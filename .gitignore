@@ -1,0 +1,12 @@
+.venv/
+.tools/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.env.*
+!.env.example
+artifacts/generated/
+.DS_Store
+.vercel/
+.ruff_cache/

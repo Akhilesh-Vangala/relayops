@@ -1,0 +1,12 @@
+[project]
+name = "relayops"
+version = "0.2.0"
+description = "Evidence-grounded LangGraph agent that resolves cross-system operations exceptions with simulated, approved and reconciled actions"
+requires-python = ">=3.12,<3.13"
+dependencies = ["openpyxl==3.1.5", "defusedxml==0.7.1", "pydantic==2.13.5", "langgraph==1.2.14", "anthropic==1.12.0", "langgraph-checkpoint-sqlite==3.1.1", "playwright==1.60.0", "fastapi==0.128.8", "uvicorn==0.39.0", "psycopg[binary,pool]==3.3.6"]
+
+[tool.vercel]
+entrypoint = "app:app"
+
+[tool.ruff]
+target-version = "py312"

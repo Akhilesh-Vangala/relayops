@@ -1,0 +1,8 @@
+{
+  "model": "claude-sonnet-5-5",
+  "input_per_million": 2,
+  "output_per_million": 10,
+  "verified": "2026-10-12",
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "scope": "Single planning request with no caching; estimate is not an invoice cap"
+}
