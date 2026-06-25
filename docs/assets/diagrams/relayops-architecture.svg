@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+<title id="title">RelayOps architecture and authority boundaries</title>
+<desc id="desc">Three layers of implemented components. The model proposes; verification and authorization remain separate.</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 7 3.5 0 7" fill="none" stroke="#777"/></marker></defs>
+<rect width="1200" height="660" rx="12" fill="#fafafa"/>
+<text x="32" y="48" font-family="Arial,Helvetica,sans-serif" font-size="28" fill="#141414" font-weight="700" >RelayOps / system map</text>
+<text x="32" y="78" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#595959" font-weight="400" >Implemented components · distinct model, runtime and operator authority</text>
+<text x="32" y="130" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#4b4b4b" font-weight="600" letter-spacing="1.2">01 / READ-ONLY MODEL AUTHORITY</text>
+<rect x="32" y="148" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="50" y="178" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Observe systems &amp; docs</text>
+<text x="50" y="204" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Playwright pixels and accessibility</text>
+<text x="50" y="226" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >Four systems · two original documents</text>
+<path d="M385 195H414" stroke="#777" marker-end="url(#arrow)"/>
+<rect x="418" y="148" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="436" y="178" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Investigate &amp; remember</text>
+<text x="436" y="204" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Owned LangGraph conditional loop</text>
+<text x="436" y="226" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >Cited hypotheses · recent image context</text>
+<path d="M771 195H800" stroke="#777" marker-end="url(#arrow)"/>
+<rect x="804" y="148" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="822" y="178" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Submit grounded plan</text>
+<text x="822" y="204" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Strict Pydantic business actions</text>
+<text x="822" y="226" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >Source version · evidence · scope</text>
+<path d="M1116 244V267H82V312" fill="none" stroke="#a0a0a0" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+<text x="32" y="294" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#4b4b4b" font-weight="600" letter-spacing="1.2">02 / RUNTIME VERIFICATION &amp; OPERATOR AUTHORITY</text>
+<rect x="32" y="312" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="50" y="342" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Public action policy</text>
+<text x="50" y="368" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Validate quantities and evidence</text>
+<text x="50" y="390" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >At most two correction iterations</text>
+<path d="M385 359H414" stroke="#777" marker-end="url(#arrow)"/>
+<rect x="418" y="312" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="436" y="342" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Counterfactual simulation</text>
+<text x="436" y="368" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Execute on a private fixture copy</text>
+<text x="436" y="390" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >Separate final-state evaluator</text>
+<path d="M771 359H800" stroke="#777" marker-end="url(#arrow)"/>
+<rect x="804" y="312" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="822" y="342" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Exact-version review</text>
+<text x="822" y="368" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Immutable approval or rejection</text>
+<text x="822" y="390" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >Source / runtime / report integrity</text>
+<path d="M1116 408V431H82V476" fill="none" stroke="#a0a0a0" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+<text x="32" y="458" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#4b4b4b" font-weight="600" letter-spacing="1.2">03 / SANDBOX EXECUTION &amp; RECOVERY</text>
+<rect x="32" y="476" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="50" y="506" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Controlled action broker</text>
+<text x="50" y="532" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Only the approved plan can execute</text>
+<text x="50" y="554" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >One local transaction per action</text>
+<path d="M385 523H414" stroke="#777" marker-end="url(#arrow)"/>
+<rect x="418" y="476" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="436" y="506" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Durable action receipts</text>
+<text x="436" y="532" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Retain partial and uncertain effects</text>
+<text x="436" y="554" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >Repeated requests avoid duplicates</text>
+<path d="M771 523H800" stroke="#777" marker-end="url(#arrow)"/>
+<rect x="804" y="476" width="352" height="95" rx="8" fill="white" stroke="#c6c6c6"/>
+<text x="822" y="506" font-family="Arial,Helvetica,sans-serif" font-size="21" fill="#151515" font-weight="600" >Reconcile &amp; verify</text>
+<text x="822" y="532" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#505050" font-weight="400" >Check state before retrying</text>
+<text x="822" y="554" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#707070" font-weight="400" >Independent actual-effect checks</text>
+<path d="M32 616H1168" stroke="#ddd"/>
+<text x="32" y="640" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#555" font-weight="400" >Local synthetic workflow contract. External connectors, individual identity and cloud remain pending.</text>
+</svg>

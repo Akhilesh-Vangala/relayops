@@ -1,0 +1,29 @@
+.git
+.github
+.tools
+.venv
+.env*
+artifacts
+docs
+notebooks
+tests
+__pycache__
+*.pyc
+README-HISTORY.md
+docs/development/BRANCHING.md
+.github/CONTRIBUTING.md
+HANDOFF.md
+PLAN.md
+PROGRESS.md
+deploy
+/scripts
+Dockerfile
+infrastructure/containers/compose.yaml
+
+# Infrastructure tooling is not part of the serverless app.
+backend/tests
+backend/docker/Dockerfile
+
+# Component-owned non-serverless material
+infrastructure
+backend/docker

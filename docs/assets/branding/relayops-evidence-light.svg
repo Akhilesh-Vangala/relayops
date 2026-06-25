@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 242" role="img" aria-labelledby="title desc">
+<title id="title">RelayOps recorded engineering evidence</title><desc id="desc">Engineering/integration counts; not live model quality. Recorded source baseline ed15257.</desc>
+<rect width="1280" height="242" rx="12" fill="#fafafa"/>
+<text x="32" y="34" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#555" font-weight="600" letter-spacing="1.7">RECORDED ENGINEERING EVIDENCE</text>
+<text x="32" y="119" font-family="Arial,Helvetica,sans-serif" font-size="62" fill="#111" font-weight="700">47</text>
+<text x="32" y="154" font-family="Arial,Helvetica,sans-serif" font-size="20" fill="#111" font-weight="600">Unit / integration tests</text>
+<text x="32" y="182" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#555" font-weight="400">Includes SDK mock HTTP / SSE</text>
+<path d="M428 58V185" stroke="#d2d2d2"/>
+<text x="446" y="119" font-family="Arial,Helvetica,sans-serif" font-size="62" fill="#111" font-weight="700">16</text>
+<text x="446" y="154" font-family="Arial,Helvetica,sans-serif" font-size="20" fill="#111" font-weight="600">Browser journey checks</text>
+<text x="446" y="182" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#555" font-weight="400">Actual UI and source captures</text>
+<path d="M842 58V185" stroke="#d2d2d2"/>
+<text x="860" y="119" font-family="Arial,Helvetica,sans-serif" font-size="62" fill="#111" font-weight="700">12</text>
+<text x="860" y="154" font-family="Arial,Helvetica,sans-serif" font-size="20" fill="#111" font-weight="600">Scripted assessments</text>
+<text x="860" y="182" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#555" font-weight="400">Known development cases</text>
+<text x="32" y="222" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#555" font-weight="500" letter-spacing="0.8">BASELINE ed15257 · REPRODUCIBLE CI · SCRIPTED / PROTOCOL EVIDENCE · LIVE AI QUALITY PENDING</text>
+</svg>
