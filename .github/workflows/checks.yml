@@ -1,0 +1,161 @@
+name: RelayOps workbench
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  PYTHONPATH: backend/src
+  RELAY_ALLOW_LIVE: "0"
+  ANTHROPIC_API_KEY: ""
+
+jobs:
+  tests:
+    name: Protocol, policy and recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: relayops_test
+          POSTGRES_USER: relayops
+          POSTGRES_PASSWORD: relayops-test-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U relayops -d relayops_test"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the hashed dependency lock
+        run: python -m pip install --require-hashes -r backend/requirements/runtime.txt
+      - name: Install Chromium and system dependencies
+        run: python -m playwright install --with-deps chromium
+      - name: Verify installed dependency compatibility
+        run: python -m pip check
+      - name: Lint and format check
+        run: |
+          pipx run ruff==0.14.0 check .
+          pipx run ruff==0.14.0 format --check .
+      - name: Check repository layout and documentation
+        run: python scripts/checks/check_repository.py
+      - name: Run unit and integration tests
+        run: python -m unittest discover -s backend/tests -v
+        env:
+          RELAY_TEST_DATABASE_URL: postgresql://relayops:relayops-test-password@127.0.0.1:5432/relayops_test
+      - name: Exercise actual product owner policies and quotas
+        env:
+          RELAY_PRODUCT_TEST_ADMIN_URL: postgresql://relayops:relayops-test-password@127.0.0.1:5432/relayops_test
+        run: python scripts/checks/product_rls.py
+      - name: Run the known scripted development matrix
+        run: python -m relayops.evaluation.benchmark --output artifacts/generated/ci-matrix
+      - name: Verify all matrix assessments and untouched source state
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('artifacts/generated/ci-matrix/report.json').read_text())
+          assert result['case_count'] == 12
+          assert result['passing_assessments'] == result['case_count']
+          assert result['live_model_generations'] == 0
+          assert all(case['original_business_untouched'] for case in result['cases'])
+          print('12 known scripted assessments passed; original business state preserved; no live generation.')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-matrix
+          path: artifacts/generated/ci-matrix
+          retention-days: 14
+
+  browser:
+    name: Operator and browser evidence journey
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the hashed dependency lock
+        run: python -m pip install --require-hashes -r backend/requirements/runtime.txt
+      - name: Install Chromium and system dependencies
+        run: python -m playwright install --with-deps chromium
+      - name: Exercise the interactive public app and video player
+        run: python scripts/demos/public_demo_browser.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install pinned accessibility checker
+        run: npm install --prefix /tmp/product-a11y --ignore-scripts --no-audit --no-fund axe-core@4.14.0
+      - name: Product upload, approval, immutable history, recovery and accessibility
+        run: python scripts/demos/product_browser.py --axe /tmp/product-a11y/node_modules/axe-core/axe.min.js
+      - name: Real multi-format uploads and worksheet accessibility
+        run: python scripts/demos/import_browser.py --axe /tmp/product-a11y/node_modules/axe-core/axe.min.js
+      - name: Run the real local workbench journey
+        run: python backend/tests/e2e/browser_workbench.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: |
+            artifacts/generated/browser-workbench-*
+            artifacts/generated/public-demo-browser
+            artifacts/generated/product-browser
+            artifacts/generated/import-browser
+          retention-days: 14
+
+  containers:
+    name: Containers and Kubernetes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and execute the browser test image
+        run: |
+          docker build -f backend/docker/Dockerfile --target test -t relayops:test .
+          docker run --name relayops-check relayops:test
+      - name: Copy container evidence
+        if: always()
+        run: |
+          mkdir -p artifacts
+          docker cp relayops-check:/app/artifacts/generated artifacts/generated-container
+      - name: Run actual Compose API and browser-worker topology
+        run: scripts/deployment/compose_smoke.sh
+      - name: Install pinned kubectl and Kind
+        run: |
+          kubectl_version=v1.34.1
+          curl -fsSLo /tmp/kubectl "https://dl.k8s.io/release/${kubectl_version}/bin/linux/amd64/kubectl"
+          curl -fsSLo /tmp/kubectl.sha256 "https://dl.k8s.io/release/${kubectl_version}/bin/linux/amd64/kubectl.sha256"
+          echo "$(cat /tmp/kubectl.sha256)  /tmp/kubectl" | sha256sum --check
+          sudo install -m 0755 /tmp/kubectl /usr/local/bin/kubectl
+          go install sigs.k8s.io/kind@v0.30.0
+      - name: Render manifests and exercise API restart, browser worker and exact review
+        run: |
+          export PATH="$(go env GOPATH)/bin:$PATH"
+          kubectl kustomize infrastructure/kubernetes/base > /tmp/relayops-base.yaml
+          kubectl kustomize infrastructure/kubernetes/overlays/kind > /tmp/relayops-kind.yaml
+          scripts/deployment/kind_smoke.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: container-and-kind-evidence
+          path: |
+            artifacts/generated-container
+            artifacts/generated/kind-smoke
+            artifacts/generated/compose-smoke
+          retention-days: 14
