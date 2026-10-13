@@ -8,7 +8,8 @@ def evaluate(original, final, events, outcome):
     checks = {"scope_preserved": (final["tenant"], final["case_id"]) == (original["tenant"], original["case_id"]),
               "source_order_preserved": final["procurement"] == original["procurement"],
               "source_delivery_preserved": final["warehouse"] == original["warehouse"],
-              "invoice_quantity_preserved": final["billing"]["invoiced_units"] == original["billing"]["invoiced_units"]}
+              "invoice_quantity_preserved": final["billing"]["invoiced_units"] == original["billing"]["invoiced_units"],
+              "source_documents_preserved": final.get("documents") == original.get("documents")}
     if uncertain or shortage == 0:
         checks.update(correct_outcome=outcome == ("needs_information" if uncertain else "no_change"),
                       no_business_effects=not effects, original_state_preserved=final == original)

@@ -1,5 +1,7 @@
 # Setup and deployment
 
+October12 current implementation: [model-directed agent and local workbench](09-AGENT-AND-WORKBENCH.md) add persistent dynamic tool selection, real browser/document screenshots, cited public hypotheses, bounded correction, actual SDK HTTP/SSE checks and operator pages. Earlier no-browser/no-server/single-call-only statements below describe the initial foundation and are superseded for current coverage; live quality, arbitrary UI actions, scanned-document extraction and distributed/cloud release remain pending.
+
 Python3.11.17 local environment; requirements.txt is fully pinned with hashes from requirements.in. Fresh checkout: python3.11 -m venv .venv; install with .venv/bin/python -m pip install --require-hashes -r requirements.txt. Use PYTHONPATH=src for module execution/tests; see README commands. This Mac uses an isolated uv-created environment; no system Python or VerifyOps package/environment changed.
 
 No application server, browser product, Docker image, remote CI or cloud deployment yet. Do not describe prepared architecture as executed infrastructure. GitHub repository is TBD; the project has not been published.

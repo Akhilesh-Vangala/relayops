@@ -1,5 +1,9 @@
 # Decisions
 
+## 2026-10-12 — Deeper model-directed agent and observable product
+
+User requests principal-level AI engineering depth and more substantive layers. Implement bounded model-selected observations and document pixels, public hypothesis memory, correction, persistent checkpoints/receipts and a local evidence/review workbench. Source/runtime/client/pricing fingerprints bind recovery and review. Keep old diagnostic/single-call paths for comparison. Distinguish actual SDK HTTP protocol checks and real browser capture from live model/VLM performance. Unknown streams retain admission; complete receipts can be reused without another generation. Native pages are implemented now; React/Temporal/PostgreSQL remain gated proposals.
+
 ## 2026-10-12 — Enterprise workflow agent selected
 
 User selects enterprise workflow agent for the second flagship. Choose an original short-shipment lane that complements VerifyOps with state-changing actions, intended multimodal browser interaction and uncertain-outcome recovery. Existing personal repositories are excluded. Broader portfolio/AI-engineering roles remain in scope.

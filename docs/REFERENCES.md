@@ -13,3 +13,7 @@ Primary resources reviewed October12,2026; findings and tradeoffs in the workspa
 - [Playwright page API](https://playwright.dev/python/docs/api/class-page)
 - [Official Anthropic Python SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python)
 - [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing)
+
+- [LangGraph persistence](https://docs.langchain.com/oss/python/langgraph/persistence)
+- [Claude vision](https://platform.claude.com/docs/en/build-with-claude/vision)
+- [Claude tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview)

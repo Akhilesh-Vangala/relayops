@@ -1,5 +1,7 @@
 # Architecture
 
+October12 current implementation: [model-directed agent and local workbench](09-AGENT-AND-WORKBENCH.md) add persistent dynamic tool selection, real browser/document screenshots, cited public hypotheses, bounded correction, actual SDK HTTP/SSE checks and operator pages. Earlier no-browser/no-server/single-call-only statements below describe the initial foundation and are superseded for current coverage; live quality, arbitrary UI actions, scanned-document extraction and distributed/cloud release remain pending.
+
 ## Implemented foundation
 
 Python3.11.17; strict Pydantic frozen Plan/Action; LangGraph observe→propose→policy→simulate; original SQLite fixture world with evidence/approval/receipt/event tables; controlled executor; separate final-state evaluator; diagnostic and gated AsyncAnthropic planners. Graph state is ephemeral, not checkpointed. One ledger per fixture/run; no distributed queue or individual authentication.

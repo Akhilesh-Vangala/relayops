@@ -10,10 +10,14 @@
 
 ## Agent and browser — Pending
 
-- [ ] Official SDK mocked HTTP/SSE compatibility and bounded live model smoke early.
-- [ ] Original stateful web sandbox apps and document fixtures.
-- [ ] Playwright screenshot/accessibility observation and controlled action adapter.
-- [ ] Bounded dynamic observation/decision/action/postcondition loop and clarification.
+- [x] Official SDK mocked HTTP/SSE integration, bounds and receipt replay tests.
+- [ ] Controlled live model smoke/comparison early.
+- [x] Original browser-rendered synthetic system/document evidence pages.
+- [ ] Independently deployed enterprise sandbox apps and noisy document corpus.
+- [x] Scoped read-only Playwright screenshot/accessibility observation.
+- [ ] General GUI/API action adapters with broker authority.
+- [x] Bounded dynamic observation/hypothesis/decision loop, public corrections and independent postchecks.
+- [ ] Dynamic external action execution and interactive clarification continuation.
 - [ ] Model/tool/budget trace comparison against strong baselines.
 
 ## Durable product — Pending
@@ -21,7 +25,8 @@
 - [ ] PostgreSQL action/evidence/approval/state storage and migrations.
 - [ ] Temporal lifecycle with isolated execution, retries only where effects are safe and tested.
 - [ ] Individual identity, role/resource checks, approval expiry/revocation and partial-state recovery/compensation.
-- [ ] Real app pages, evidence/review/replay and monitoring; cloud deployment.
+- [x] Local operator pages, stored activity/evidence viewer and exact-version review/sandbox execution.
+- [ ] Production frontend, operational monitoring and cloud deployment.
 
 ## Release evidence — Pending
 

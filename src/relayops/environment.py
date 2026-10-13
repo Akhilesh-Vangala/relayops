@@ -17,6 +17,12 @@ def fixture(name="short-shipment", *, ordered=100, received=80, unit_cents=2500,
         "warehouse": {"received_units": received, "delivery_known": delivery_known, "available_units": stock},
         "billing": {"invoiced_units": billed, "held_cents": 0},
         "case_management": {"status": "open", "claim_units": 0, "reserved_units": 0},
+        "documents": {
+            "invoice": {"title": "Supplier invoice INV-2041", "order_id": "PO-2041", "units": billed,
+                        "unit_cents": unit_cents, "note": "Invoice quantity must be reconciled with confirmed delivery."},
+            "delivery_note": {"title": "Delivery note DN-2041", "order_id": "PO-2041", "units": received,
+                              "confirmed": delivery_known, "note": "Inspect delivery confirmation before acting."},
+        },
     }
 
 
@@ -55,7 +61,8 @@ class World:
         return {"tenant": state["tenant"], "case_id": state["case_id"],
                 "procurement": state["procurement"],
                 "warehouse": {k: state["warehouse"][k] for k in ("received_units", "delivery_known", "available_units")},
-                "billing": {"invoiced_units": state["billing"]["invoiced_units"]}}
+                "billing": {"invoiced_units": state["billing"]["invoiced_units"]},
+                "documents": state.get("documents", {})}
 
     def version(self, db=None):
         return digest(self.source(db))
@@ -78,6 +85,20 @@ class World:
 
     def public_observations(self):
         return [self.observe(self.state()["tenant"], system) for system in SYSTEMS]
+
+    def observe_document(self, tenant, document):
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            state = self.state(db)
+            if tenant != state["tenant"] or document not in state.get("documents", {}):
+                raise Refused("Document outside the authorized case")
+            version = self.version(db)
+            record = {"tenant": tenant, "case_id": state["case_id"], "source_version": version,
+                      "system": "document:" + document, "data": state["documents"][document]}
+            identity = digest(record)
+            db.execute("INSERT OR IGNORE INTO evidence VALUES (?,?,?,?,?)",
+                       (identity, tenant, version, record["system"], json.dumps(record)))
+            return {"evidence_id": identity, **record}
 
     def events(self):
         with self.connect() as db:

@@ -1,5 +1,7 @@
 # End-to-end flow
 
+October12 current implementation: [model-directed agent and local workbench](09-AGENT-AND-WORKBENCH.md) add persistent dynamic tool selection, real browser/document screenshots, cited public hypotheses, bounded correction, actual SDK HTTP/SSE checks and operator pages. Earlier no-browser/no-server/single-call-only statements below describe the initial foundation and are superseded for current coverage; live quality, arbitrary UI actions, scanned-document extraction and distributed/cloud release remain pending.
+
 1. Initialize a fresh original synthetic fixture.
 2. Observe procurement, warehouse, billing and case management; register source-versioned evidence IDs.
 3. Diagnostic or gated model returns a strict proposed Plan.

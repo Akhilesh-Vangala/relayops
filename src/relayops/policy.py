@@ -17,7 +17,7 @@ def validate(world, plan: Plan, db=None):
     rows = [db.execute("SELECT * FROM evidence WHERE id=?", (identity,)).fetchone() for identity in plan.evidence_ids]
     if any(row is None or row["tenant"] != plan.tenant or row["version"] != plan.source_version for row in rows):
         raise Refused("Forged, cross-tenant or stale evidence")
-    if {row["system"] for row in rows} != set(SYSTEMS):
+    if not set(SYSTEMS).issubset({row["system"] for row in rows}):
         raise Refused("Evidence from every relevant system is required")
     order, delivery, billing = state["procurement"], state["warehouse"], state["billing"]
     shortage = order["ordered_units"] - delivery["received_units"]

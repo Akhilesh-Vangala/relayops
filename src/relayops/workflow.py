@@ -20,6 +20,23 @@ class State(TypedDict, total=False):
     activity: list
 
 
+def simulate_plan(world, plan):
+    original = world.state()
+    with tempfile.TemporaryDirectory(prefix="relayops-simulation-") as directory:
+        shadow = World(Path(directory) / "world.sqlite")
+        shadow.initialize(original)
+        with world.connect() as source, shadow.connect() as destination:
+            for row in source.execute("SELECT * FROM evidence"):
+                destination.execute("INSERT INTO evidence VALUES (?,?,?,?,?)", tuple(row))
+        if plan.actions:
+            token = approve(shadow, plan, operator="counterfactual-simulator")
+            execute(shadow, plan, token)
+        report = evaluate(original, shadow.state(), shadow.events(), plan.outcome)
+        if not report["passed"]:
+            raise Refused("Counterfactual final state failed independent checks")
+    return report
+
+
 def build_workflow(world, planner):
     def observe(state):
         return {"observations": world.public_observations(), "activity": ["observed-four-systems"]}
@@ -33,21 +50,7 @@ def build_workflow(world, planner):
         return {"policy": "passed", "activity": state["activity"] + ["policy-validated"]}
 
     def simulate(state):
-        original = world.state()
-        with tempfile.TemporaryDirectory(prefix="relayops-simulation-") as directory:
-            shadow = World(Path(directory) / "world.sqlite")
-            shadow.initialize(original)
-            # Register the exact original evidence, without granting access to evaluator answers.
-            with world.connect() as source, shadow.connect() as destination:
-                for row in source.execute("SELECT * FROM evidence"):
-                    destination.execute("INSERT INTO evidence VALUES (?,?,?,?,?)", tuple(row))
-            plan = state["plan"]
-            if plan.actions:
-                token = approve(shadow, plan, operator="counterfactual-simulator")
-                execute(shadow, plan, token)
-            report = evaluate(original, shadow.state(), shadow.events(), plan.outcome)
-            if not report["passed"]:
-                raise Refused("Counterfactual final state failed independent checks")
+        report = simulate_plan(world, state["plan"])
         return {"simulation": report, "activity": state["activity"] + ["simulated-on-private-copy", "awaiting-operator-if-actions"]}
 
     builder = StateGraph(State)
