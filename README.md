@@ -8,7 +8,8 @@
 </p>
 
 <p align="center">
-  <a href="#the-business-problem">Problem</a> ·
+  <a href="docs/CASE-STUDY.md">Case study</a> ·
+  <a href="docs/DEMO.md">Recorded demo</a> ·
   <a href="#inside-the-agent">Agent architecture</a> ·
   <a href="#the-operator-workbench">Workbench</a> ·
   <a href="#run-locally">Quick start</a> ·
@@ -20,25 +21,22 @@
 
 **A workflow agent that observes business systems, grounds a proposal in evidence, and executes only an explicitly approved version.**
 
-RelayOps investigates operational exceptions across procurement, warehouse, billing and case management. Its checkpointed LangGraph agent selects read-only tools, inspects browser and document evidence, records cited hypotheses, and corrects rejected plans. A separate runtime simulates the proposed effects, checks the resulting business state, and presents the exact proposal for operator review.
+RelayOps investigates procurement, warehouse, billing and case evidence through a checkpointed LangGraph tool loop. Proposals pass separate simulation and business-state checks, then exact-version sandbox review before controlled execution.
 
-> **Development release.** The local app, dynamic agent loop, official model transport and sandbox execution are implemented and integration-tested. The default demo uses scripted model choices and makes no model calls. Live AI quality, scanned-document extraction, production connectors, individual identity and cloud operation remain pending.
+> **Development release.** Default demos are scripted and synthetic. Live model quality, scanned-document extraction, production connectors, individual identity and cloud operation remain pending. [Scope and tradeoffs →](docs/CASE-STUDY.md#what-the-evidence-establishes)
 
-## The business problem
-
-A supplier invoices **100 units at $25 each**, but the warehouse confirms receipt of **80 units**. Paying the entire invoice or retrying an uncertain action can create an incorrect business outcome. Resolving the exception requires consistent evidence from several systems and verified effects after review.
-
-| Source-backed finding | Proposed action under the supported contract |
-| --- | --- |
-| Confirmed 20-unit shortage; consistent order and invoice; sufficient stock | Hold **$500**, create a **20-unit** supplier claim, reserve **20 replacement units**, then resolve the case. |
-| Unknown delivery, conflicting invoice quantity or insufficient stock | Request clarification and produce **no business actions**. |
-| Complete, consistent delivery | Return **no change**. |
-
-This is an original synthetic workflow with a declared action contract. It supports reviewable engineering experiments; additional business lanes require new contracts and validation environments.
+| Run the product | Inspect the engineering | Challenge the evidence |
+| --- | --- | --- |
+| [Quick start](#run-locally) · [Recorded walkthrough](docs/DEMO.md) | [Design case study](docs/CASE-STUDY.md) · [System map](docs/README.md) | [Reproducible checks](CONTRIBUTING.md) · [Limits and tradeoffs](docs/CASE-STUDY.md#what-the-evidence-establishes) |
 
 ## The operator workbench
 
-![Actual RelayOps home page with operational cases, stored investigations and live-model configuration status](docs/assets/workbench-overview.png)
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/relayops-demo-poster.png">
+  <img src="docs/assets/relayops-demo.gif" alt="Five recorded stages: investigate the shortage, inspect hypotheses and browser evidence, review the exact proposal, and verify sandbox effects" width="100%">
+</picture>
+
+**14-second recorded walkthrough.** Actual app execution with original synthetic data and scripted model choices. The review is an automated sandbox demonstration; no production financial effects or live model inference. [Static frames and recording provenance →](docs/DEMO.md)
 
 The app has overview, case catalog, case detail, investigation history, investigation detail and architecture pages. Open a case, run an investigation, inspect source screenshots and cited hypotheses, review the proposal, then explicitly execute approved sandbox actions. Activity and outcomes come from stored records.
 
@@ -52,6 +50,27 @@ The app has overview, case catalog, case detail, investigation history, investig
 These captures use original synthetic data and scripted model choices. The shown proposal has not been approved; screenshots do not establish live AI accuracy or customer usage.
 
 </details>
+
+## The business problem
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/relayops-case-dark.svg">
+  <img src="docs/assets/relayops-case-light.svg" alt="Original short-shipment case: 100 units ordered, 80 received, 20 missing; a 500 dollar hold and controlled replacement actions require verification and review" width="100%">
+</picture>
+
+A supplier invoices **100 units at $25 each**, but the warehouse confirms receipt of **80 units**. Paying the entire invoice or retrying an uncertain action can create an incorrect business outcome. Resolving the exception requires consistent evidence from several systems and verified effects after review.
+
+| Source-backed finding | Proposed action under the supported contract |
+| --- | --- |
+| Confirmed 20-unit shortage; consistent order and invoice; sufficient stock | Hold **$500**, create a **20-unit** supplier claim, reserve **20 replacement units**, then resolve the case. |
+| Unknown delivery, conflicting invoice quantity or insufficient stock | Request clarification and produce **no business actions**. |
+| Complete, consistent delivery | Return **no change**. |
+
+This is an original synthetic workflow with a declared action contract. It supports reviewable engineering experiments; additional business lanes require new contracts and validation environments.
+
+## Engineering contribution
+
+The owned work connects **model-directed observation**, **cited public hypotheses**, **private-copy simulation**, **exact-version review**, and **receipted sandbox actions**. Application code preserves source/runtime compatibility, uncertain generations, partial effects and explicit reconciliation. The supported workflow is a declared contract. [Design decisions, failure cases and implementation entry points →](docs/CASE-STUDY.md)
 
 ## Inside the agent
 
@@ -152,6 +171,11 @@ Live runs are billable and must pass model, token and estimated-spend admission.
 </details>
 
 ## Engineering evidence
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/relayops-evidence-dark.svg">
+  <img src="docs/assets/relayops-evidence-light.svg" alt="Recorded engineering evidence: 47 unit and integration tests, sixteen browser journey checks, twelve known scripted assessments; live AI quality pending" width="100%">
+</picture>
 
 The recorded local checks below belong to implementation baseline [`dc85c15`](https://github.com/Akhilesh-Vangala/relayops/commit/dc85c1536d9cb95054bfd26542d9b46ed2e8c2ef). The publication baseline at [`7aa02f7`](https://github.com/Akhilesh-Vangala/relayops/commit/7aa02f7c74cca3c1826f612e83b378a957fd1751) passed both Linux jobs in [Actions run 38345763992](https://github.com/Akhilesh-Vangala/relayops/actions/runs/38345763992). Logs and downloaded artifacts confirm the same counts. The badge tracks the current branch.
 

@@ -4,6 +4,8 @@ Start with the [project README](../README.md) for the problem, actual app screen
 
 ## Review paths
 
+Start with the [engineering case study](CASE-STUDY.md) and [recorded demo](DEMO.md) for a concise review of the business problem, owned contribution, failure behavior and evidence.
+
 | Question | Read |
 | --- | --- |
 | What problem does this solve? | [Business brief](01-PROJECT-BRIEF.md), [source data and supported contract](04-DATA-AND-INTEGRATIONS.md) |
