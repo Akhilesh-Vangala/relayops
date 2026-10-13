@@ -9,6 +9,7 @@
 
 <p align="center">
   <a href="docs/CASE-STUDY.md">Case study</a> ·
+  <a href="https://relayops-two.vercel.app">Live showcase</a> ·
   <a href="docs/DEMO.md">Recorded demo</a> ·
   <a href="#inside-the-agent">Agent architecture</a> ·
   <a href="#the-operator-workbench">Workbench</a> ·
@@ -23,11 +24,11 @@
 
 RelayOps investigates procurement, warehouse, billing and case evidence through a checkpointed LangGraph tool loop. Proposals pass separate simulation and business-state checks, then exact-version sandbox review before controlled execution.
 
-> **Development release.** Default demos are scripted and synthetic. Live model quality, scanned-document extraction, production connectors, individual identity and cloud operation remain pending. [Scope and tradeoffs →](docs/CASE-STUDY.md#what-the-evidence-establishes)
+> **Development release.** The [public Vercel showcase](https://relayops-two.vercel.app) is read only. Default demos are scripted and synthetic. Live model quality, scanned-document extraction, production connectors, individual identity and durable cloud workflow execution remain pending. [Deployment boundary →](docs/12-VERCEL-SHOWCASE.md)
 
 | Run the product | Inspect the engineering | Challenge the evidence |
 | --- | --- | --- |
-| [Quick start](#run-locally) · [Recorded walkthrough](docs/DEMO.md) | [Design case study](docs/CASE-STUDY.md) · [System map](docs/README.md) | [Reproducible checks](CONTRIBUTING.md) · [Limits and tradeoffs](docs/CASE-STUDY.md#what-the-evidence-establishes) |
+| [Live read-only showcase](https://relayops-two.vercel.app) · [Quick start](#run-locally) · [Recorded walkthrough](docs/DEMO.md) | [Design case study](docs/CASE-STUDY.md) · [System map](docs/README.md) | [Reproducible checks](CONTRIBUTING.md) · [Limits and tradeoffs](docs/CASE-STUDY.md#what-the-evidence-establishes) |
 
 ## The operator workbench
 
