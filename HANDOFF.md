@@ -1,0 +1,9 @@
+# Handoff
+
+Second flagship RelayOps, user-selected enterprise workflow agent. Read README, PLAN, docs/DECISIONS and workspace setup/second-project/01-RELAYOPS-SELECTION.md. Current code is a local original synthetic business environment, typed proposals, LangGraph assessment, private simulation, controlled sandbox actions and independent final-state evaluator.
+
+Final26tests and three CLI demonstrations pass; source/report hashes and checks are recorded in artifacts/generated/foundation-001/summary.json and PROGRESS. Actual fresh-Python-process reconciliation tested. Provider tests use injected scripted SDK objects, not live requests or official mocked HTTP. Core code in src/relayops; tests in tests; requirements locked with hashes; Python3.11.17 .venv isolated. No existing personal repository copied; VerifyOps untouched. Local Git initialized for this project only; no remote/publication, cloud resources, UI or live model execution yet.
+
+Next priority: inspect foundation contract and failure behavior, add official SDK HTTP transport tests and one controlled live planner run, then original browser/doc environment and bounded agent loop. Do not spend months adding frameworks before live model evaluation. Current single-call structured planner is not autonomous browser control; SQLite journal not distributed persistence; graph has no checkpointer. Proposed PostgreSQL/Temporal/FastAPI/React/Playwright stack remains pending.
+
+Never import another project's private.env or automatically approve real-world effects. Model observations exclude evaluator answers. Demo execution approves only a synthetic world with explicit CLI flag. Unknown receipts block automatic retries; changed sources require refreshed evidence/review; partially executed work is preserved. Keep portfolio/ empty.

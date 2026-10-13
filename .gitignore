@@ -1,0 +1,9 @@
+.venv/
+.tools/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+artifacts/generated/
+.DS_Store

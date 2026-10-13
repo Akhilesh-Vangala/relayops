@@ -1,0 +1,5 @@
+# Progress
+
+October12: user selects enterprise workflow agent; RelayOps scaffolded and implemented as an original local foundation. Initial26tests pass plus known-diagnostic short-shipment/acknowledgement-loss and unknown-delivery CLI demonstrations. Tests include scripted SDK injection, not real provider HTTP or live quality. Final rerun:26tests pass in the isolated locked environment, including actual fresh-Python-process reconciliation and private model/profile binding. Three final CLI demonstrations pass: assessment leaves original state unchanged; short-shipment execution reconciles one uncertain receipt and produces four unique effects/$500hold/20-unit claim/20-unit reservation/resolved state; unknown delivery abstains with no effects. Python compilation also passes. No live model generation.
+
+No user-facing application/browser agent, deployment, public repository, live generation or actual customer feedback. The flagship remains in development, with target features and release gates in PLAN. Generated evidence is ignored under artifacts/generated.

@@ -1,0 +1,6 @@
+[project]
+name = "relayops"
+version = "0.1.0"
+description = "State-verified enterprise workflow execution research environment"
+requires-python = ">=3.11,<3.12"
+dependencies = ["pydantic==2.13.5", "langgraph==1.2.14", "anthropic==1.12.0"]
