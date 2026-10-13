@@ -1,28 +1,69 @@
+<p align="center">
+  <img src="docs/assets/relayops-banner.svg" alt="RelayOps — evidence to verified action; observe, propose, verify, authorize" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml"><img src="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml/badge.svg" alt="RelayOps workbench CI status"></a>
+  &nbsp; Python 3.11 · LangGraph · AsyncAnthropic · Playwright · FastAPI
+</p>
+
+<p align="center">
+  <a href="#the-business-problem">Problem</a> ·
+  <a href="#inside-the-agent">Agent architecture</a> ·
+  <a href="#the-operator-workbench">Workbench</a> ·
+  <a href="#run-locally">Quick start</a> ·
+  <a href="#engineering-evidence">Evidence</a> ·
+  <a href="docs/README.md">Technical documentation</a>
+</p>
+
 # RelayOps
 
-**A model-directed enterprise workflow agent with browser evidence, cited memory, controlled actions and independent verification.**
+**A workflow agent that observes business systems, grounds a proposal in evidence, and executes only an explicitly approved version.**
 
-RelayOps investigates operational exceptions across procurement, warehouse, billing and case-management evidence. The agent chooses read-only tools, inspects original document pages, records hypotheses, corrects rejected plans, and submits a proposal for counterfactual checking and exact-version operator review.
+RelayOps investigates operational exceptions across procurement, warehouse, billing and case management. Its checkpointed LangGraph agent selects read-only tools, inspects browser and document evidence, records cited hypotheses, and corrects rejected plans. A separate runtime simulates the proposed effects, checks the resulting business state, and presents the exact proposal for operator review.
 
-**Current development release:** a local monochrome workbench, real LangGraph tool loop/checkpoints, official Anthropic streaming client, real browser screenshots/accessibility observations, action receipts/reconciliation and execution-based tests. Live AI quality, real scanned-document extraction, arbitrary enterprise connectors, distributed infrastructure and cloud deployment remain unverified/pending. Scripted demonstrations are explicitly labeled.
-
-## Open the workbench
-
-```sh
-PYTHONPATH=src .venv/bin/python -m relayops.web --port 8100
-```
-
-Open **http://127.0.0.1:8100**. Overview → case → investigation → evidence/hypotheses → proposal and verification → sandbox review → controlled execution. The default demonstration uses scripted model choices and makes no model calls. Live selection requires explicit private configuration and server-side admission. This is a local single-host research workbench; individual identity and public hosting are not implemented.
+> **Development release.** The local app, dynamic agent loop, official model transport and sandbox execution are implemented and integration-tested. The default demo uses scripted model choices and makes no model calls. Live AI quality, scanned-document extraction, production connectors, individual identity and cloud operation remain pending.
 
 ## The business problem
 
-An order has100units at$25each, an invoice for100units and confirmed delivery of80units. Establish the20-unit shortage from source evidence; propose a$500hold,20-unit claim and20-unit replacement reservation; resolve only after effects are confirmed. Unknown delivery, inconsistent invoice quantity or insufficient stock requires no-write clarification; healthy delivery requires no change.
+A supplier invoices **100 units at $25 each**, but the warehouse confirms receipt of **80 units**. Paying the entire invoice or retrying an uncertain action can create an incorrect business outcome. Resolving the exception requires consistent evidence from several systems and verified effects after review.
 
-The current supported lane has a declared action contract. Broader planning and noisy real-world inputs require additional validated environments rather than assumed generalization.
+| Source-backed finding | Proposed action under the supported contract |
+| --- | --- |
+| Confirmed 20-unit shortage; consistent order and invoice; sufficient stock | Hold **$500**, create a **20-unit** supplier claim, reserve **20 replacement units**, then resolve the case. |
+| Unknown delivery, conflicting invoice quantity or insufficient stock | Request clarification and produce **no business actions**. |
+| Complete, consistent delivery | Return **no change**. |
 
-## Implemented agent and execution layers
+This is an original synthetic workflow with a declared action contract. It supports reviewable engineering experiments; additional business lanes require new contracts and validation environments.
+
+## The operator workbench
+
+![Actual RelayOps home page with operational cases, stored investigations and live-model configuration status](docs/assets/workbench-overview.png)
+
+The app has overview, case catalog, case detail, investigation history, investigation detail and architecture pages. Open a case, run an investigation, inspect source screenshots and cited hypotheses, review the proposal, then explicitly execute approved sandbox actions. Activity and outcomes come from stored records.
+
+<details>
+<summary><strong>Inspect the real investigation screen and source evidence</strong></summary>
+
+![Actual investigation with cited hypotheses, proposed business actions and recorded agent activity](docs/assets/investigation.png)
+
+![Full investigation with an expanded original source observation and counterfactual checks](docs/assets/investigation-full.png)
+
+These captures use original synthetic data and scripted model choices. The shown proposal has not been approved; screenshots do not establish live AI accuracy or customer usage.
+
+</details>
+
+## Inside the agent
+
+![RelayOps system map separating read-only model tools, runtime verification, operator review and sandbox action recovery](docs/assets/relayops-architecture.svg)
+
+The model chooses `observe_system`, `inspect_document`, `record_hypotheses` and `submit_plan`. It cannot approve or execute its own proposal. **relay-agent-1** uses actual conditional graph transitions, durable investigation checkpoints and model-result receipts. Public policy feedback permits at most two corrections; private evaluator answers do not enter the feedback loop.
+
+<details>
+<summary><strong>Expand the detailed agent flow and implemented layers</strong></summary>
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 flowchart TD
     Goal[Scoped case and task] --> Model[Bounded model round with public memory]
     Model --> Choice{Model tool choice}
@@ -56,47 +97,88 @@ flowchart TD
 | **Review and action control** | Immutable exact-version sandbox review; stale/tampered/source-changed assessments blocked. Controlled actions retain receipts, uncertain outcomes and partial state. |
 | **Operator visibility** | Home, cases, investigation history/detail, evidence screenshots, hypothesis memory, real activity, proposed changes, verification and architecture pages. |
 
-## Bounds and spending
+</details>
 
-The current agent allows12model rounds,24evidence calls,3identical calls,2public corrections,2048requested output tokens per round/12000total,8000counted input per request/64000cumulative,240active model seconds and a2MBmultimodal body. Typed streaming must include completion; real generation retries are disabled.
+| Engineering boundary | Current behavior |
+| --- | --- |
+| **Source grounding** | Four system observations and two document observations; cited evidence, source-version checks and hashed real screenshots. |
+| **Multimodal context** | Browser pixels and accessibility text enter model tool results. Only the latest two images remain in context; original image artifacts stay retained. |
+| **Verification** | Public action policy, private-copy simulation and a separate final-state evaluator. Execution is followed by independent actual-effect checks. |
+| **Approval integrity** | Immutable exact-version sandbox review; changed source, runtime, report or artifacts block stale approval. |
+| **Recovery** | Completed model receipts avoid a second generation; uncertain generations block replay. Action receipts retain partial effects and require explicit reconciliation before retry. |
+| **Model bounds** | 12 rounds, 24 evidence calls, 3 identical calls, 2 corrections; 8,000 input tokens per request / 64,000 cumulative; 2,048 requested output per round / 12,000 total; 240 active model seconds; 2 MB request body. |
+| **Estimated spending** | $0.50 cumulative commitment allowance per run; unknown usage retains reservations. Reported overruns are accounted for before another generation. This is not a provider invoice cap or shared billing service. |
 
-Agent receipts enforce a **$0.50 cumulative estimated commitment allowance per run**, retain unknown reservations, and account for reported usage overruns before allowing more generations. This is not a provider invoice cap or shared cross-run billing system. A private key, RELAY_ALLOW_LIVE=1 and RELAY_MODEL matching the trusted pricing profile are required. No live generation has been performed in the recorded milestone.
+SQLite state, local background tasks and browser contexts are single-host development infrastructure. External side effects, distributed workflow guarantees and OS-level execution isolation require additional implementation.
 
-## Reproduce
+[Implementation and boundaries](docs/09-AGENT-AND-WORKBENCH.md) · [Source map and tradeoffs](docs/10-REPOSITORY-GUIDE.md) · [Decisions](docs/DECISIONS.md)
 
-Python3.11.17 is used locally. Fresh environment:
+## Run locally
+
+Use Python **3.11**; the recorded local runtime and CI target **3.11.17**. From a fresh checkout:
 
 ```sh
+git clone https://github.com/Akhilesh-Vangala/relayops.git
+cd relayops
 python3.11 -m venv .venv
 .venv/bin/python -m pip install --require-hashes -r requirements.txt
 .venv/bin/python -m playwright install chromium
-PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -v
-PYTHONPATH=src .venv/bin/python tests/browser_workbench.py
-PYTHONPATH=src .venv/bin/python -m relayops.agent_cli --output artifacts/generated/browser-demo --browser --test-correction
-PYTHONPATH=src .venv/bin/python -m relayops.benchmark --output artifacts/generated/development-matrix
+PYTHONPATH=src RELAY_ALLOW_LIVE=0 .venv/bin/python -m relayops.web --port 8100
 ```
 
-Use fresh output directories. `agent_cli --recover` explicitly resumes a compatible saved run; no automatic paid recovery. Legacy `python -m relayops` retains the original deterministic/single-request assessment and controlled sandbox execution examples.
+Open **http://127.0.0.1:8100**. The default scripted integration demonstrates actual evidence collection, a rejected proposal, correction, independent simulation and explicit sandbox review. No API key is needed. The server binds to loopback; persistent local data is stored under `artifacts/generated/app`.
 
-For a privately configured live run, choose `--client anthropic` in agent_cli. Configuration uses exported values; the project never loads another project's private.env. Observe costs and failures on a bounded live smoke before broader evaluation.
+<details>
+<summary><strong>Run the CLI, checks and known development matrix</strong></summary>
 
-## Recorded evidence
+```sh
+PYTHONPATH=src RELAY_ALLOW_LIVE=0 .venv/bin/python -m unittest discover -s tests -v
+PYTHONPATH=src RELAY_ALLOW_LIVE=0 .venv/bin/python tests/browser_workbench.py
+PYTHONPATH=src RELAY_ALLOW_LIVE=0 .venv/bin/python -m relayops.agent_cli --output artifacts/generated/browser-demo --browser --test-correction
+PYTHONPATH=src RELAY_ALLOW_LIVE=0 .venv/bin/python -m relayops.benchmark --output artifacts/generated/development-matrix
+```
 
-**47unit/integration tests,16real browser journey checks and12/12known scripted development assessments pass.** Tests include actual official SDK HTTP/SSE assembly over a mock transport, rate-limit/no-retry behavior, truncated streams, completed receipt reuse, checkpoint recovery, forged evidence/tools, browser observation hashes, review integrity, changed-source rejection and duplicate prevention.
+Use fresh output directories. `agent_cli --recover` explicitly resumes a compatible saved investigation. The legacy `python -m relayops` CLI retains the foundation assessment and acknowledgement-loss sandbox examples.
 
-The browser journey captures six actual source screenshots, checks five pages at320/390/768/1440px, verifies grounded clarification and tests explicit review/execution. Private/temp approvals are synthetic test actions, not customer feedback. These are engineering/integration results, **not live model accuracy or unseen generalization**. Generated artifacts remain ignored.
+</details>
 
-## Architecture and next gates
+<details>
+<summary><strong>Enable a bounded live model run privately</strong></summary>
 
-Implemented: Python, LangGraph, Pydantic, AsyncAnthropic, Playwright, FastAPI/Uvicorn and local SQLite. LangSmith is a transitive dependency, not an implemented integration. No embeddings/vector retrieval is claimed.
+Configure exported `ANTHROPIC_API_KEY`, `RELAY_ALLOW_LIVE=1` and `RELAY_MODEL` matching the trusted pricing profile. Then select the live workbench mode or `agent_cli --client anthropic`. The project uses the official async SDK and typed streaming; generation retries are disabled. It never imports another project's private configuration.
 
-Next gates: early live model comparison; OCR/VLM extraction with field provenance on noisy documents; general browser/API action adapters; more workflow contracts and frozen held-out tasks; PostgreSQL/Temporal; individual identity, execution isolation and concurrency/recovery tests; production frontend and monitored cloud deployment; actual user feedback. Learned policy/training is conditional on measured failure modes and validated trajectories.
+Live runs are billable and must pass model, token and estimated-spend admission. No live generation has been performed in the recorded evidence below. [Configuration and limits](docs/09-AGENT-AND-WORKBENCH.md).
 
-- [Implemented agent/workbench details](docs/09-AGENT-AND-WORKBENCH.md)
-- [Brief](docs/01-PROJECT-BRIEF.md) · [Architecture](docs/02-ARCHITECTURE.md) · [AI design](docs/05-AI-DESIGN.md)
-- [Data](docs/04-DATA-AND-INTEGRATIONS.md) · [Flow](docs/03-PROJECT-FLOW.md) · [Evaluation](docs/06-EVALUATION.md)
-- [Setup](docs/07-SETUP-AND-DEPLOYMENT.md) · [Demo](docs/08-PORTFOLIO-AND-DEMO.md)
-- [Plan](PLAN.md) · [Progress](PROGRESS.md) · [Handoff](HANDOFF.md) · [Decisions](docs/DECISIONS.md)
-- [Preserved foundation README](README-HISTORY.md)
+</details>
 
-GitHub repository: TBD. No remote publication or cloud deployment is claimed.
+## Engineering evidence
+
+The recorded local checks below belong to implementation baseline [`dc85c15`](https://github.com/Akhilesh-Vangala/relayops/commit/dc85c1536d9cb95054bfd26542d9b46ed2e8c2ef). Presentation and CI additions preserve that source implementation.
+
+| Check | Recorded local result | What it tests |
+| --- | --- | --- |
+| Unit and integration suite | **47 passed** | SDK HTTP/SSE assembly over mocked transport, checkpoint recovery, strict citations, receipt reuse, review integrity and duplicate prevention. |
+| Actual browser journey | **16 checks passed** | Six source captures, proposal correction, review/execution, grounded clarification, five pages across four viewport widths, no runtime errors. |
+| Known scripted development matrix | **12/12 assessments passed** | Original short-shipment variants, missing evidence, conflicting quantities, stock boundaries and no-change cases. |
+| Fresh-process / concurrency tests | Included in the unit suite | Explicit uncertain-action reconciliation in a new Python process and concurrent duplicate-effect prevention. |
+
+These counts are **engineering and integration evidence**, not live model accuracy, held-out performance or customer validation. The CI badge links to current-branch Linux checks. Actions uploads browser evidence and matrix reports; generated runtime stores and logs stay out of Git.
+
+## Repository map
+
+```text
+relayops/
+├── src/relayops/        Agent, browser tools, policy, action broker, API and UI
+├── tests/              Protocol, recovery, execution and browser journeys
+├── docs/               Architecture, AI design, evaluation, setup and original visuals
+├── .github/            Reproducible checks and review templates
+├── requirements.txt    Fully pinned dependency hashes
+├── PLAN.md             Implementation and release gates
+└── CONTRIBUTING.md     Local verification and evidence conventions
+```
+
+[Technical documentation](docs/README.md) · [Code and design tradeoffs](docs/10-REPOSITORY-GUIDE.md) · [Research references](docs/REFERENCES.md) · [Progress](PROGRESS.md) · [Handoff](HANDOFF.md)
+
+## Next release gates
+
+Controlled live model comparisons; noisy document extraction with field provenance; new frozen workflow/layout tasks and safety evaluations; external action adapters; PostgreSQL/Temporal and individual identity; isolated execution and monitored cloud delivery; actual user feedback. [Full implementation plan](PLAN.md).

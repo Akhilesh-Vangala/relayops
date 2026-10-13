@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 420" role="img" aria-labelledby="title desc">
+<title id="title">RelayOps — Evidence to verified action.</title><desc id="desc">Observe business systems. Ground a plan. Control every effect.. Original monochrome architecture illustration.</desc>
+<defs><pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#222" stroke-width="0.6"/></pattern></defs>
+<rect width="1280" height="420" rx="16" fill="#101010"/>
+<rect x="728" width="552" height="420" rx="16" fill="url(#grid)"/>
+<path d="M728 32V388" stroke="#333"/>
+<text x="48" y="59" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#a8a8a8" font-weight="600" letter-spacing="2">AGENTIC SYSTEMS / ENGINEERING WORKBENCH</text>
+<text x="46" y="153" font-family="Arial,Helvetica,sans-serif" font-size="80" fill="#fff" font-weight="700" letter-spacing="-3">RelayOps</text>
+<text x="48" y="207" font-family="Arial,Helvetica,sans-serif" font-size="29" fill="#f0f0f0" font-weight="500" >Evidence to verified action.</text>
+<text x="48" y="251" font-family="Arial,Helvetica,sans-serif" font-size="17" fill="#bdbdbd" font-weight="400" >Observe business systems. Ground a plan. Control every effect.</text>
+<rect x="48" y="301" width="159" height="35" rx="17" fill="#fff"/>
+<text x="66" y="324" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#161616" font-weight="600" >LangGraph / Python</text>
+<text x="224" y="324" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#c8c8c8" font-weight="400" >Original code. Explicit boundaries.</text>
+<text x="48" y="385" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#909090" font-weight="500" letter-spacing="1.2">EVIDENCE → PROPOSAL → VERIFICATION → REVIEW</text>
+<path d="M972 136H1006M1103 177V228M1006 270H972" fill="none" stroke="#b3b3b3" stroke-width="1.5"/>
+<path d="m998 132 8 4-8 4M1099 220l4 8 4-8m-127 46-8 4 8 4" fill="none" stroke="#b3b3b3" stroke-width="1.5"/>
+<rect x="778" y="94" width="194" height="83" rx="8" fill="#191919" stroke="#555"/>
+<text x="794" y="118" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#909090" font-weight="500" letter-spacing="1">01</text>
+<text x="794" y="142" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#fff" font-weight="600" >Observe</text>
+<text x="794" y="163" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#bdbdbd" font-weight="400" >Browser + document evidence</text>
+<rect x="1006" y="94" width="194" height="83" rx="8" fill="#191919" stroke="#555"/>
+<text x="1022" y="118" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#909090" font-weight="500" letter-spacing="1">02</text>
+<text x="1022" y="142" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#fff" font-weight="600" >Propose</text>
+<text x="1022" y="163" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#bdbdbd" font-weight="400" >Cited business actions</text>
+<rect x="1006" y="228" width="194" height="83" rx="8" fill="#191919" stroke="#555"/>
+<text x="1022" y="252" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#909090" font-weight="500" letter-spacing="1">03</text>
+<text x="1022" y="276" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#fff" font-weight="600" >Verify</text>
+<text x="1022" y="297" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#bdbdbd" font-weight="400" >Private-copy simulation</text>
+<rect x="778" y="228" width="194" height="83" rx="8" fill="#191919" stroke="#555"/>
+<text x="794" y="252" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#909090" font-weight="500" letter-spacing="1">04</text>
+<text x="794" y="276" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#fff" font-weight="600" >Authorize</text>
+<text x="794" y="297" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#bdbdbd" font-weight="400" >Exact-version review</text>
+<text x="778" y="355" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#a8a8a8" font-weight="500" letter-spacing="1">MODEL PROPOSES. AUTHORITY STAYS EXPLICIT.</text>
+</svg>
