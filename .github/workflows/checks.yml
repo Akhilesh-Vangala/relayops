@@ -1,0 +1,72 @@
+name: RelayOps workbench
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+env:
+  PYTHONPATH: src
+  RELAY_ALLOW_LIVE: "0"
+  ANTHROPIC_API_KEY: ""
+
+jobs:
+  tests:
+    name: Protocol, policy and recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.17"
+      - name: Install the hashed dependency lock
+        run: python -m pip install --require-hashes -r requirements.txt
+      - name: Install Chromium and system dependencies
+        run: python -m playwright install --with-deps chromium
+      - name: Verify installed dependency compatibility
+        run: python -m pip check
+      - name: Run unit and integration tests
+        run: python -m unittest discover -s tests -v
+      - name: Run the known scripted development matrix
+        run: python -m relayops.benchmark --output artifacts/generated/ci-matrix
+      - name: Verify all matrix assessments and untouched source state
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('artifacts/generated/ci-matrix/report.json').read_text())
+          assert result['case_count'] == 12
+          assert result['passing_assessments'] == result['case_count']
+          assert result['live_model_generations'] == 0
+          assert all(case['original_business_untouched'] for case in result['cases'])
+          print('12 known scripted assessments passed; original business state preserved; no live generation.')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-matrix
+          path: artifacts/generated/ci-matrix
+          retention-days: 14
+
+  browser:
+    name: Operator and browser evidence journey
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.17"
+      - name: Install the hashed dependency lock
+        run: python -m pip install --require-hashes -r requirements.txt
+      - name: Install Chromium and system dependencies
+        run: python -m playwright install --with-deps chromium
+      - name: Run the real local workbench journey
+        run: python tests/browser_workbench.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: artifacts/generated/browser-workbench-*
+          retention-days: 14
