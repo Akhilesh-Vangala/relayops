@@ -22,3 +22,5 @@ Start with the [project README](../README.md) for the problem, actual app screen
 - [Visual provenance and review guide](10-REPOSITORY-GUIDE.md).
 
 The source map and current agent document describe the latest implementation. Dated foundation sections in earlier documents are retained as history and explicitly superseded where implementation has advanced. The original [foundation README](../README-HISTORY.md) is preserved.
+
+For repository development, use the [branch, PR and release policy](../BRANCHING.md).

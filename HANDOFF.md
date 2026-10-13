@@ -1,5 +1,7 @@
 # Handoff
 
+October 13 repository workflow: protected `main`, short-lived named work branches, required GitHub Actions checks, squash-only PR integration and automatic remote branch cleanup are documented in [BRANCHING.md](BRANCHING.md). CI runs for PRs targeting `main` and pushes to `main`, with superseded PR runs cancelled. The setup change itself goes through a real PR; actual protection and merge verification are recorded in the workspace context after execution. Runtime code and existing release evidence are unchanged.
+
 October 13 verified publication: [RelayOps](https://github.com/Akhilesh-Vangala/relayops) is public with original history preserved. Publication baseline 7aa02f7 passed [both actual Linux CI jobs](https://github.com/Akhilesh-Vangala/relayops/actions/runs/38345763992); downloaded artifacts/logs confirm 47 unit/integration tests, 16 actual browser checks and 12/12 known scripted assessments, with dependency compatibility passing and no live model generation. README visuals, source/tradeoff guide and review templates are published; [publication record](docs/11-GITHUB-PUBLICATION.md) documents evidence and limits. The current branch badge follows later documentation commits. Live model evaluation, individual identity, distributed execution and monitored cloud release remain pending.
 
 ## Dated implementation history
