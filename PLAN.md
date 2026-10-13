@@ -26,7 +26,8 @@
 - [ ] Temporal lifecycle with isolated execution, retries only where effects are safe and tested.
 - [ ] Individual identity, role/resource checks, approval expiry/revocation and partial-state recovery/compensation.
 - [x] Local operator pages, stored activity/evidence viewer and exact-version review/sandbox execution.
-- [ ] Production frontend, operational monitoring and cloud deployment.
+- [x] Public read-only Vercel engineering showcase with cloud build and external smoke checks.
+- [ ] Durable state-changing cloud workflow runtime, individual identity, monitoring and rollback.
 
 ## Release evidence — Pending
 

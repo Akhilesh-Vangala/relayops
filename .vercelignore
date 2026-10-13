@@ -1,0 +1,17 @@
+.git
+.github
+.tools
+.venv
+.env*
+artifacts
+docs
+notebooks
+tests
+__pycache__
+*.pyc
+README-HISTORY.md
+BRANCHING.md
+CONTRIBUTING.md
+HANDOFF.md
+PLAN.md
+PROGRESS.md
