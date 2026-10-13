@@ -1,5 +1,7 @@
 # Contributing
 
+Use the [branch and release workflow](BRANCHING.md): short-lived work branch → pull request → required CI → squash merge into protected `main`.
+
 Use the [README quick start](README.md#run-locally) to create a Python 3.11 environment from the hashed dependency lock. Development checks require Chromium. Use original synthetic fixtures and fresh generated output directories.
 
 ## Verify a change

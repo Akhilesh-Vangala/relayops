@@ -182,3 +182,5 @@ relayops/
 ## Next release gates
 
 Controlled live model comparisons; noisy document extraction with field provenance; new frozen workflow/layout tasks and safety evaluations; external action adapters; PostgreSQL/Temporal and individual identity; isolated execution and monitored cloud delivery; actual user feedback. [Full implementation plan](PLAN.md).
+
+[Branch and release workflow](BRANCHING.md) · [Contributing](CONTRIBUTING.md)
