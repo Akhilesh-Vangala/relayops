@@ -1,6 +1,6 @@
 # Setup and deployment
 
-October 13 current repository: [RelayOps](https://github.com/Akhilesh-Vangala/relayops). Use the [README quick start](../README.md#run-locally), [CI workflow](../.github/workflows/checks.yml) and [contribution guide](../CONTRIBUTING.md). The local operator app is implemented; GitHub Actions verification is recorded after execution. The earlier no-server/no-publication paragraph below is the superseded foundation record. No Docker runtime or cloud deployment is claimed.
+October 13 current repository: [RelayOps](https://github.com/Akhilesh-Vangala/relayops). Use the [README quick start](../README.md#run-locally), [CI workflow](../.github/workflows/checks.yml) and [contribution guide](../CONTRIBUTING.md). The local operator app is implemented; Both Linux jobs passed at the publication baseline; [actual CI evidence](11-GITHUB-PUBLICATION.md) includes logs/artifact verification. The earlier no-server/no-publication paragraph below is the superseded foundation record. No Docker runtime or cloud deployment is claimed.
 
 October12 current implementation: [model-directed agent and local workbench](09-AGENT-AND-WORKBENCH.md) add persistent dynamic tool selection, real browser/document screenshots, cited public hypotheses, bounded correction, actual SDK HTTP/SSE checks and operator pages. Earlier no-browser/no-server/single-call-only statements below describe the initial foundation and are superseded for current coverage; live quality, arbitrary UI actions, scanned-document extraction and distributed/cloud release remain pending.
 

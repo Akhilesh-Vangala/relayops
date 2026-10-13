@@ -32,7 +32,7 @@
 
 - [ ] Frozen held-out workflow/layout tests and adversarial failures.
 - [ ] Repeated quality/cost/latency measurements and ablations.
-- [ ] Public reproducible repository/CI and technical write-up.
+- [x] Public reproducible repository/CI and scoped implementation/tradeoff write-up: [publication evidence](docs/11-GITHUB-PUBLICATION.md), [engineering guide](docs/10-REPOSITORY-GUIDE.md).
 - [ ] Actual user sessions/feedback and measured utility.
 
-Do not increment VerifyOps's separate completion tracker. No new project GitHub URL/publication or cloud resources established.
+RelayOps publication and actual Linux CI are verified; cloud delivery remains pending. Keep this project's gates separate from VerifyOps's completion tracker.

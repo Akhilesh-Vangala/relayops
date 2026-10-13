@@ -153,9 +153,9 @@ Live runs are billable and must pass model, token and estimated-spend admission.
 
 ## Engineering evidence
 
-The recorded local checks below belong to implementation baseline [`dc85c15`](https://github.com/Akhilesh-Vangala/relayops/commit/dc85c1536d9cb95054bfd26542d9b46ed2e8c2ef). Presentation and CI additions preserve that source implementation.
+The recorded local checks below belong to implementation baseline [`dc85c15`](https://github.com/Akhilesh-Vangala/relayops/commit/dc85c1536d9cb95054bfd26542d9b46ed2e8c2ef). The publication baseline at [`7aa02f7`](https://github.com/Akhilesh-Vangala/relayops/commit/7aa02f7c74cca3c1826f612e83b378a957fd1751) passed both Linux jobs in [Actions run 38345763992](https://github.com/Akhilesh-Vangala/relayops/actions/runs/38345763992). Logs and downloaded artifacts confirm the same counts. The badge tracks the current branch.
 
-| Check | Recorded local result | What it tests |
+| Check | Verified result | What it tests |
 | --- | --- | --- |
 | Unit and integration suite | **47 passed** | SDK HTTP/SSE assembly over mocked transport, checkpoint recovery, strict citations, receipt reuse, review integrity and duplicate prevention. |
 | Actual browser journey | **16 checks passed** | Six source captures, proposal correction, review/execution, grounded clarification, five pages across four viewport widths, no runtime errors. |
@@ -177,7 +177,7 @@ relayops/
 └── CONTRIBUTING.md     Local verification and evidence conventions
 ```
 
-[Technical documentation](docs/README.md) · [Code and design tradeoffs](docs/10-REPOSITORY-GUIDE.md) · [Research references](docs/REFERENCES.md) · [Progress](PROGRESS.md) · [Handoff](HANDOFF.md)
+[Technical documentation](docs/README.md) · [Publication evidence](docs/11-GITHUB-PUBLICATION.md) · [Code and design tradeoffs](docs/10-REPOSITORY-GUIDE.md) · [Research references](docs/REFERENCES.md) · [Progress](PROGRESS.md) · [Handoff](HANDOFF.md)
 
 ## Next release gates
 
