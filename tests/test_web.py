@@ -1,8 +1,10 @@
 import asyncio
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import httpx
 
@@ -80,3 +82,20 @@ class WebTests(unittest.IsolatedAsyncioTestCase):
         response=await self.client.get('/')
         self.assertIn("frame-ancestors 'none'",response.headers['Content-Security-Policy'])
         self.assertEqual(response.headers['Cache-Control'],'no-store')
+
+    async def test_public_showcase_is_remote_readable_and_blocks_changes(self):
+        with patch.dict(os.environ, {'RELAY_PUBLIC_SHOWCASE': '1'}):
+            public_app = create_app(self.root / 'public')
+        async with httpx.AsyncClient(
+            transport=httpx.ASGITransport(app=public_app, client=('203.0.113.10', 1)),
+            base_url='https://relayops.example',
+        ) as public:
+            overview = await public.get('/')
+            self.assertEqual(overview.status_code, 200)
+            self.assertIn('Vercel · Read-only showcase', overview.text)
+            showcase = await public.get('/showcase')
+            self.assertEqual(showcase.status_code, 200)
+            self.assertIn('ACTUAL ISOLATED APP EXECUTION', showcase.text)
+            blocked = await public.post('/api/runs', json={'case_id': 'short-shipment'})
+            self.assertEqual(blocked.status_code, 405)
+            self.assertEqual(blocked.json()['detail'], 'Public showcase is read-only')
