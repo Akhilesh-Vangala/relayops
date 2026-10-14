@@ -42,6 +42,7 @@ Required check names (preserve these names when editing CI):
 
 - `Protocol, policy and recovery`
 - `Operator and browser evidence journey`
+- `Containers and Kubernetes`
 
 Settings live in GitHub and are verified through its API; this Markdown file is the documented policy, not an executable protection rule. Check the branch settings if GitHub configuration changes.
 

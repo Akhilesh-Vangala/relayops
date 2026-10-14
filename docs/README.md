@@ -13,6 +13,7 @@ Start with the [engineering case study](CASE-STUDY.md) and [recorded demo](DEMO.
 | How are actions checked and authorized? | [Project flow](03-PROJECT-FLOW.md), [architecture](02-ARCHITECTURE.md), [design decisions](DECISIONS.md) |
 | What do the tests actually establish? | [Evaluation](06-EVALUATION.md), [current evidence](../README.md#engineering-evidence), [CI](../.github/workflows/checks.yml), [verified publication](11-GITHUB-PUBLICATION.md) |
 | How do I run or inspect the app? | [Public read-only showcase](https://relayops-two.vercel.app), [Vercel boundary](12-VERCEL-SHOWCASE.md), [quick start](../README.md#run-locally), [setup](07-SETUP-AND-DEPLOYMENT.md) |
+| How are durable workers and containers operated? | [Queue, Docker and Kubernetes](13-DURABLE-WORKERS-AND-KUBERNETES.md) |
 | What is implemented versus proposed? | [Plan](../PLAN.md), [progress](../PROGRESS.md), [handoff](../HANDOFF.md) |
 | Which research informed the design? | [Primary references](REFERENCES.md), [AI design](05-AI-DESIGN.md) |
 

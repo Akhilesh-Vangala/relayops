@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relayops-worker
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: worker
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+      - name: wait-for-schema
+        image: relayops
+        imagePullPolicy: IfNotPresent
+        command:
+        - python
+        - -m
+        - relayops.wait_for_database
+        envFrom: &id001
+        - configMapRef:
+            name: relayops-config
+        - secretRef:
+            name: relayops-secrets
+        securityContext: &id002
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      containers:
+      - name: worker
+        image: relayops
+        imagePullPolicy: IfNotPresent
+        envFrom: *id001
+        securityContext: *id002
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: '2'
+            memory: 2Gi
+        volumeMounts:
+        - name: state
+          mountPath: /state
+        - name: tmp
+          mountPath: /tmp
+        - name: shm
+          mountPath: /dev/shm
+        command:
+        - python
+        - -m
+        - relayops.worker
+        - --state-dir
+        - /state
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -m
+            - relayops.worker_health
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: state
+        persistentVolumeClaim:
+          claimName: relayops-state
+      - name: tmp
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 256Mi
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: api
+                app.kubernetes.io/name: relayops
+            topologyKey: kubernetes.io/hostname

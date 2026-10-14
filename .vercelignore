@@ -15,3 +15,7 @@ CONTRIBUTING.md
 HANDOFF.md
 PLAN.md
 PROGRESS.md
+deploy
+scripts
+Dockerfile
+compose.yaml
