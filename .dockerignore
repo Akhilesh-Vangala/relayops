@@ -1,0 +1,11 @@
+.git
+.github
+.tools
+.venv*
+.env*
+artifacts
+docs
+notebooks
+__pycache__
+*.pyc
+.vercel

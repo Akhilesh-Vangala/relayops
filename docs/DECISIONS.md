@@ -19,3 +19,9 @@ SQLite is only the initial fixture/journal backend. Proposed release uses Postgr
 ## 2026-10-12 — Bounded live connector early
 
 Official AsyncAnthropic; no urllib; input/time/output/estimated-cost admission, zero generation retries and persisted unknown receipts. One request per fresh run. Live generation awaits private configuration and funding; full HTTP compatibility/provider edge cases and autonomous browser loop remain next work. Do not defer live evaluation behind months of orchestration.
+
+## October 14 — Durable queue before container replicas
+
+Persist API requests and separate worker ownership before adding Kubernetes replicas. PostgreSQL uses `FOR UPDATE SKIP LOCKED`; SQLite remains the offline adapter. Expired owners cannot publish and interrupted work is never automatically replayed. This makes API restarts independent of worker execution while retaining conservative paid-call/receipt semantics.
+
+Choose same-node RWO storage while the authored fixture business worlds, action receipts and graph checkpoints remain SQLite files. A distributed queue does not make these files distributed-safe; multi-node scale needs their database/object-store migration. Kind validates the actual API restart/browser/review/execution journey, while policy enforcement and cloud availability remain separate gates. Shared Basic/Bearer operator access is an interim integration boundary, not individual OIDC authorization.

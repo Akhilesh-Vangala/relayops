@@ -1,5 +1,7 @@
 # Implementation plan
 
+October 14 durable-worker foundation: persisted requests, optional PostgreSQL queue with competing row-locked claims, lease/owner fencing and a separate browser worker now replace API-local tasks in container mode. API startup no longer invalidates owned work. Hardened Python 3.12 Docker/Compose and restricted Kubernetes/Kind packaging are implemented; local real PostgreSQL passes 57 tests without skips and the existing browser journey passes 16 checks. Container/Kind CI remains to be verified before merge. [Architecture and deployment boundary](docs/13-DURABLE-WORKERS-AND-KUBERNETES.md). Fixture/action/checkpoint SQLite files still require same-node storage; individual identity, multi-host business state, isolated execution, live evaluation and monitored cloud operation remain pending.
+
 ## Foundation — Local implementation and verification
 
 - [x] Original cross-system short-shipment contract and synthetic world.
@@ -20,9 +22,11 @@
 - [ ] Dynamic external action execution and interactive clarification continuation.
 - [ ] Model/tool/budget trace comparison against strong baselines.
 
-## Durable product — Pending
+## Durable product — In progress
 
-- [ ] PostgreSQL action/evidence/approval/state storage and migrations.
+- [x] PostgreSQL investigation queue, schema migration, leased separate worker, API restart preservation and stale-owner rejection.
+- [x] Hardened Docker/Compose and restricted Kubernetes/Kind integration topology; actual remote execution is recorded after CI.
+- [ ] PostgreSQL business action/evidence/approval state and graph checkpoint migration; object artifacts and multi-host storage.
 - [ ] Temporal lifecycle with isolated execution, retries only where effects are safe and tested.
 - [ ] Individual identity, role/resource checks, approval expiry/revocation and partial-state recovery/compensation.
 - [x] Local operator pages, stored activity/evidence viewer and exact-version review/sandbox execution.

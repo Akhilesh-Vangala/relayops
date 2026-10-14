@@ -1,31 +1,30 @@
 """Local monochrome operator workbench; synthetic worlds, separate run records."""
 import asyncio
 import hashlib
+import base64
+import secrets
 import html
 import json
 import os
 import re
-import sqlite3
-import uuid
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 from types import SimpleNamespace
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, Response
 from pydantic import BaseModel, ConfigDict
 
-from .agent import fingerprint, investigate
-from .agent_transport import AgentModel
-from .browser import BrowserEvidence, evidence_page
+from .agent import fingerprint
+from .browser import evidence_page
 from .domain import Plan, Refused, digest
 from .environment import World, fixture
 from .evaluator import evaluate
 from .executor import approve, execute
-from .scripted_agent import ScriptedAgent
-from .workflow import simulate_plan
+from .run_store import RunStore
+from .worker import run_one
 
 SCENARIOS = {
     "short-shipment": ("Short shipment", "100 ordered · 80 confirmed delivered · reconcile 20 missing units", {}),
@@ -82,33 +81,55 @@ def create_app(state_dir):
         return page(title, content, public_showcase)
     root = Path(state_dir).resolve()
     root.mkdir(parents=True, exist_ok=True)
-    def db():
-        connection = sqlite3.connect(root / "runs.sqlite", timeout=5)
-        connection.row_factory = sqlite3.Row
-        return connection
-    with db() as connection:
-        connection.execute("CREATE TABLE IF NOT EXISTS runs (id TEXT PRIMARY KEY, case_id TEXT, mode TEXT, status TEXT, review TEXT, approval TEXT, created_at TEXT, request_key TEXT UNIQUE, request_hash TEXT, execution TEXT)")
+    store = RunStore(root)
+    db = store.connection
+    access_token = os.getenv("RELAY_ACCESS_TOKEN", "")
+    public_origin = os.getenv("RELAY_PUBLIC_ORIGIN", "")
+    if access_token and len(access_token) < 32:
+        store.close()
+        raise ValueError("RELAY_ACCESS_TOKEN must contain at least 32 characters")
+    if public_origin and (urlsplit(public_origin).scheme != "https" or not access_token):
+        store.close()
+        raise ValueError("A public origin requires HTTPS and a private access token")
+    embedded_worker = os.getenv("RELAY_EMBEDDED_WORKER", "0" if store.pool else "1") == "1"
     tasks = set()
     @asynccontextmanager
     async def lifespan(app):
-        with db() as connection:
-            connection.execute("UPDATE runs SET status='interrupted' WHERE status IN ('queued','running')")
-        yield
-        for task in tasks:
-            task.cancel()
-        await asyncio.gather(*tasks, return_exceptions=True)
+        try:
+            yield
+        finally:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            store.close()
     app = FastAPI(title="RelayOps public showcase" if public_showcase else "RelayOps local research workbench", lifespan=lifespan)
+    app.state.store = store
     @app.middleware("http")
     async def boundaries(request, call_next):
         if public_showcase:
             if request.method != "GET":
                 return Response('{"detail":"Public showcase is read-only"}', status_code=405, media_type="application/json")
         else:
-            if request.client and request.client.host not in ("127.0.0.1", "::1", "testclient"):
-                return Response("Local workbench access only", status_code=403)
             host = request.headers.get("host", "").split(":")[0]
-            if host not in ("127.0.0.1", "localhost", "testserver"):
+            allowed_hosts = {"127.0.0.1", "localhost", "testserver", urlsplit(public_origin).hostname}
+            if host not in allowed_hosts:
                 return Response("Unexpected host", status_code=403)
+            probe = request.url.path in ("/healthz", "/readyz")
+            if access_token and not probe:
+                authorization = request.headers.get("authorization", "")
+                expected = "Bearer " + access_token
+                authenticated = secrets.compare_digest(authorization, expected)
+                if authorization.startswith("Basic "):
+                    try:
+                        username, password = base64.b64decode(authorization[6:], validate=True).decode().split(":", 1)
+                        authenticated = username == "operator" and secrets.compare_digest(password, access_token)
+                    except (ValueError, UnicodeError):
+                        authenticated = False
+                if not authenticated:
+                    return Response("Operator authentication required", status_code=401,
+                                    headers={"WWW-Authenticate": 'Basic realm="RelayOps"'})
+            elif not access_token and not probe and request.client and request.client.host not in ("127.0.0.1", "::1", "testclient"):
+                return Response("Local workbench access only", status_code=403)
         if request.method != "GET":
             origin = request.headers.get("origin")
             if origin and origin not in ("http://" + request.headers["host"], "https://" + request.headers["host"]):
@@ -133,38 +154,23 @@ def create_app(state_dir):
         return World(root / "runs" / identity / "world.sqlite")
     def report_for(identity):
         path = root / "runs" / identity / "assessment.json"
-        return json.loads(path.read_text()) if path.exists() else None
-    async def work(identity, spec):
-        browser, client = None, None
-        try:
-            with db() as connection:
-                connection.execute("UPDATE runs SET status='running' WHERE id=?", (identity,))
-            world = world_for(identity)
-            if spec.browser:
-                browser = await BrowserEvidence(world).start()
-            client = ScriptedAgent(incorrect_first=True) if spec.mode == "scripted" else AgentModel(world, json.loads((Path(__file__).resolve().parents[2] / "data/pricing.json").read_text()))
-            result = await investigate(world, client, browser=browser)
-            result["simulation"] = await asyncio.to_thread(simulate_plan, world, Plan.from_json(result["plan"]))
-            result["version"] = digest(result)
-            destination = world.path.parent / "assessment.json"
-            temp = destination.with_suffix(".tmp")
-            temp.write_text(json.dumps(result, indent=2) + "\n"); temp.replace(destination)
-            with db() as connection:
-                connection.execute("UPDATE runs SET status='completed' WHERE id=?", (identity,))
-        except BaseException as error:
-            status = "interrupted" if isinstance(error, asyncio.CancelledError) else "failed"
-            with db() as connection:
-                connection.execute("UPDATE runs SET status=? WHERE id=?", (status, identity))
-            # Local diagnostic only; provider exceptions are not exposed to the browser.
-            (root / "runs" / identity / "failure.json").write_text(json.dumps({"kind": type(error).__name__, "status": status}))
-        finally:
-            if browser:
-                await browser.close()
-            if client and hasattr(client, "close"):
-                await client.close()
+        return json.loads(path.read_text()) if get_run(identity)["status"] == "completed" and path.exists() else None
     def live_ready():
         profile=json.loads((Path(__file__).resolve().parents[2] / 'data/pricing.json').read_text())
         return bool(os.getenv("ANTHROPIC_API_KEY") and os.getenv("RELAY_ALLOW_LIVE") == "1" and os.getenv("RELAY_MODEL") == profile['model'])
+    @app.get("/healthz")
+    def health():
+        return {"status": "ok"}
+
+    @app.get("/readyz")
+    def readiness():
+        try:
+            with db() as connection:
+                connection.execute("SELECT 1").fetchone()
+        except Exception:
+            return Response('{"status":"unavailable"}', status_code=503, media_type="application/json")
+        return {"status": "ready"}
+
     @app.get("/assets/style.css")
     def stylesheet():
         return Response(CSS, media_type="text/css")
@@ -202,27 +208,21 @@ def create_app(state_dir):
             raise HTTPException(400, "Bounded idempotency key required")
         if spec.mode == "live" and not live_ready():
             raise HTTPException(503, "Live agent is not privately configured")
-        identity, request_hash = uuid.uuid4().hex, digest(spec.model_dump())
-        with db() as connection:
-            connection.execute("BEGIN IMMEDIATE")
-            old = connection.execute("SELECT * FROM runs WHERE request_key=?", (key,)).fetchone()
-            if old:
-                if old['request_hash'] != request_hash:
-                    raise HTTPException(409, "Idempotency key was used for another request")
-                return {"id": old['id'], "status": old['status']}
-            if connection.execute("SELECT COUNT(*) FROM runs WHERE status IN ('queued','running')").fetchone()[0] >= 4:
-                raise HTTPException(429, "Local investigation capacity reached")
-            world = world_for(identity)
-            world.initialize(fixture(name=spec.case_id, **SCENARIOS[spec.case_id][2]))
-            connection.execute("INSERT INTO runs VALUES (?,?,?,?,?,?,?,?,?,NULL)", (identity, spec.case_id, spec.mode, "queued", None, None,
-                                       datetime.now(timezone.utc).isoformat(), key, request_hash))
-        task = asyncio.create_task(work(identity, spec)); tasks.add(task); task.add_done_callback(tasks.discard)
-        return {"id": identity, "status": "queued"}
+        try:
+            identity, status, created = await asyncio.to_thread(store.enqueue, spec.model_dump(), key)
+        except Refused as error:
+            raise HTTPException(409, str(error)) from None
+        if created and embedded_worker:
+            task = asyncio.create_task(run_one(store, identity))
+            tasks.add(task)
+            task.add_done_callback(tasks.discard)
+        return {"id": identity, "status": status}
     @app.get("/api/runs/{identity}")
     def status(identity):
         row = get_run(identity)
         return {"id": identity, "case_id": row['case_id'], "mode": row['mode'], "status": row['status'], "review": row['review'],
-                "events": len(world_for(identity).events()), "assessment": report_for(identity)}
+                "events": len(world_for(identity).events()) if (root / "runs" / identity / "world.sqlite").exists() else 0,
+                "error_kind": row.get("error_kind"), "assessment": report_for(identity)}
     @app.get("/runs")
     def runs():
         if public_showcase:
@@ -334,7 +334,7 @@ def create_app(state_dir):
                   ('Verify','Public plan policy, private counterfactual execution and independent final-state assertions.'),
                   ('Authorize','Exact-version review and controlled sandbox action identities.'),
                   ('Recover','Unknown receipts block retry; explicit reconciliation before continuation.')]
-        return render('AI architecture',"<div class='hero'><h1>From evidence to verified actions</h1><p class='muted'>Implemented layers with explicit authority boundaries.</p></div><div class='grid'>"+''.join("<div class='card'><div class='eyebrow'>"+escape(title)+"</div><h2>"+escape(text)+"</h2></div>" for title,text in layers)+"</div><div class='callout'>Current: local single-host research application. PostgreSQL, Temporal, individual identity, production connectors, learned policy and monitored cloud deployment remain pending.</div>")
+        return render('AI architecture',"<div class='hero'><h1>From evidence to verified actions</h1><p class='muted'>Implemented layers with explicit authority boundaries.</p></div><div class='grid'>"+''.join("<div class='card'><div class='eyebrow'>"+escape(title)+"</div><h2>"+escape(text)+"</h2></div>" for title,text in layers)+"</div><div class='callout'>Current: PostgreSQL coordination with separate leased browser workers and Docker/Kubernetes packaging. Fixture worlds and agent checkpoints remain local files. Individual identity, isolated customer execution, production connectors and monitored cloud deployment remain pending.</div>")
     return app
 
 

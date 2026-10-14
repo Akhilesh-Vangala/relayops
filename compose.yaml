@@ -1,0 +1,66 @@
+x-runtime: &runtime
+  build:
+    context: .
+    target: runtime
+  environment: &environment
+    RELAY_DATABASE_URL: postgresql://relayops:${RELAY_POSTGRES_PASSWORD:?Set a private alphanumeric PostgreSQL password}@postgres:5432/relayops
+    RELAY_ACCESS_TOKEN: ${RELAY_ACCESS_TOKEN:?Set a private operator token of at least 32 characters}
+    RELAY_PUBLIC_ORIGIN: ${RELAY_PUBLIC_ORIGIN:-}
+    RELAY_STATE_DIR: /state
+    RELAY_EMBEDDED_WORKER: "0"
+    RELAY_ALLOW_LIVE: "0"
+  volumes:
+    - state:/state
+  read_only: true
+  tmpfs:
+    - /tmp:size=1024m,mode=1777
+  shm_size: 256m
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  init: true
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: relayops
+      POSTGRES_USER: relayops
+      POSTGRES_PASSWORD: ${RELAY_POSTGRES_PASSWORD:?Set RELAY_POSTGRES_PASSWORD}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U relayops -d relayops"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+  migrate:
+    <<: *runtime
+    command: ["python", "-m", "relayops.migrations"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+  api:
+    <<: *runtime
+    ports:
+      - "127.0.0.1:${RELAY_PORT:-8100}:8100"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+  worker:
+    <<: *runtime
+    command: ["python", "-m", "relayops.worker", "--state-dir", "/state"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      disable: true
+volumes:
+  postgres:
+  state:

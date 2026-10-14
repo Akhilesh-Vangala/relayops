@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: relayops-config
+data:
+  RELAY_STATE_DIR: /state
+  RELAY_EMBEDDED_WORKER: '0'
+  RELAY_ALLOW_LIVE: '0'
+  RELAY_PUBLIC_ORIGIN: ''

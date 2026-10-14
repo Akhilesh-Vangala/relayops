@@ -1,5 +1,7 @@
 # Setup and deployment
 
+October 14 current implementation: [durable worker and Kubernetes foundation](13-DURABLE-WORKERS-AND-KUBERNETES.md) adds PostgreSQL investigation coordination, a separate leased browser worker, restart preservation, shared-operator access, hardened Python 3.12 Docker/Compose and a restricted same-node Kind topology. Earlier API-local/no-container/no-queue statements are historical. Business state/checkpoint/object migration and monitored cloud operation remain open.
+
 October 13 current repository: [RelayOps](https://github.com/Akhilesh-Vangala/relayops). The [public Vercel showcase](https://relayops-two.vercel.app) serves the real FastAPI product in an explicit read-only mode; its [deployment record](12-VERCEL-SHOWCASE.md) defines what this establishes. The local operator app retains state-changing sandbox workflows. Both Linux jobs passed at the publication baseline; [actual CI evidence](11-GITHUB-PUBLICATION.md) includes logs/artifact verification. Earlier no-server/no-publication text below is retained as history.
 
 October12 current implementation: [model-directed agent and local workbench](09-AGENT-AND-WORKBENCH.md) add persistent dynamic tool selection, real browser/document screenshots, cited public hypotheses, bounded correction, actual SDK HTTP/SSE checks and operator pages. Earlier no-browser/no-server/single-call-only statements below describe the initial foundation and are superseded for current coverage; live quality, arbitrary UI actions, scanned-document extraction and distributed/cloud release remain pending.

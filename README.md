@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml"><img src="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml/badge.svg" alt="RelayOps workbench CI status"></a>
-  &nbsp; Python 3.11 · LangGraph · AsyncAnthropic · Playwright · FastAPI
+  &nbsp; Python 3.12 · LangGraph · PostgreSQL · Playwright · Kubernetes
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 
 RelayOps investigates procurement, warehouse, billing and case evidence through a checkpointed LangGraph tool loop. Proposals pass separate simulation and business-state checks, then exact-version sandbox review before controlled execution.
 
-> **Development release.** The [public Vercel showcase](https://relayops-two.vercel.app) is read only. Default demos are scripted and synthetic. Live model quality, scanned-document extraction, production connectors, individual identity and durable cloud workflow execution remain pending. [Deployment boundary →](docs/12-VERCEL-SHOWCASE.md)
+> **Development release.** The [public Vercel showcase](https://relayops-two.vercel.app) is read only. Default demos are scripted and synthetic. Live model quality, scanned-document extraction, production connectors, individual identity and durable cloud workflow execution remain pending. [Durable worker/container foundation →](docs/13-DURABLE-WORKERS-AND-KUBERNETES.md)
 
 | Run the product | Inspect the engineering | Challenge the evidence |
 | --- | --- | --- |
@@ -129,18 +129,28 @@ flowchart TD
 | **Model bounds** | 12 rounds, 24 evidence calls, 3 identical calls, 2 corrections; 8,000 input tokens per request / 64,000 cumulative; 2,048 requested output per round / 12,000 total; 240 active model seconds; 2 MB request body. |
 | **Estimated spending** | $0.50 cumulative commitment allowance per run; unknown usage retains reservations. Reported overruns are accounted for before another generation. This is not a provider invoice cap or shared billing service. |
 
-SQLite state, local background tasks and browser contexts are single-host development infrastructure. External side effects, distributed workflow guarantees and OS-level execution isolation require additional implementation.
+PostgreSQL coordinates separate leased workers in container mode. Fixture/action/checkpoint files and browser contexts remain within a same-node development boundary. Multi-host business state, external connectors and OS-level execution isolation require additional implementation.
 
 [Implementation and boundaries](docs/09-AGENT-AND-WORKBENCH.md) · [Source map and tradeoffs](docs/10-REPOSITORY-GUIDE.md) · [Decisions](docs/DECISIONS.md)
 
+## Docker and Kubernetes
+
+The persistent runtime uses PostgreSQL admission and separate leased browser workers. Docker Compose runs migration/API/worker/PostgreSQL; Kubernetes uses a restricted namespace and an explicit same-node storage boundary for remaining fixture/checkpoint files. [Full topology, commands and limits](docs/13-DURABLE-WORKERS-AND-KUBERNETES.md).
+
+```sh
+cp .env.example .env
+# Configure private operator and PostgreSQL values.
+docker compose up --build --wait
+```
+
 ## Run locally
 
-Use Python **3.11**; the recorded local runtime and CI target **3.11.17**. From a fresh checkout:
+Use Python **3.12** locally, in CI and in the container. From a fresh checkout:
 
 ```sh
 git clone https://github.com/Akhilesh-Vangala/relayops.git
 cd relayops
-python3.11 -m venv .venv
+python3.12 -m venv .venv
 .venv/bin/python -m pip install --require-hashes -r requirements.txt
 .venv/bin/python -m playwright install chromium
 PYTHONPATH=src RELAY_ALLOW_LIVE=0 .venv/bin/python -m relayops.web --port 8100
