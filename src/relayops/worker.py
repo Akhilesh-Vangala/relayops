@@ -21,6 +21,13 @@ SCENARIO_OPTIONS = {
 }
 
 
+def heartbeat_file():
+    path = Path(os.getenv("RELAY_WORKER_HEARTBEAT", "/tmp/relayops-worker-heartbeat"))
+    temporary = path.with_suffix(".tmp")
+    temporary.write_text(str(os.getpid()))
+    temporary.replace(path)
+
+
 async def run_job(store, job):
     browser = client = None
     world = World(store.root / "runs" / job["id"] / "world.sqlite")
@@ -34,6 +41,7 @@ async def run_job(store, job):
             except asyncio.TimeoutError:
                 try:
                     await asyncio.to_thread(store.heartbeat, job)
+                    heartbeat_file()
                 except Exception:
                     task.cancel()
                     return
@@ -98,6 +106,7 @@ async def serve(store, once=False):
     for number in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(number, stop)
     while not stopping.is_set():
+        heartbeat_file()
         current = asyncio.create_task(run_one(store))
         try:
             worked = await current

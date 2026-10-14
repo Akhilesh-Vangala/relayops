@@ -60,7 +60,11 @@ services:
       migrate:
         condition: service_completed_successfully
     healthcheck:
-      disable: true
+      test: ["CMD", "python", "-m", "relayops.worker_health"]
+      interval: 10s
+      timeout: 3s
+      start_period: 15s
+      retries: 3
 volumes:
   postgres:
   state:

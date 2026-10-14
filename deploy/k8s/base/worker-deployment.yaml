@@ -72,6 +72,16 @@ spec:
         - relayops.worker
         - --state-dir
         - /state
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -m
+            - relayops.worker_health
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
       volumes:
       - name: state
         persistentVolumeClaim:
