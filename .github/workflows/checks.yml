@@ -112,7 +112,9 @@ jobs:
           docker run --name relayops-check relayops:test
       - name: Copy container evidence
         if: always()
-        run: docker cp relayops-check:/app/artifacts/generated artifacts/generated-container
+        run: |
+          mkdir -p artifacts
+          docker cp relayops-check:/app/artifacts/generated artifacts/generated-container
       - name: Run actual Compose API and browser-worker topology
         run: scripts/deployment/compose_smoke.sh
       - name: Install pinned kubectl and Kind
