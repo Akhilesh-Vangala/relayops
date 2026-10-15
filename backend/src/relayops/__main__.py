@@ -4,11 +4,15 @@ import asyncio
 import json
 from pathlib import Path
 
-from .environment import World, fixture
-from .evaluator import evaluate
-from .executor import approve, execute, reconcile
-from .planner import AnthropicPlanner, DiagnosticPlanner
-from .workflow import build_workflow
+from relayops.domain.environment import World
+from relayops.domain.environment import fixture
+from relayops.verification.evaluator import evaluate
+from relayops.execution.executor import approve
+from relayops.execution.executor import execute
+from relayops.execution.executor import reconcile
+from relayops.agents.planner import AnthropicPlanner
+from relayops.agents.planner import DiagnosticPlanner
+from relayops.agents.workflow import build_workflow
 
 
 async def run(args):
@@ -17,7 +21,7 @@ async def run(args):
     world = World(args.output / "world.sqlite")
     world.initialize(original)
     planner = DiagnosticPlanner() if args.planner == "diagnostic" else AnthropicPlanner(
-        world, json.loads(Path("data/pricing.json").read_text()))
+        world, json.loads(Path("backend/data/pricing.json").read_text()))
     try:
         assessment = await build_workflow(world, planner).ainvoke({})
         plan = assessment["plan"]

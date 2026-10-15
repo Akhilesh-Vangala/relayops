@@ -20,7 +20,7 @@ flowchart LR
 
 ## Durable coordination
 
-`backend/src/relayops/run_store.py` retains request payloads, idempotency keys/hashes, ownership tokens, lease expiry, terminal status and sanitized error kinds. PostgreSQL is selected by `RELAY_DATABASE_URL`; unset keeps an additive SQLite local adapter. A separate migration initializes schema version 1 before API/worker startup.
+`backend/src/relayops/persistence/run_store.py` retains request payloads, idempotency keys/hashes, ownership tokens, lease expiry, terminal status and sanitized error kinds. PostgreSQL is selected by `RELAY_DATABASE_URL`; unset keeps an additive SQLite local adapter. A separate migration initializes schema version 1 before API/worker startup.
 
 Admission serializes the queue-cap/idempotency transaction. PostgreSQL workers claim through `FOR UPDATE SKIP LOCKED`; local workers use a SQLite immediate transaction. Workers renew ownership every ten seconds with a sixty-second lease. A process heartbeat updated during polling and lease renewal gives Compose/Kubernetes a meaningful liveness probe; a missing/stale heartbeat or dead process fails it. Result publication checks current owner, running status and lease under the relevant write/row lock before atomically exposing the assessment file. Terminal publication clears ownership.
 
@@ -28,7 +28,7 @@ API startup no longer marks all queued/running investigations interrupted. An AP
 
 Existing completed SQLite records and exact reviews are retained. Old active records lacked stored browser configuration and ownership, so the additive migration marks those ambiguous legacy active records interrupted once; it does not guess and replay them. The migration does not import local historical runs into a new PostgreSQL database.
 
-The embedded worker remains the offline default without a database URL. `RELAY_EMBEDDED_WORKER=0` disables API-local execution; this is mandatory in Compose/Kubernetes. `python -m relayops.worker` then claims jobs independently. PostgreSQL mode defaults embedded execution off.
+The embedded worker remains the offline default without a database URL. `RELAY_EMBEDDED_WORKER=0` disables API-local execution; this is mandatory in Compose/Kubernetes. `python -m relayops.workers.worker` then claims jobs independently. PostgreSQL mode defaults embedded execution off.
 
 ## Access boundary
 
@@ -43,7 +43,7 @@ Python 3.12 and the hashed dependency lock are used locally, in CI and in contai
 ```sh
 cp .env.example .env
 # Privately configure RELAY_POSTGRES_PASSWORD (alphanumeric) and RELAY_ACCESS_TOKEN.
-docker compose up --build --wait
+scripts/deployment/compose.sh up --build --wait
 curl http://127.0.0.1:8100/readyz
 # In the browser use username operator and the privately configured token.
 # Open http://127.0.0.1:8100/cases
@@ -53,14 +53,14 @@ Model generation is explicitly disabled in the checked-in Compose/cluster enviro
 
 ## Kubernetes scope
 
-`deploy/k8s/base` includes a restricted namespace, tokenless pods, migrated-schema init checks, resource bounds, separate API/worker deployments, API health/readiness probes, default-deny plus DNS/PostgreSQL egress policies, and an RWO state volume. A runtime Secret named `relayops-secrets` is supplied externally. `deploy/k8s/overlays/kind` supplies test-only PostgreSQL and operator credentials.
+`infrastructure/kubernetes/base` includes a restricted namespace, tokenless pods, migrated-schema init checks, resource bounds, separate API/worker deployments, API health/readiness probes, default-deny plus DNS/PostgreSQL egress policies, and an RWO state volume. A runtime Secret named `relayops-secrets` is supplied externally. `infrastructure/kubernetes/overlays/kind` supplies test-only PostgreSQL and operator credentials.
 
 The queue is PostgreSQL-backed, but fixture worlds, action receipts and LangGraph checkpoints are still SQLite/POSIX files. Worker affinity deliberately keeps API and workers on the same node with the RWO volume. This is a staging integration topology, not a multi-host/high-availability release. Do not substitute a shared NFS/EFS mount for those SQLite files and claim distributed durability. A production multi-node release requires moving business state/receipts/checkpoints to appropriate database adapters and artifacts to object storage, then testing isolation and recovery.
 
 ```sh
-kubectl kustomize deploy/k8s/base
-kubectl kustomize deploy/k8s/overlays/kind
-scripts/kind_smoke.sh
+kubectl kustomize infrastructure/kubernetes/base
+kubectl kustomize infrastructure/kubernetes/overlays/kind
+scripts/deployment/kind_smoke.sh
 ```
 
 The smoke creates a disposable Kind cluster, deploys the actual image, runs migrations, starts API/workers, scales workers down, admits a browser request, restarts the API and asserts the request stayed queued. It then starts two workers, requires six actual browser observations and successful independent simulation, binds review to the returned version, and executes twice while requiring no duplicate sandbox effects. Failure diagnostics and successful synthetic assessments are archived by CI.

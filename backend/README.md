@@ -1,7 +1,10 @@
 # RelayOps backend
 
-Python application and agent code is in [src/relayops](src/relayops/). Unit/integration tests live in [tests](tests/); the runtime/test image is built from [Dockerfile](Dockerfile) with the repository root as context.
+Application code is grouped by responsibility in [src/relayops](src/relayops). Each capability has a local guide.
 
+- [Tests](tests/): capability-grouped regression/integration cases and browser journeys where applicable.
+- [Dependency locks](requirements/): runtime and development requirements.
+- [Docker image](docker/Dockerfile): runtime and test build stages.
+- [Fixtures and pricing](data/): original versioned synthetic material.
 
-
-[Repository layout](../docs/development/LAYOUT.md) · [Current architecture](../docs/architecture/OVERVIEW.md) · [Run and verify](../README.md#run-locally).
+[Full layout](../docs/development/LAYOUT.md) · [Run locally](../README.md#run-locally).

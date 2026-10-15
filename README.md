@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/assets/relayops-banner.svg" alt="RelayOps — Workflow execution" width="100%"></p>
+<p align="center"><img src="docs/assets/branding/relayops-banner.svg" alt="RelayOps — Workflow execution" width="100%"></p>
 
 <p align="center"><a href="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml"><img src="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml/badge.svg" alt="Required engineering checks"></a> &nbsp; Python · LangGraph · FastAPI · PostgreSQL</p>
 
@@ -18,8 +18,8 @@ Resolve a supplier short shipment across procurement, warehouse, billing and cas
 ## Run the workflow
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/relayops-interactive-poster.png">
-  <img src="docs/assets/relayops-interactive-demo.gif" alt="Actual guided relayops browser journey on original synthetic data" width="100%">
+  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/demos/relayops-interactive-poster.png">
+  <img src="docs/assets/demos/relayops-interactive-demo.gif" alt="Actual guided relayops browser journey on original synthetic data" width="100%">
 </picture>
 
 **Actual execution, guided synthetic data.** The continuous recording shows real browser interactions and server results. No live model call, customer data or user-validation claim. [Recording provenance and reproducible capture](docs/DEMO.md).
@@ -33,7 +33,7 @@ Four original synthetic cases. Investigate, inspect evidence and simulation, app
 
 ## Architecture and authority
 
-![RelayOps architecture and verification boundaries](docs/assets/relayops-architecture.svg)
+![RelayOps architecture and verification boundaries](docs/assets/diagrams/relayops-architecture.svg)
 
 A bounded LangGraph investigator observes original browser/document evidence, records cited hypotheses and submits typed proposals. Separate policy, private-copy simulation and final-state verification precede exact-version review and receipted actions. PostgreSQL coordinates leased browser workers; fixture worlds and checkpoints still use same-node files.
 
@@ -61,14 +61,41 @@ flowchart LR
 
 ```text
 relayops/
-├── backend/          Python application, agent/runtime, unit tests and image build
-├── frontend/         public/ and workbench/ browser assets
-├── tests/e2e/        Browser journeys across the frontend and backend
-├── scripts/          Reproducible checks, benchmarks and demo capture
-├── deploy/           Kubernetes
-├── docs/             Architecture, operations, evaluation, demos and project history
-├── .github/          Required CI and review workflow
-└── app.py          Thin Vercel entrypoint; deployment wiring stays at the root
+├── backend/
+│   ├── src/relayops/
+│   ├── tests/
+│   ├── requirements/
+│   ├── docker/
+│   └── data/
+├── frontend/
+│   └── apps/
+│       ├── demo/
+│       │   └── assets/
+│       │       ├── scripts/
+│       │       ├── styles/
+│       │       └── media/
+│       └── workbench/
+│           └── assets/
+│               ├── scripts/
+│               └── styles/
+├── infrastructure/
+│   ├── containers/
+│   └── kubernetes/
+├── scripts/
+│   ├── checks/
+│   ├── demos/
+│   └── deployment/
+├── docs/
+│   ├── architecture/
+│   ├── operations/
+│   ├── evaluation/
+│   ├── project/history/
+│   └── assets/
+│       ├── branding/
+│       ├── diagrams/
+│       ├── screenshots/
+│       └── demos/
+└── .github/
 ```
 
 [Component ownership and commands](docs/development/LAYOUT.md) · [Current handoff](docs/project/HANDOFF.md) · [Release plan](docs/project/PLAN.md)
@@ -81,9 +108,9 @@ relayops/
 git clone https://github.com/Akhilesh-Vangala/relayops.git
 cd relayops
 python3.12 -m venv .venv
-.venv/bin/python -m pip install --require-hashes -r backend/requirements.txt
+.venv/bin/python -m pip install --require-hashes -r backend/requirements/runtime.txt
 .venv/bin/python -m playwright install chromium
-PYTHONPATH=backend/src RELAY_ALLOW_LIVE=0 .venv/bin/python -m relayops.web
+PYTHONPATH=backend/src RELAY_ALLOW_LIVE=0 .venv/bin/python -m relayops.api.web
 ```
 
 Open **http://127.0.0.1:8100**. The local workbench uses original synthetic data; guided/scripted checks need no provider key.
@@ -105,9 +132,9 @@ Python 3.11–3.12 is supported; CI and containers use 3.12. Keep private config
 
 ```sh
 PYTHONPATH=backend/src RELAY_ALLOW_LIVE=0 python -m unittest discover -s backend/tests -v
-PYTHONPATH=backend/src RELAY_ALLOW_LIVE=0 python tests/e2e/browser_workbench.py
-python scripts/public_demo_browser.py
-python scripts/check_repository.py
+PYTHONPATH=backend/src RELAY_ALLOW_LIVE=0 python backend/tests/e2e/browser_workbench.py
+python scripts/demos/public_demo_browser.py
+python scripts/checks/check_repository.py
 ```
 
 Native commands run inside the project's installed environment. Required CI repeats the relevant checks on Linux. Test counts describe distinct cases; rerunning them in a container does not double the number of tests. [Evaluation and limits](docs/evaluation/README.md) · [Progress and source-linked evidence](docs/project/PROGRESS.md).
@@ -118,4 +145,4 @@ Native commands run inside the project's installed environment. Required CI repe
 - **Private agent/runtime:** official Anthropic SDK, typed tools and bounded agent loops. A private provider key and explicit live selection are required; live quality and cost comparisons remain unmeasured.
 - **Production boundary:** business-state/workspace files remain same-node; individual identity, per-run isolation, real connectors and monitored persistent cloud operation are open.
 
-[Design decisions](docs/DECISIONS.md) · [Recorded demo](docs/DEMO.md) · [Branch policy](BRANCHING.md) · [Contributing](CONTRIBUTING.md) · [Dated history](docs/project/history/PRE-ORGANIZATION-README.md)
+[Design decisions](docs/DECISIONS.md) · [Recorded demo](docs/DEMO.md) · [Branch policy](docs/development/BRANCHING.md) · [Contributing](.github/CONTRIBUTING.md) · [Dated history](docs/project/history/PRE-ORGANIZATION-README.md)

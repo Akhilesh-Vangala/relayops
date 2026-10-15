@@ -14,16 +14,16 @@ The current entry point is the [README](../../README.md). This guide maps a tech
 
 | Concern | Source |
 | --- | --- |
-| Dynamic investigation and graph state | [agent.py](../../backend/src/relayops/agent.py) |
-| Official SDK, typed streaming, budget receipts | [agent_transport.py](../../backend/src/relayops/agent_transport.py) |
-| Browser evidence and restricted observation | [browser.py](../../backend/src/relayops/browser.py) |
-| Strict plans and source binding | [domain.py](../../backend/src/relayops/domain.py), [policy.py](../../backend/src/relayops/policy.py) |
-| Synthetic business environment and journal | [environment.py](../../backend/src/relayops/environment.py) |
-| Private-copy simulation | [workflow.py](../../backend/src/relayops/workflow.py) |
-| Approval-bound actions and reconciliation | [executor.py](../../backend/src/relayops/executor.py) |
-| Independent business-state evaluation | [evaluator.py](../../backend/src/relayops/evaluator.py) |
-| Operator application and native HTML/CSS/JavaScript | [web.py](../../backend/src/relayops/web.py) |
-| Known scripted development matrix | [benchmark.py](../../backend/src/relayops/benchmark.py) |
+| Dynamic investigation and graph state | [agent.py](../../backend/src/relayops/agents/agent.py) |
+| Official SDK, typed streaming, budget receipts | [agent_transport.py](../../backend/src/relayops/agents/agent_transport.py) |
+| Browser evidence and restricted observation | [browser.py](../../backend/src/relayops/agents/browser.py) |
+| Strict plans and source binding | [domain.py](../../backend/src/relayops/domain/models.py), [policy.py](../../backend/src/relayops/domain/policy.py) |
+| Synthetic business environment and journal | [environment.py](../../backend/src/relayops/domain/environment.py) |
+| Private-copy simulation | [workflow.py](../../backend/src/relayops/agents/workflow.py) |
+| Approval-bound actions and reconciliation | [executor.py](../../backend/src/relayops/execution/executor.py) |
+| Independent business-state evaluation | [evaluator.py](../../backend/src/relayops/verification/evaluator.py) |
+| Operator application and native HTML/CSS/JavaScript | [web.py](../../backend/src/relayops/api/web.py) |
+| Known scripted development matrix | [benchmark.py](../../backend/src/relayops/evaluation/benchmark.py) |
 | Reproducible CI | [checks.yml](../../.github/workflows/checks.yml) |
 
 ## Design tradeoffs
