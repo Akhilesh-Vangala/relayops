@@ -25,3 +25,8 @@ Official AsyncAnthropic; no urllib; input/time/output/estimated-cost admission, 
 Persist API requests and separate worker ownership before adding Kubernetes replicas. PostgreSQL uses `FOR UPDATE SKIP LOCKED`; SQLite remains the offline adapter. Expired owners cannot publish and interrupted work is never automatically replayed. This makes API restarts independent of worker execution while retaining conservative paid-call/receipt semantics.
 
 Choose same-node RWO storage while the authored fixture business worlds, action receipts and graph checkpoints remain SQLite files. A distributed queue does not make these files distributed-safe; multi-node scale needs their database/object-store migration. Kind validates the actual API restart/browser/review/execution journey, while policy enforcement and cloud availability remain separate gates. Shared Basic/Bearer operator access is an interim integration boundary, not individual OIDC authorization.
+
+
+## October14 — Executable public sandbox
+
+Use request-bounded original fixtures and signed browser envelopes for Vercel interactive actions. Retain full private durable workers separately. This supports real verification/execution in public without claiming persistent effects or immutable global review. Browser session history and explicit replay/fork limitations are accepted tradeoffs; a shared ephemeral SQLite queue is not used for the new endpoints. [Details](14-INTERACTIVE-PUBLIC-DEMO.md).

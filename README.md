@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="docs/CASE-STUDY.md">Case study</a> ·
-  <a href="https://relayops-two.vercel.app">Live showcase</a> ·
+  <a href="https://relayops-two.vercel.app">Working app</a> ·
   <a href="docs/DEMO.md">Recorded demo</a> ·
   <a href="#inside-the-agent">Agent architecture</a> ·
   <a href="#the-operator-workbench">Workbench</a> ·
@@ -24,13 +24,23 @@
 
 RelayOps investigates procurement, warehouse, billing and case evidence through a checkpointed LangGraph tool loop. Proposals pass separate simulation and business-state checks, then exact-version sandbox review before controlled execution.
 
-> **Development release.** The [public Vercel showcase](https://relayops-two.vercel.app) is read only. Default demos are scripted and synthetic. Live model quality, scanned-document extraction, production connectors, individual identity and durable cloud workflow execution remain pending. [Durable worker/container foundation →](docs/13-DURABLE-WORKERS-AND-KUBERNETES.md)
+> **Development release.** The [public Vercel app](https://relayops-two.vercel.app/demo) runs an interactive guided sandbox with actual verification. [Watch the continuous recording](https://relayops-two.vercel.app/demo/recording). Default demos are scripted and synthetic. Live model quality, scanned-document extraction, production connectors, individual identity and durable cloud workflow execution remain pending. [Durable worker/container foundation →](docs/13-DURABLE-WORKERS-AND-KUBERNETES.md)
 
 | Run the product | Inspect the engineering | Challenge the evidence |
 | --- | --- | --- |
-| [Live read-only showcase](https://relayops-two.vercel.app) · [Quick start](#run-locally) · [Recorded walkthrough](docs/DEMO.md) | [Design case study](docs/CASE-STUDY.md) · [System map](docs/README.md) | [Reproducible checks](CONTRIBUTING.md) · [Limits and tradeoffs](docs/CASE-STUDY.md#what-the-evidence-establishes) |
+| [Interactive app](https://relayops-two.vercel.app) · [Quick start](#run-locally) · [Recorded walkthrough](docs/DEMO.md) | [Design case study](docs/CASE-STUDY.md) · [System map](docs/README.md) | [Reproducible checks](CONTRIBUTING.md) · [Limits and tradeoffs](docs/CASE-STUDY.md#what-the-evidence-establishes) |
 
-## The operator workbench
+## Try it and watch it
+
+[**Open the interactive app →**](https://relayops-two.vercel.app/demo) · [**Watch the continuous recording →**](https://relayops-two.vercel.app/demo/recording) · [Recording file](src/relayops/demo_assets/walkthrough.webm)
+
+![Actual interactive RelayOps browser journey](docs/assets/relayops-interactive-demo.gif)
+
+Choose a shortage → inspect the real LangGraph diagnostic and private-copy simulation → approve the checked proposal → execute sandbox actions → reconcile a deliberately lost acknowledgment → independently verify final state. Four confirmed action receipts and a repeated execution check are visible.
+
+**Actual calculations, guided synthetic data, no model charges.** Browser-local history and signed version checks support the public flow. Persistent private workers and live-model evaluations are separate. [Public architecture and limits](docs/14-INTERACTIVE-PUBLIC-DEMO.md) · [Recording provenance](docs/demos/interactive-recording.json).
+
+## The private operator workbench
 
 <picture>
   <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/relayops-demo-poster.png">

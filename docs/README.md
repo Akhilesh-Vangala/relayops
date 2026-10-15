@@ -27,3 +27,5 @@ Start with the [engineering case study](CASE-STUDY.md) and [recorded demo](DEMO.
 The source map and current agent document describe the latest implementation. Dated foundation sections in earlier documents are retained as history and explicitly superseded where implementation has advanced. The original [foundation README](../README-HISTORY.md) is preserved.
 
 For repository development, use the [branch, PR and release policy](../BRANCHING.md).
+
+- [Interactive public app, continuous recording and authority boundaries](14-INTERACTIVE-PUBLIC-DEMO.md)
