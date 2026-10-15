@@ -16,7 +16,7 @@ HANDOFF.md
 PLAN.md
 PROGRESS.md
 deploy
-scripts
+/scripts
 Dockerfile
 infrastructure/containers/compose.yaml
 
