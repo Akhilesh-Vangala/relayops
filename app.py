@@ -1,4 +1,4 @@
-"""Vercel entrypoint for the interactive synthetic RelayOps sandbox."""
+"""Vercel entrypoint for RelayOps samples and reviewed visitor CSV exports."""
 import os
 import sys
 from pathlib import Path

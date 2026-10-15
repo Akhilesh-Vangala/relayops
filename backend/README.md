@@ -8,3 +8,5 @@ Application code is grouped by responsibility in [src/relayops](src/relayops). E
 - [Fixtures and pricing](data/): original versioned synthetic material.
 
 [Full layout](../docs/development/LAYOUT.md) · [Run locally](../README.md#run-locally).
+
+- [Visitor-owned CSV processing](src/relayops/uploads/): bounded ingestion, source-derived workflows and independent checks.

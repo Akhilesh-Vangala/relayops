@@ -56,7 +56,7 @@ def page(title, content, public_showcase=None):
     showcase = "<a href='/showcase'>Recorded demo</a>" if public_showcase else ""
     return HTMLResponse("<!doctype html><html lang='en'><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'>"
                         "<title>" + escape(title) + " · RelayOps</title><link rel='stylesheet' href='/assets/style.css'>"
-                        "<aside><strong>RelayOps</strong><div class='muted'>Enterprise workflow lab</div><nav><a href='/'>Overview</a><a href='/cases'>Cases</a><a href='/runs'>Investigations</a><a href='/architecture'>AI architecture</a>" + showcase + "</nav></aside>"
+                        "<aside><strong>RelayOps</strong><div class='muted'>Enterprise workflow lab</div><nav><a href='/uploads'>Use your own data</a><a href='/'>Overview</a><a href='/cases'>Cases</a><a href='/runs'>Investigations</a><a href='/architecture'>AI architecture</a>" + showcase + "</nav></aside>"
                         "<main><div class='top'><span>WORKSPACE / " + escape(title.upper()) + "</span><span class='pill'>" + environment + "</span></div>" + content +
                         "<div class='footer'>Evidence-backed proposals · Explicit sandbox review · No production connectors" + (" · Public actions disabled" if public_showcase else "") + "</div></main><script src='/assets/app.js' defer></script></html>")
 
@@ -113,7 +113,8 @@ def create_app(state_dir):
     async def boundaries(request, call_next):
         if public_showcase:
             from relayops.api.public_demo import WRITE_PATHS
-            if request.method != "GET" and not (public_demo and request.method == "POST" and request.url.path in WRITE_PATHS):
+            from relayops.uploads.api import WRITE_PATHS as UPLOAD_PATHS
+            if request.method != "GET" and not (public_demo and request.method == "POST" and request.url.path in (WRITE_PATHS | UPLOAD_PATHS)):
                 return Response('{"detail":"Public showcase is read-only"}', status_code=405, media_type="application/json")
         else:
             host = request.headers.get("host", "").split(":")[0]
@@ -140,7 +141,7 @@ def create_app(state_dir):
             origin = request.headers.get("origin")
             if origin and origin not in ("http://" + request.headers["host"], "https://" + request.headers["host"]):
                 return Response("Unexpected origin", status_code=403)
-            if request.headers.get("content-type", "").split(";")[0] != "application/json" or len(await request.body()) > 16000:
+            if request.headers.get("content-type", "").split(";")[0] != "application/json" or len(await request.body()) > (1000000 if request.url.path.startswith("/api/uploads/") else 16000):
                 return Response("Bounded JSON body required", status_code=400)
         response = await call_next(request)
         image_sources = "'self' https://raw.githubusercontent.com" if public_showcase else "'self'"
@@ -346,6 +347,8 @@ def create_app(state_dir):
     if public_demo:
         from relayops.api.public_demo import attach
         attach(app, SCENARIOS)
+    from relayops.uploads.api import attach as attach_uploads
+    attach_uploads(app, "RelayOps", Path(__file__).resolve().parents[4])
     return app
 
 
