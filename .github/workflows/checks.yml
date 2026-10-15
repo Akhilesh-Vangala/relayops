@@ -89,6 +89,8 @@ jobs:
         run: python -m playwright install --with-deps chromium
       - name: Exercise the interactive public app and video player
         run: python scripts/demos/public_demo_browser.py
+      - name: Visitor upload and reviewed export journey
+        run: python scripts/demos/uploads_browser.py
       - name: Run the real local workbench journey
         run: python backend/tests/e2e/browser_workbench.py
       - uses: actions/upload-artifact@v4
@@ -98,6 +100,7 @@ jobs:
           path: |
             artifacts/generated/browser-workbench-*
             artifacts/generated/public-demo-browser
+            artifacts/generated/uploads-browser
           retention-days: 14
 
   containers:
