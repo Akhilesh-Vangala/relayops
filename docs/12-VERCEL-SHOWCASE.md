@@ -1,5 +1,7 @@
 # Vercel engineering showcase
 
+> Historical read-only deployment record. The new [interactive public app](14-INTERACTIVE-PUBLIC-DEMO.md) supersedes this behavior for `/demo`; private write routes remain blocked.
+
 ## Public surface
 
 [relayops-two.vercel.app](https://relayops-two.vercel.app) runs the real RelayOps FastAPI interface on Vercel's Python 3.12 runtime. Visitors can inspect the case catalog, synthetic source records, implemented architecture, investigation summary and the recorded isolated execution.

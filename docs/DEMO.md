@@ -1,5 +1,17 @@
 # RelayOps / recorded demonstration
 
+## New interactive public demonstration
+
+[Run the app](https://relayops-two.vercel.app/demo) · [Watch continuous browser capture](https://relayops-two.vercel.app/demo/recording) · [Download the WebM](../src/relayops/demo_assets/walkthrough.webm)
+
+![Actual interactive app preview](assets/relayops-interactive-demo.gif)
+
+Choose a shortage → inspect the real LangGraph diagnostic and private-copy simulation → approve the checked proposal → execute sandbox actions → reconcile a deliberately lost acknowledgment → independently verify final state. Four confirmed action receipts and a repeated execution check are visible.
+
+This recording captures actual automated clicks and server calculations on synthetic fixtures. No live-model generation or customer feedback is represented. [Recording/source hashes](demos/interactive-recording.json) · [Architecture and replay limits](14-INTERACTIVE-PUBLIC-DEMO.md). The earlier private-workbench recording below is preserved as separate evidence.
+
+## Earlier private-workbench recording
+
 [Project README](../README.md) · [Engineering case study](CASE-STUDY.md) · [Technical index](README.md)
 
 ![Static poster from the actual recorded application](assets/relayops-demo-poster.png)

@@ -84,13 +84,17 @@ jobs:
         run: python -m pip install --require-hashes -r requirements.txt
       - name: Install Chromium and system dependencies
         run: python -m playwright install --with-deps chromium
+      - name: Exercise the interactive public app and video player
+        run: python scripts/public_demo_browser.py
       - name: Run the real local workbench journey
         run: python tests/browser_workbench.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: browser-evidence
-          path: artifacts/generated/browser-workbench-*
+          path: |
+            artifacts/generated/browser-workbench-*
+            artifacts/generated/public-demo-browser
           retention-days: 14
 
   containers:

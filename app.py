@@ -1,4 +1,4 @@
-"""Vercel entrypoint for the public, read-only RelayOps engineering showcase."""
+"""Vercel entrypoint for the interactive synthetic RelayOps sandbox."""
 import os
 import sys
 from pathlib import Path
@@ -8,6 +8,10 @@ sys.path.insert(0, str(ROOT / "src"))
 
 os.environ["RELAY_ALLOW_LIVE"] = "0"
 os.environ["RELAY_PUBLIC_SHOWCASE"] = "1"
+os.environ["RELAY_PUBLIC_DEMO"] = "1"
+os.environ["RELAY_EMBEDDED_WORKER"] = "0"
+os.environ["RELAY_DATABASE_URL"] = ""
+os.environ["ANTHROPIC_API_KEY"] = ""
 
 from relayops.web import create_app  # noqa: E402
 
