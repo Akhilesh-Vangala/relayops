@@ -19,3 +19,6 @@ deploy
 scripts
 Dockerfile
 compose.yaml
+
+# Infrastructure tooling is not part of the serverless app.
+deploy

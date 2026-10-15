@@ -4,7 +4,8 @@
   "functions": {
     "app.py": {
       "maxDuration": 60,
-      "excludeFiles": "{tests/**,artifacts/**,docs/**,.tools/**}"
+      "excludeFiles": "{tests/**,artifacts/**,docs/**,.tools/**,deploy/**}",
+      "includeFiles": "{src/relayops/demo_assets/**,data/**}"
     }
   }
 }

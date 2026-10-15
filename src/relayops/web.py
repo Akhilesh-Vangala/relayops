@@ -14,7 +14,7 @@ from urllib.parse import urlsplit
 from types import SimpleNamespace
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import HTMLResponse, Response, RedirectResponse
 from pydantic import BaseModel, ConfigDict
 
 from .agent import fingerprint
@@ -77,6 +77,7 @@ class Execution(BaseModel):
 
 def create_app(state_dir):
     public_showcase = os.getenv("RELAY_PUBLIC_SHOWCASE") == "1"
+    public_demo = public_showcase and os.getenv("RELAY_PUBLIC_DEMO") == "1"
     def render(title, content):
         return page(title, content, public_showcase)
     root = Path(state_dir).resolve()
@@ -107,7 +108,8 @@ def create_app(state_dir):
     @app.middleware("http")
     async def boundaries(request, call_next):
         if public_showcase:
-            if request.method != "GET":
+            from .public_demo import WRITE_PATHS
+            if request.method != "GET" and not (public_demo and request.method == "POST" and request.url.path in WRITE_PATHS):
                 return Response('{"detail":"Public showcase is read-only"}', status_code=405, media_type="application/json")
         else:
             host = request.headers.get("host", "").split(":")[0]
@@ -181,6 +183,8 @@ def create_app(state_dir):
         return "<div class='grid'>" + "".join("<a class='card' href='/cases/" + name + "'><div class='eyebrow'>Workflow case</div><h2>" + escape(value[0]) + "</h2><p class='muted'>" + escape(value[1]) + "</p><span>Inspect evidence →</span></a>" for name, value in SCENARIOS.items()) + "</div>"
     @app.get("/")
     def home():
+        if public_demo:
+            return RedirectResponse("/demo")
         with db() as connection:
             count = connection.execute("SELECT COUNT(*) FROM runs").fetchone()[0]
         release = "<div class='callout'><strong>Public engineering showcase.</strong> Explore the original cases and architecture, then open the recorded executed workflow. State-changing runs are disabled on the serverless deployment.</div>" if public_showcase else ""
@@ -335,6 +339,9 @@ def create_app(state_dir):
                   ('Authorize','Exact-version review and controlled sandbox action identities.'),
                   ('Recover','Unknown receipts block retry; explicit reconciliation before continuation.')]
         return render('AI architecture',"<div class='hero'><h1>From evidence to verified actions</h1><p class='muted'>Implemented layers with explicit authority boundaries.</p></div><div class='grid'>"+''.join("<div class='card'><div class='eyebrow'>"+escape(title)+"</div><h2>"+escape(text)+"</h2></div>" for title,text in layers)+"</div><div class='callout'>Current: PostgreSQL coordination with separate leased browser workers and Docker/Kubernetes packaging. Fixture worlds and agent checkpoints remain local files. Individual identity, isolated customer execution, production connectors and monitored cloud deployment remain pending.</div>")
+    if public_demo:
+        from .public_demo import attach
+        attach(app, SCENARIOS)
     return app
 
 
