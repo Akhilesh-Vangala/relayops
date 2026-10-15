@@ -10,16 +10,20 @@ tests
 __pycache__
 *.pyc
 README-HISTORY.md
-BRANCHING.md
-CONTRIBUTING.md
+docs/development/BRANCHING.md
+.github/CONTRIBUTING.md
 HANDOFF.md
 PLAN.md
 PROGRESS.md
 deploy
-scripts
+/scripts
 Dockerfile
-compose.yaml
+infrastructure/containers/compose.yaml
 
 # Infrastructure tooling is not part of the serverless app.
 backend/tests
-backend/Dockerfile
+backend/docker/Dockerfile
+
+# Component-owned non-serverless material
+infrastructure
+backend/docker

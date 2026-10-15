@@ -1,8 +1,8 @@
 # RelayOps recorded demonstration
 
-[Open the working app](https://relayops-two.vercel.app/demo) · [Watch the continuous recording](https://relayops-two.vercel.app/demo/recording) · [Download the WebM](../frontend/public/walkthrough.webm) · [Capture/source manifest](demos/interactive-recording.json)
+[Open the working app](https://relayops-two.vercel.app/demo) · [Watch the continuous recording](https://relayops-two.vercel.app/demo/recording) · [Download the WebM](../frontend/apps/demo/assets/media/walkthrough.webm) · [Capture/source manifest](demos/interactive-recording.json)
 
-![Actual guided browser journey](assets/relayops-interactive-demo.gif)
+![Actual guided browser journey](assets/demos/relayops-interactive-demo.gif)
 
 The GIF is a six-frame preview. The WebM is a continuous Playwright screen recording of real browser interactions and server results; no generated UI, invented scores, model reasoning transcript or customer feedback is inserted. All data is original synthetic development data and no live model inference occurs.
 
@@ -17,12 +17,12 @@ The GIF is a six-frame preview. The WebM is a continuous Playwright screen recor
 
 ## Scope and provenance
 
-Video SHA256: `7231166b78fe84ac93bf64f949cfecfdefe2a163ab6300fe61a29dac2b134389`. The [manifest](demos/interactive-recording.json) contains frame hashes, source hashes, browser checks and capture scope. Public review/action stages reconstruct isolated fixtures; browser-local signed branches can replay/fork until expiry. The recording is not a globally durable approval/execution claim.
+Video SHA256: `5a0e74f566548b4b4e8248fa584fb4302f6a37894c3badd76ff4a807c7135168`. The [manifest](demos/interactive-recording.json) contains frame hashes, source hashes, browser checks and capture scope. Public review/action stages reconstruct isolated fixtures; browser-local signed branches can replay/fork until expiry. The recording is not a globally durable approval/execution claim.
 
 ## Reproduce
 
 ```sh
-python scripts/public_demo_browser.py --record --publish-assets --output artifacts/generated/demo-capture
+python scripts/demos/public_demo_browser.py --record --publish-assets --output artifacts/generated/demo-capture
 ```
 
 The public browser runner starts an isolated temporary local app by default; --url selects the deployed app. Source hashes bind the actual working tree at capture. Raw captures and generated state stay ignored.

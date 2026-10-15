@@ -42,19 +42,19 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install the hashed dependency lock
-        run: python -m pip install --require-hashes -r backend/requirements.txt
+        run: python -m pip install --require-hashes -r backend/requirements/runtime.txt
       - name: Install Chromium and system dependencies
         run: python -m playwright install --with-deps chromium
       - name: Verify installed dependency compatibility
         run: python -m pip check
       - name: Check repository layout and documentation
-        run: python scripts/check_repository.py
+        run: python scripts/checks/check_repository.py
       - name: Run unit and integration tests
         run: python -m unittest discover -s backend/tests -v
         env:
           RELAY_TEST_DATABASE_URL: postgresql://relayops:relayops-test-password@127.0.0.1:5432/relayops_test
       - name: Run the known scripted development matrix
-        run: python -m relayops.benchmark --output artifacts/generated/ci-matrix
+        run: python -m relayops.evaluation.benchmark --output artifacts/generated/ci-matrix
       - name: Verify all matrix assessments and untouched source state
         run: |
           python - <<'PY'
@@ -84,13 +84,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install the hashed dependency lock
-        run: python -m pip install --require-hashes -r backend/requirements.txt
+        run: python -m pip install --require-hashes -r backend/requirements/runtime.txt
       - name: Install Chromium and system dependencies
         run: python -m playwright install --with-deps chromium
       - name: Exercise the interactive public app and video player
-        run: python scripts/public_demo_browser.py
+        run: python scripts/demos/public_demo_browser.py
       - name: Run the real local workbench journey
-        run: python tests/e2e/browser_workbench.py
+        run: python backend/tests/e2e/browser_workbench.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -108,13 +108,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and execute the browser test image
         run: |
-          docker build -f backend/Dockerfile --target test -t relayops:test .
+          docker build -f backend/docker/Dockerfile --target test -t relayops:test .
           docker run --name relayops-check relayops:test
       - name: Copy container evidence
         if: always()
-        run: docker cp relayops-check:/app/artifacts/generated artifacts/generated-container
+        run: |
+          mkdir -p artifacts
+          docker cp relayops-check:/app/artifacts/generated artifacts/generated-container
       - name: Run actual Compose API and browser-worker topology
-        run: scripts/compose_smoke.sh
+        run: scripts/deployment/compose_smoke.sh
       - name: Install pinned kubectl and Kind
         run: |
           kubectl_version=v1.34.1
@@ -126,9 +128,9 @@ jobs:
       - name: Render manifests and exercise API restart, browser worker and exact review
         run: |
           export PATH="$(go env GOPATH)/bin:$PATH"
-          kubectl kustomize deploy/k8s/base > /tmp/relayops-base.yaml
-          kubectl kustomize deploy/k8s/overlays/kind > /tmp/relayops-kind.yaml
-          scripts/kind_smoke.sh
+          kubectl kustomize infrastructure/kubernetes/base > /tmp/relayops-base.yaml
+          kubectl kustomize infrastructure/kubernetes/overlays/kind > /tmp/relayops-kind.yaml
+          scripts/deployment/kind_smoke.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:

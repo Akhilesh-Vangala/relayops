@@ -13,6 +13,6 @@ os.environ["RELAY_EMBEDDED_WORKER"] = "0"
 os.environ["RELAY_DATABASE_URL"] = ""
 os.environ["ANTHROPIC_API_KEY"] = ""
 
-from relayops.web import create_app  # noqa: E402
+from relayops.api.web import create_app  # noqa: E402
 
 app = create_app(Path("/tmp/relayops-public-showcase"))

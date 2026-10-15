@@ -4,9 +4,9 @@ Run from the repository root. Python 3.11–3.12 is supported; CI and images use
 
 ```sh
 python3.12 -m venv .venv
-.venv/bin/python -m pip install --require-hashes -r backend/requirements.txt
+.venv/bin/python -m pip install --require-hashes -r backend/requirements/runtime.txt
 .venv/bin/python -m playwright install chromium
-PYTHONPATH=backend/src .venv/bin/python -m relayops.web
+PYTHONPATH=backend/src .venv/bin/python -m relayops.api.web
 ```
 
 The default local workflow uses the scripted investigator and original synthetic business systems.
@@ -15,18 +15,18 @@ The default local workflow uses the scripted investigator and original synthetic
 
 The Vercel entrypoint `app.py` serves an interactive guided sandbox at `/demo`, with a continuous player at `/demo/recording`. It disables provider credentials, embedded workers and persistent database settings. Only exact bounded public-demo POST routes are enabled; legacy private writes remain blocked. [Public behavior and replay boundaries](PUBLIC-SANDBOX.md).
 
-Use `python scripts/public_demo_browser.py` to start an isolated temporary public app and exercise it. `--url https://relayops-two.vercel.app` checks the deployed app. `--record --publish-assets` captures actual browser media into `frontend/public/`; no model call is needed.
+Use `python scripts/demos/public_demo_browser.py` to start an isolated temporary public app and exercise it. `--url https://relayops-two.vercel.app` checks the deployed app. `--record --publish-assets` captures actual browser media into `frontend/apps/demo/`; no model call is needed.
 
 ## Private persistent runtime
 
 ```sh
-docker build -f backend/Dockerfile --target test -t relayops:test .
+docker build -f backend/docker/Dockerfile --target test -t relayops:test .
 docker run --rm relayops:test
 # Configure the required private operator token and PostgreSQL password first.
-docker compose up --build -d
+scripts/deployment/compose.sh up --build -d
 ```
 
-The build context is the repository root; the Dockerfile is `backend/Dockerfile`. Compose declares this explicitly so frontend assets, original data and browser evidence tooling enter the correct image. API and worker are separate processes, coordinated through PostgreSQL; fixture/workspace files remain on same-node shared storage. [Detailed runtime](DURABLE-WORKERS.md).
+The build context is the repository root; the Dockerfile is `backend/docker/Dockerfile`. Compose declares this explicitly so frontend assets, original data and browser evidence tooling enter the correct image. API and worker are separate processes, coordinated through PostgreSQL; fixture/workspace files remain on same-node shared storage. [Detailed runtime](DURABLE-WORKERS.md).
 
 ## Private configuration and live inference
 

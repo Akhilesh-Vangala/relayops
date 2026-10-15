@@ -1,7 +1,7 @@
 > Historical record. [Current project overview](../../../README.md) and [current handoff](../HANDOFF.md) take precedence.
 
 <p align="center">
-  <img src="../../assets/relayops-banner.svg" alt="RelayOps — evidence to verified action; observe, propose, verify, authorize" width="100%">
+  <img src="../../assets/branding/relayops-banner.svg" alt="RelayOps — evidence to verified action; observe, propose, verify, authorize" width="100%">
 </p>
 
 <p align="center">
@@ -30,13 +30,13 @@ RelayOps investigates procurement, warehouse, billing and case evidence through 
 
 | Run the product | Inspect the engineering | Challenge the evidence |
 | --- | --- | --- |
-| [Interactive app](https://relayops-two.vercel.app) · [Quick start](#run-locally) · [Recorded walkthrough](../../DEMO.md) | [Design case study](../../architecture/CASE-STUDY.md) · [System map](../../README.md) | [Reproducible checks](../../../CONTRIBUTING.md) · [Limits and tradeoffs](../../architecture/CASE-STUDY.md#what-the-evidence-establishes) |
+| [Interactive app](https://relayops-two.vercel.app) · [Quick start](#run-locally) · [Recorded walkthrough](../../DEMO.md) | [Design case study](../../architecture/CASE-STUDY.md) · [System map](../../README.md) | [Reproducible checks](../../../.github/CONTRIBUTING.md) · [Limits and tradeoffs](../../architecture/CASE-STUDY.md#what-the-evidence-establishes) |
 
 ## Try it and watch it
 
-[**Open the interactive app →**](https://relayops-two.vercel.app/demo) · [**Watch the continuous recording →**](https://relayops-two.vercel.app/demo/recording) · [Recording file](../../../frontend/public/walkthrough.webm)
+[**Open the interactive app →**](https://relayops-two.vercel.app/demo) · [**Watch the continuous recording →**](https://relayops-two.vercel.app/demo/recording) · [Recording file](../../../frontend/apps/demo/assets/media/walkthrough.webm)
 
-![Actual interactive RelayOps browser journey](../../assets/relayops-interactive-demo.gif)
+![Actual interactive RelayOps browser journey](../../assets/demos/relayops-interactive-demo.gif)
 
 Choose a shortage → inspect the real LangGraph diagnostic and private-copy simulation → approve the checked proposal → execute sandbox actions → reconcile a deliberately lost acknowledgment → independently verify final state. Four confirmed action receipts and a repeated execution check are visible.
 
@@ -45,8 +45,8 @@ Choose a shortage → inspect the real LangGraph diagnostic and private-copy sim
 ## The private operator workbench
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="../../assets/relayops-demo-poster.png">
-  <img src="../../assets/relayops-demo.gif" alt="Five recorded stages: investigate the shortage, inspect hypotheses and browser evidence, review the exact proposal, and verify sandbox effects" width="100%">
+  <source media="(prefers-reduced-motion: reduce)" srcset="../../assets/demos/relayops-demo-poster.png">
+  <img src="../../assets/demos/relayops-demo.gif" alt="Five recorded stages: investigate the shortage, inspect hypotheses and browser evidence, review the exact proposal, and verify sandbox effects" width="100%">
 </picture>
 
 **14-second recorded walkthrough.** Actual app execution with original synthetic data and scripted model choices. The review is an automated sandbox demonstration; no production financial effects or live model inference. [Static frames and recording provenance →](../../DEMO.md)
@@ -56,9 +56,9 @@ The app has overview, case catalog, case detail, investigation history, investig
 <details>
 <summary><strong>Inspect the real investigation screen and source evidence</strong></summary>
 
-![Actual investigation with cited hypotheses, proposed business actions and recorded agent activity](../../assets/investigation.png)
+![Actual investigation with cited hypotheses, proposed business actions and recorded agent activity](../../assets/screenshots/investigation.png)
 
-![Full investigation with an expanded original source observation and counterfactual checks](../../assets/investigation-full.png)
+![Full investigation with an expanded original source observation and counterfactual checks](../../assets/screenshots/investigation-full.png)
 
 These captures use original synthetic data and scripted model choices. The shown proposal has not been approved; screenshots do not establish live AI accuracy or customer usage.
 
@@ -67,8 +67,8 @@ These captures use original synthetic data and scripted model choices. The shown
 ## The business problem
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../../assets/relayops-case-dark.svg">
-  <img src="../../assets/relayops-case-light.svg" alt="Original short-shipment case: 100 units ordered, 80 received, 20 missing; a 500 dollar hold and controlled replacement actions require verification and review" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="../../assets/branding/relayops-case-dark.svg">
+  <img src="../../assets/branding/relayops-case-light.svg" alt="Original short-shipment case: 100 units ordered, 80 received, 20 missing; a 500 dollar hold and controlled replacement actions require verification and review" width="100%">
 </picture>
 
 A supplier invoices **100 units at $25 each**, but the warehouse confirms receipt of **80 units**. Paying the entire invoice or retrying an uncertain action can create an incorrect business outcome. Resolving the exception requires consistent evidence from several systems and verified effects after review.
@@ -87,7 +87,7 @@ The owned work connects **model-directed observation**, **cited public hypothese
 
 ## Inside the agent
 
-![RelayOps system map separating read-only model tools, runtime verification, operator review and sandbox action recovery](../../assets/relayops-architecture.svg)
+![RelayOps system map separating read-only model tools, runtime verification, operator review and sandbox action recovery](../../assets/diagrams/relayops-architecture.svg)
 
 The model chooses `observe_system`, `inspect_document`, `record_hypotheses` and `submit_plan`. It cannot approve or execute its own proposal. **relay-agent-1** uses actual conditional graph transitions, durable investigation checkpoints and model-result receipts. Public policy feedback permits at most two corrections; private evaluator answers do not enter the feedback loop.
 
@@ -196,8 +196,8 @@ Live runs are billable and must pass model, token and estimated-spend admission.
 ## Engineering evidence
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../../assets/relayops-evidence-dark.svg">
-  <img src="../../assets/relayops-evidence-light.svg" alt="Recorded engineering evidence: 47 unit and integration tests, sixteen browser journey checks, twelve known scripted assessments; live AI quality pending" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="../../assets/branding/relayops-evidence-dark.svg">
+  <img src="../../assets/branding/relayops-evidence-light.svg" alt="Recorded engineering evidence: 47 unit and integration tests, sixteen browser journey checks, twelve known scripted assessments; live AI quality pending" width="100%">
 </picture>
 
 The recorded local checks below belong to implementation baseline [`dc85c15`](https://github.com/Akhilesh-Vangala/relayops/commit/dc85c1536d9cb95054bfd26542d9b46ed2e8c2ef). The publication baseline at [`7aa02f7`](https://github.com/Akhilesh-Vangala/relayops/commit/7aa02f7c74cca3c1826f612e83b378a957fd1751) passed both Linux jobs in [Actions run 38345763992](https://github.com/Akhilesh-Vangala/relayops/actions/runs/38345763992). Logs and downloaded artifacts confirm the same counts. The badge tracks the current branch.
@@ -230,4 +230,4 @@ relayops/
 
 Controlled live model comparisons; noisy document extraction with field provenance; new frozen workflow/layout tasks and safety evaluations; external action adapters; PostgreSQL/Temporal and individual identity; isolated execution and monitored cloud delivery; actual user feedback. [Full implementation plan](../PLAN.md).
 
-[Branch and release workflow](../../../BRANCHING.md) · [Contributing](../../../CONTRIBUTING.md)
+[Branch and release workflow](../../development/BRANCHING.md) · [Contributing](../../../.github/CONTRIBUTING.md)
