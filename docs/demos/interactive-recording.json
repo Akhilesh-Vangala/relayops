@@ -1,6 +1,6 @@
 {
   "project": "RelayOps",
-  "url": "Local isolated public entrypoint at capture; canonical public verification recorded separately",
+  "url": "http://127.0.0.1:63963",
   "interactive_journey": true,
   "guided": true,
   "paid_model_calls": 0,
@@ -19,12 +19,12 @@
     {
       "stage": "checked-proposal",
       "path": "01-checked-proposal.png",
-      "sha256": "757c04872ff6e2ef49e8af95c45f59eab1346eea94eee051dc8f543e2ea91d30"
+      "sha256": "600ae3ec3790b2bb26ee265a7ae7f706b574ceaeae035d69d34b25b093772b5c"
     },
     {
       "stage": "executed-evidence",
       "path": "02-executed-evidence.png",
-      "sha256": "2d36a40c93b52fd61168affd201cfa6e575439ba196295d242c852451972b671"
+      "sha256": "d0d4db3da434589d9a8f6c4d2d5018d0d57451dcb76dd6422a980c45f09c2e6d"
     },
     {
       "stage": "uncertain-action",
@@ -49,14 +49,22 @@
     "confirmed_receipts": 4
   },
   "source_sha256": {
-    "app.py": "96cd6a0a950a017d7f8bbe97e1ccb81b0ea5a09199925d2b2a9af6e8600d5b6e",
-    "src/relayops/public_demo.py": "9ad3524bb8c2e22b6008ffbd7bedbaf99520944d3f897c84956a0e1478136553",
-    "src/relayops/demo_security.py": "6f2f5ff7c134ab053f2798c9998d7b25214f87f695792353e0d26e816c5432ab",
-    "src/relayops/demo_assets/app.js": "15189d5ef669be0c8b1b3aa1e1a7439b710f8424aef60662f90c392d708f76c7",
-    "src/relayops/demo_assets/style.css": "5e4e30e952040b4cdac45b655c775226cc16a7805ac74690535999c46a771bbe"
+    "app.py": "a71dc6f47e6bb7741a8806673bfefbb4efc154a32132746813ecbcaf59e19fc1",
+    "backend/src/relayops/public_demo.py": "7405b9fad6ab7150feb1072d51e74c0be2f9a1dcee2777a3f8acf76611e4cb76",
+    "backend/src/relayops/demo_security.py": "6f2f5ff7c134ab053f2798c9998d7b25214f87f695792353e0d26e816c5432ab",
+    "frontend/public/app.js": "15189d5ef669be0c8b1b3aa1e1a7439b710f8424aef60662f90c392d708f76c7",
+    "frontend/public/style.css": "5e4e30e952040b4cdac45b655c775226cc16a7805ac74690535999c46a771bbe",
+    "backend/src/relayops/web.py": "77e6128489072bd245ec113abf614b4b9fb7c1f7478cbb70530f22353c0dbdd4",
+    "backend/src/relayops/workflow.py": "e55555f74b61c9e1a99c5c899382804f20ef4e8d33fd7cb9d7e8ffb75fb2c0c4",
+    "backend/src/relayops/planner.py": "f692f1a8b6b4552b4c58ac560624c29bd3f40fa91767307df4c01116eacbe554",
+    "backend/src/relayops/policy.py": "387bef398ab0ce195b426fcbccc631b6684452c3911fb4e2e72d5d1c3c505081",
+    "backend/src/relayops/executor.py": "dd5ea6d7b605fe5a1871a1854fa2fb0e37f24e91d3b9e41ed8b47140201272dc",
+    "backend/src/relayops/evaluator.py": "f59e6f843d64d09fa7fe5d2c6c92ea25a6610175b564c6367abba8f0024f4bd6",
+    "backend/src/relayops/environment.py": "b2a6e39950eecc4d618afa0b3f763d23c9d4e5da90356faa4b88d53106e4b6fe"
   },
-  "video_sha256": "081c361a9ddf0ebda3cabf755c61128411d65c98aad7ffbc85b6e5faa6b1a393",
+  "video_sha256": "7231166b78fe84ac93bf64f949cfecfdefe2a163ab6300fe61a29dac2b134389",
   "recording": "Continuous actual browser capture; automated synthetic interactions, not customer feedback or live model inference",
-  "video_path": "src/relayops/demo_assets/walkthrough.webm",
-  "preview_path": "docs/assets/relayops-interactive-demo.gif"
+  "video_path": "frontend/public/walkthrough.webm",
+  "preview_path": "docs/assets/relayops-interactive-demo.gif",
+  "capture_environment": "Isolated local public ASGI entrypoint, same code paths as Vercel, fresh fixtures per request"
 }

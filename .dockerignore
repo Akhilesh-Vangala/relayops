@@ -9,3 +9,9 @@ notebooks
 __pycache__
 *.pyc
 .vercel
+
+**/.env*
+**/.venv*
+**/__pycache__
+**/.tools
+**/.terraform

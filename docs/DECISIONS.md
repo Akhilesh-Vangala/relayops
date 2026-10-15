@@ -29,4 +29,4 @@ Choose same-node RWO storage while the authored fixture business worlds, action 
 
 ## October14 — Executable public sandbox
 
-Use request-bounded original fixtures and signed browser envelopes for Vercel interactive actions. Retain full private durable workers separately. This supports real verification/execution in public without claiming persistent effects or immutable global review. Browser session history and explicit replay/fork limitations are accepted tradeoffs; a shared ephemeral SQLite queue is not used for the new endpoints. [Details](14-INTERACTIVE-PUBLIC-DEMO.md).
+Use request-bounded original fixtures and signed browser envelopes for Vercel interactive actions. Retain full private durable workers separately. This supports real verification/execution in public without claiming persistent effects or immutable global review. Browser session history and explicit replay/fork limitations are accepted tradeoffs; a shared ephemeral SQLite queue is not used for the new endpoints. [Details](operations/PUBLIC-SANDBOX.md).
