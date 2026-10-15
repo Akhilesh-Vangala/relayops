@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "backend" / "src"))
 
 os.environ["RELAY_ALLOW_LIVE"] = "0"
 os.environ["RELAY_PUBLIC_SHOWCASE"] = "1"

@@ -1,6 +1,7 @@
 x-runtime: &runtime
   build:
     context: .
+    dockerfile: backend/Dockerfile
     target: runtime
   environment: &environment
     RELAY_DATABASE_URL: postgresql://relayops:${RELAY_POSTGRES_PASSWORD:?Set a private alphanumeric PostgreSQL password}@postgres:5432/relayops

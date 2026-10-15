@@ -17,7 +17,7 @@ cleanup() {
 }
 trap cleanup EXIT
 kind create cluster --name "${cluster_name}" --wait 120s
-docker build --target runtime -t relayops:kind .
+docker build -f backend/Dockerfile --target runtime -t relayops:kind .
 kind load docker-image relayops:kind --name "${cluster_name}"
 kubectl apply -k deploy/k8s/overlays/kind
 kubectl -n relayops wait --for=condition=complete job/relayops-migrate --timeout=240s
