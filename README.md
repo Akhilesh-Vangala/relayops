@@ -38,7 +38,7 @@ RelayOps investigates procurement, warehouse, billing and case evidence through 
 
 Choose a shortage → inspect the real LangGraph diagnostic and private-copy simulation → approve the checked proposal → execute sandbox actions → reconcile a deliberately lost acknowledgment → independently verify final state. Four confirmed action receipts and a repeated execution check are visible.
 
-**Actual calculations, guided synthetic data, no model charges.** Browser-local history and signed version checks support the public flow. Persistent private workers and live-model evaluations are separate. [Public architecture and limits](docs/14-INTERACTIVE-PUBLIC-DEMO.md) · [Recording provenance](docs/demos/interactive-recording.json).
+**Actual calculations, guided synthetic data, no model charges.** Browser-local history and signed version checks support the public flow. Persistent private workers and live-model evaluations are separate. [Public architecture and limits](docs/14-INTERACTIVE-PUBLIC-DEMO.md) · [Recording provenance](docs/demos/interactive-recording.json) · [Verified public execution](docs/PUBLIC-DEMO-EVIDENCE.md).
 
 ## The private operator workbench
 
