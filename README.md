@@ -1,6 +1,8 @@
 <p align="center"><img src="docs/assets/branding/relayops-banner.svg" alt="RelayOps — Workflow execution" width="100%"></p>
 
-**Use your own data:** [Open RelayOps](https://relayops-two.vercel.app/) · [Start with your CSV](https://relayops-two.vercel.app/uploads) · [Product walkthrough and storage](docs/product/PRODUCT-WORKSPACE.md). Guided source/rule review, observed execution stages, independently checked results, consented device projects/history and portable backups. Approve checked snapshot changes separately; no external business writes.
+**Use your own data:** [Open RelayOps](https://relayops-two.vercel.app/) · [Start with your data file](https://relayops-two.vercel.app/uploads) · [Product walkthrough and storage](docs/product/PRODUCT-WORKSPACE.md). Guided source/rule review, observed execution stages, independently checked results, consented device projects/history and portable backups. Approve checked snapshot changes separately; no external business writes.
+
+**File imports:** CSV · TSV · Excel `.xlsx` with worksheet choice · JSON · JSONL. [Import contract and limits](docs/product/FILE-IMPORTS.md). Existing independent checks and approval rules apply to every format.
 
 <p align="center"><a href="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml"><img src="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml/badge.svg" alt="Required engineering checks"></a> &nbsp; Python · LangGraph · FastAPI · PostgreSQL</p>
 
