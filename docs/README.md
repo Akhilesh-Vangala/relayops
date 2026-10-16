@@ -1,3 +1,5 @@
+[Product pages, storage and verification](product/PRODUCT-WORKSPACE.md) · [Own-data business contract](product/USER-DATA.md)
+
 # RelayOps technical documentation
 
 [Project overview](../README.md) · [Working app](https://relayops-two.vercel.app/demo) · [Recorded demo](DEMO.md)

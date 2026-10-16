@@ -1,3 +1,7 @@
+# Current product recording
+
+The [upload walkthrough](demos/uploads-recording.json) now records the complete product journey: real file selection, source preview, reviewed definition, executed independently checked results, exports, explicit device save and saved history. [Product result screenshot](assets/demos/product-report.png). This is one continuous Chromium capture using authored test data, with readable pauses; it is not customer feedback or live-model inference. The original guided sample recording remains distinct below. Previous capture manifests are retained under `docs/demos/history/`.
+
 # RelayOps recorded demonstration
 
 [Open the working app](https://relayops-two.vercel.app/demo) · [Watch the continuous recording](https://relayops-two.vercel.app/demo/recording) · [Download the WebM](../frontend/apps/demo/assets/media/walkthrough.webm) · [Capture/source manifest](demos/interactive-recording.json)
