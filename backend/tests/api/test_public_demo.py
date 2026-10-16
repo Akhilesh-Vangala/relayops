@@ -192,4 +192,4 @@ class PublicDemoTests(unittest.TestCase):
         self.assertEqual(
             self.client.get("/api/demo/runs/" + result["id"]).status_code, 404
         )
-        self.assertEqual(self.client.get("/").url.path, "/demo")
+        self.assertIn("/product-assets/app.js", self.client.get("/").text)
