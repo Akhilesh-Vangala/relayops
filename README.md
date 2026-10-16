@@ -1,6 +1,6 @@
 <p align="center"><img src="docs/assets/branding/relayops-banner.svg" alt="RelayOps — Workflow execution" width="100%"></p>
 
-**Use your own data:** [Open the CSV workspace](https://relayops-two.vercel.app/uploads) · [Contracts, verification and data handling](docs/product/USER-DATA.md). Upload, map columns, review business rules, and download checked source-derived results. Public processing is contract-driven; live model interpretation remains unavailable.
+**Use your own data:** [Open RelayOps](https://relayops-two.vercel.app/) · [Start with your CSV](https://relayops-two.vercel.app/uploads) · [Product walkthrough and storage](docs/product/PRODUCT-WORKSPACE.md). Guided source/rule review, observed execution stages, independently checked results, consented device projects/history and portable backups. Approve checked snapshot changes separately; no external business writes.
 
 <p align="center"><a href="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml"><img src="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml/badge.svg" alt="Required engineering checks"></a> &nbsp; Python · LangGraph · FastAPI · PostgreSQL</p>
 
@@ -18,6 +18,10 @@ Resolve a supplier short shipment across procurement, warehouse, billing and cas
 <a id="see-the-workbench"></a>
 
 ## Run the workflow
+
+![RelayOps actual own-data product result](docs/assets/demos/product-report.png)
+
+[Watch the actual upload walkthrough](https://relayops-two.vercel.app/uploads/recording.html) · [Product architecture and validation](docs/product/PRODUCT-WORKSPACE.md). The original guided synthetic agent demonstration follows; neither recording claims live inference.
 
 <picture>
   <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/demos/relayops-interactive-poster.png">

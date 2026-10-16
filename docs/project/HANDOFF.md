@@ -1,4 +1,8 @@
-# Active: visitor-owned CSV workspaces
+# Active: complete own-data product workspace
+
+RelayOps now has domain-specific landing/workspace, source/rule review, real streamed execution, results/evidence, consented immutable device projects/history and portable restore. Exact-source approval remains separate from assessment; saved previews need reassessment before fresh approval. Optional account adapter/RLS is prepared and locally tested; genuine hosted authentication is not configured. Protected CI, source-bound deployment and media checks must pass before release is marked delivered. See [product documentation](../product/PRODUCT-WORKSPACE.md).
+
+# Prior increment: visitor-owned CSV workspaces (superseded by product workspace)
 
 Implementation adds `/uploads`, bounded own-data APIs, exact mapping/contracts, source-derived independently reconciled outputs and evidence exports. RelayOps retains exact-source human approval before export. Local verification: 71 tests with 3 environment-dependent skips, actual file-picker/checked-result/download/mobile/Clear/invalid-file browser journeys, plus refreshed original sample recordings. Protected CI and deployment checks are required before production promotion. Existing release-gate limitations remain. See [contracts](../product/USER-DATA.md).
 

@@ -1,3 +1,7 @@
+# October15 product workspace verification
+
+Implemented and locally verified RelayOps product landing, guided own-data source/rules/results, real observed stages, explicit immutable device projects/history, backup restore and signed saved-report checks. 85 native tests, including actual PostgreSQL queue/recovery cases; 16 private-workbench browser checks; 12 grouped product checks and 14 axe views pass. Both actual owner-RLS/concurrent quota checks pass in disposable PostgreSQL. Recordings use current source and real browser pixels. Publication must use protected required CI and exact-source deployment verification; these local checks do not establish hosted Auth, live-model quality, real users or monitored durable operations. See [product implementation](../product/PRODUCT-WORKSPACE.md). Existing release gates and history below remain applicable.
+
 # RelayOps progress and evidence
 
 ## October 15 — Repository organization and demo refresh
