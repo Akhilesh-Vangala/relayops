@@ -1,7 +1,7 @@
 {
   "project": "RelayOps",
   "passed": true,
-  "url": "http://127.0.0.1:18301",
+  "url": "http://127.0.0.1:65527",
   "paid_model_calls": 0,
   "actual_user_feedback": false,
   "checks": [
@@ -69,7 +69,8 @@
     "backend/src/relayops/product/accounts.py": "9833edcdde51fc1b7b5770de3e97e1ba2306d898c771a6168661194dd408bcc5",
     "backend/src/relayops/product/api.py": "64dca786b60c6216c452fdc72ba8e248090dda25ef34f7a249673e99ac2c2e75",
     "backend/src/relayops/uploads/__init__.py": "6cf9cc3f23b8eb7fecf7b1f708e9627b7d6c5aacbe313fc0034cc082b4496ee4",
-    "backend/src/relayops/uploads/api.py": "ea9e85b9f69340a3993a9416c20b3f4f871542542832e5166d14f817b3d1dd03",
+    "backend/src/relayops/uploads/api.py": "fc0fb42cf39148149d7c514c7f4b867f1cb4340fa1d60dbd4b0e91320e342d98",
+    "backend/src/relayops/uploads/imports.py": "d025a3e701bca899913b580737065f1cb2f87084babc8699d582c03cb5ed778f",
     "backend/src/relayops/uploads/ingestion.py": "5d8bc63659a13b09d848639d1ce1870583f70a46c9c29f9465b521d25f9883a5",
     "backend/src/relayops/uploads/service.py": "e8570d3f097758a5982035b2c8c48a4357f28b683375f93aa9afe4ed77bcb42a",
     "backend/src/relayops/uploads/signing.py": "d5cd0b21e05e94526e998a8a57a617884779dd6b3f492dc50f055725d9692864",
@@ -80,22 +81,23 @@
     "backend/src/relayops/workers/wait_for_database.py": "a770ed913384248d68e6e29ca4afea456e67d4bcec6b402b21ebe34aaced43dc",
     "backend/src/relayops/workers/worker.py": "437975af3d8b2e3c3584e080401ce8e7c287cea66bfedfd009f8c432cb040c1c",
     "backend/src/relayops/workers/worker_health.py": "d7164c14cadcabf47e3b71b0f94a52253d483a1c6bb6bb7e66a9e9e0aef3e236",
-    "frontend/apps/product/app.js": "b377ada82f712d9ba185e97ae3e8a51e81a8f9e288bd9a98f8327c0750cf019a",
+    "frontend/apps/product/app.js": "90a3bbf688f84833d78ac67d40a8a02c2542cebdeada09c6321b0ac173753aaa",
     "frontend/apps/product/index.html": "3201036ac27b374437ff3561dcf06fc17ff54ce577a606796664b522cc4371dd",
     "frontend/apps/product/lib/api.js": "ce6e548786dea58855490795c65494f900838cc60cf7ed8785b95829cd78fc69",
     "frontend/apps/product/lib/dom.js": "ef3025937a144bee88e38893e72126742f403dbfa908d4c486ddf647d67e3afb",
+    "frontend/apps/product/lib/imports.js": "89d2a47dd3b885cee795ff906b6284e8f8be57f3a8e88e2fab30d5e62ce95106",
     "frontend/apps/product/lib/storage.js": "4a3b159699e667f9bf7cc0dd1981fb43e2effc434856d318ac333eeea50a5548",
     "frontend/apps/product/state.js": "effca3af034e6f9826cee8cb55e7c5f4cba1f694fce06214919880352a72ce3a",
     "frontend/apps/product/styles.css": "bf7217396e2ccd76baef6b2ed544ff804076b551a8ca025f9d7479877a1c1d72",
     "frontend/apps/product/views/account.js": "8d983c0b35aa1f67b5bc2d097fc774461ac3c75d6d998cac69e2c2dadd2bef10",
-    "frontend/apps/product/views/dashboard.js": "73239a483bfdc9e88c2baa32fd6d4b4589ad3777d6af23c43e37c1812465e539",
-    "frontend/apps/product/views/intake.js": "de58ad1fcb29e6ec6270a83be0f6f76bbc5b982ff97921766476abd0e1cf74ae",
+    "frontend/apps/product/views/dashboard.js": "b3d915a6b77b97b059fd76bf020d4d9c75d2c4e4d6f81d33626d3aca951a0642",
+    "frontend/apps/product/views/intake.js": "9be84d4e16c3e695497630b3454cfb8c6112c11e2a4e01370082496bb61a2a00",
     "frontend/apps/product/views/landing.js": "62731fb949d19698f94e0de13f1caab6a0e28d8774b6f0c2eb60ba737286b594",
     "frontend/apps/product/views/report.js": "369eb67de81fcdecc54a8b613c751dafb0926ee7a175b18b6bfba7a673677f50"
   },
-  "recording": "Continuous actual Chromium upload/rules/verification/exports/device history journey; automated fixtures, no live model inference or actual-user feedback",
+  "recording": "Actual continuous product/upload/source/rules/results/history capture with reviewed fixture data; no live inference or customer-feedback claim.",
   "media_sha256": {
-    "frontend/apps/uploads/walkthrough.webm": "da216b91dfc18c9fd7865d2cd6243b87383622ba6813d622fb090696058817b2",
-    "frontend/apps/uploads/poster.png": "af2cfc5b55601c088c65815c3b47270a0c613e1a0311cfd9e07af479e67a56cd"
+    "frontend/apps/uploads/poster.png": "af2cfc5b55601c088c65815c3b47270a0c613e1a0311cfd9e07af479e67a56cd",
+    "frontend/apps/uploads/walkthrough.webm": "8eedd31e0dd3bdbe1fb9ac400759abc7164407041b4b4b4c0e45b2111202afa6"
   }
 }

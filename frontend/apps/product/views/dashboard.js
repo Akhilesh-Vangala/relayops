@@ -122,9 +122,9 @@ export function dashboard(ctx) {
             )
           : emptyState(
               "Your first investigation starts here.",
-              "Bring a CSV of open operational cases, or use the sample to learn the workflow. Nothing is saved until you choose to keep it.",
+              "Bring an export of open operational cases, or use the sample to learn the workflow. Nothing is saved until you choose to keep it.",
               [
-                link("Upload a CSV", "/uploads?new=1", "primary"),
+                link("Upload a data file", "/uploads?new=1", "primary"),
                 button("Explore the sample", ctx.sample, "secondary"),
               ],
             ),

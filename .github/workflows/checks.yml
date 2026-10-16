@@ -100,6 +100,8 @@ jobs:
         run: npm install --prefix /tmp/product-a11y --ignore-scripts --no-audit --no-fund axe-core@4.14.0
       - name: Product upload, approval, immutable history, recovery and accessibility
         run: python scripts/demos/product_browser.py --axe /tmp/product-a11y/node_modules/axe-core/axe.min.js
+      - name: Real multi-format uploads and worksheet accessibility
+        run: python scripts/demos/import_browser.py --axe /tmp/product-a11y/node_modules/axe-core/axe.min.js
       - name: Run the real local workbench journey
         run: python backend/tests/e2e/browser_workbench.py
       - uses: actions/upload-artifact@v4
@@ -110,6 +112,7 @@ jobs:
             artifacts/generated/browser-workbench-*
             artifacts/generated/public-demo-browser
             artifacts/generated/product-browser
+            artifacts/generated/import-browser
           retention-days: 14
 
   containers:

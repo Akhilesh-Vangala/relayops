@@ -1,6 +1,6 @@
 {
   "project": "RelayOps",
-  "url": "http://127.0.0.1:61046",
+  "url": "http://127.0.0.1:65528",
   "interactive_journey": true,
   "guided": true,
   "paid_model_calls": 0,
@@ -19,12 +19,12 @@
     {
       "stage": "checked-proposal",
       "path": "01-checked-proposal.png",
-      "sha256": "5e3a83f1c8cc0f7c3d153d9fdaa7c5161c84a45a4027a7dfa2bb9e435c0f15d6"
+      "sha256": "078453603f9448878ecdbb669db6d5cfe306d7148fbecf1b4bcb5b5396c4e04d"
     },
     {
       "stage": "executed-evidence",
       "path": "02-executed-evidence.png",
-      "sha256": "f26b8bd877c95cb7dbeaaa05fcee733993f3afd1ab009fc95e3762d2145a2385"
+      "sha256": "4d8cb72c75109b4f2e4c97f2c3a686b2cf4001c80166f6dba4aee57230376084"
     },
     {
       "stage": "uncertain-action",
@@ -81,7 +81,8 @@
     "backend/src/relayops/product/accounts.py": "9833edcdde51fc1b7b5770de3e97e1ba2306d898c771a6168661194dd408bcc5",
     "backend/src/relayops/product/api.py": "64dca786b60c6216c452fdc72ba8e248090dda25ef34f7a249673e99ac2c2e75",
     "backend/src/relayops/uploads/__init__.py": "6cf9cc3f23b8eb7fecf7b1f708e9627b7d6c5aacbe313fc0034cc082b4496ee4",
-    "backend/src/relayops/uploads/api.py": "ea9e85b9f69340a3993a9416c20b3f4f871542542832e5166d14f817b3d1dd03",
+    "backend/src/relayops/uploads/api.py": "fc0fb42cf39148149d7c514c7f4b867f1cb4340fa1d60dbd4b0e91320e342d98",
+    "backend/src/relayops/uploads/imports.py": "d025a3e701bca899913b580737065f1cb2f87084babc8699d582c03cb5ed778f",
     "backend/src/relayops/uploads/ingestion.py": "5d8bc63659a13b09d848639d1ce1870583f70a46c9c29f9465b521d25f9883a5",
     "backend/src/relayops/uploads/service.py": "e8570d3f097758a5982035b2c8c48a4357f28b683375f93aa9afe4ed77bcb42a",
     "backend/src/relayops/uploads/signing.py": "d5cd0b21e05e94526e998a8a57a617884779dd6b3f492dc50f055725d9692864",
@@ -95,7 +96,7 @@
     "frontend/apps/demo/assets/scripts/app.js": "b71d4ef78d51b48c714f3a4dbbaff29ef2d4afb0ae2a4e9c6ade9dc51b5d5193",
     "frontend/apps/demo/assets/styles/style.css": "5e4e30e952040b4cdac45b655c775226cc16a7805ac74690535999c46a771bbe"
   },
-  "video_sha256": "17d6c2caba922fcf7cf3648141ab7d3b479400c92cfafb2655286b29282e8e17",
+  "video_sha256": "6d30631139d3de66840ae2b42b78d3f2abe68548268d1dfc47035dc7ea2fb01c",
   "recording": "Continuous actual browser capture; automated synthetic interactions, not customer feedback or live model inference",
   "video_path": "frontend/apps/demo/assets/media/walkthrough.webm",
   "preview_path": "docs/assets/demos/relayops-interactive-demo.gif"
