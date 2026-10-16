@@ -19,6 +19,7 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.responses import Response
 from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from pydantic import ConfigDict
 
@@ -114,6 +115,8 @@ def create_app(state_dir):
         if public_showcase:
             from relayops.api.public_demo import WRITE_PATHS
             from relayops.uploads.api import WRITE_PATHS as UPLOAD_PATHS
+            from relayops.product.api import WRITE_PATHS as ACCOUNT_PATHS
+            UPLOAD_PATHS = UPLOAD_PATHS | ACCOUNT_PATHS
             if request.method != "GET" and not (public_demo and request.method == "POST" and request.url.path in (WRITE_PATHS | UPLOAD_PATHS)):
                 return Response('{"detail":"Public showcase is read-only"}', status_code=405, media_type="application/json")
         else:
@@ -141,7 +144,7 @@ def create_app(state_dir):
             origin = request.headers.get("origin")
             if origin and origin not in ("http://" + request.headers["host"], "https://" + request.headers["host"]):
                 return Response("Unexpected origin", status_code=403)
-            if request.headers.get("content-type", "").split(";")[0] != "application/json" or len(await request.body()) > (1000000 if request.url.path.startswith("/api/uploads/") else 16000):
+            if request.headers.get("content-type", "").split(";")[0] != "application/json" or len(await request.body()) > (1000000 if request.url.path.startswith(("/api/uploads/", "/api/account/")) else 16000):
                 return Response("Bounded JSON body required", status_code=400)
         response = await call_next(request)
         image_sources = "'self' https://raw.githubusercontent.com" if public_showcase else "'self'"
@@ -189,7 +192,7 @@ def create_app(state_dir):
     @app.get("/")
     def home():
         if public_demo:
-            return RedirectResponse("/demo")
+            return FileResponse(Path(__file__).resolve().parents[4]/"frontend/apps/product/index.html", headers={"Cache-Control": "no-store"})
         with db() as connection:
             count = connection.execute("SELECT COUNT(*) FROM runs").fetchone()[0]
         release = "<div class='callout'><strong>Public engineering showcase.</strong> Explore the original cases and architecture, then open the recorded executed workflow. State-changing runs are disabled on the serverless deployment.</div>" if public_showcase else ""
@@ -349,6 +352,8 @@ def create_app(state_dir):
         attach(app, SCENARIOS)
     from relayops.uploads.api import attach as attach_uploads
     attach_uploads(app, "RelayOps", Path(__file__).resolve().parents[4])
+    from relayops.product.api import attach as attach_product
+    attach_product(app, Path(__file__).resolve().parents[4])
     return app
 
 
