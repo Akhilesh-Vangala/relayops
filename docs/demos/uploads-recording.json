@@ -1,7 +1,7 @@
 {
   "project": "RelayOps",
   "passed": true,
-  "url": "http://127.0.0.1:61521",
+  "url": "http://127.0.0.1:61969",
   "paid_model_calls": 0,
   "actual_user_feedback": false,
   "checks": [
@@ -74,7 +74,7 @@
     "backend/src/relayops/uploads/ingestion.py": "5d8bc63659a13b09d848639d1ce1870583f70a46c9c29f9465b521d25f9883a5",
     "backend/src/relayops/uploads/service.py": "e8570d3f097758a5982035b2c8c48a4357f28b683375f93aa9afe4ed77bcb42a",
     "backend/src/relayops/uploads/signing.py": "d5cd0b21e05e94526e998a8a57a617884779dd6b3f492dc50f055725d9692864",
-    "backend/src/relayops/uploads/stream.py": "7bae483dc25d25905549a4ce7eacefcb7de4613a9f1d11c24b704ec08dc7e552",
+    "backend/src/relayops/uploads/stream.py": "e8a56931777202f52ba616a4194dd77fa2a1e369ac6628e6956e8b0ea1635643",
     "backend/src/relayops/verification/__init__.py": "e79f47856ac72444982146da26520dc49d6f883f8ae0cbc713e717151d52cd0c",
     "backend/src/relayops/verification/evaluator.py": "f59e6f843d64d09fa7fe5d2c6c92ea25a6610175b564c6367abba8f0024f4bd6",
     "backend/src/relayops/workers/__init__.py": "8bf0670a840fdf42a71b598ea2086b7cae8c2dde307f3c7eb4118e968761e911",
@@ -98,6 +98,6 @@
   "recording": "Actual continuous product/upload/source/rules/results/history capture with reviewed fixture data; no live inference or customer-feedback claim.",
   "media_sha256": {
     "frontend/apps/uploads/poster.png": "af2cfc5b55601c088c65815c3b47270a0c613e1a0311cfd9e07af479e67a56cd",
-    "frontend/apps/uploads/walkthrough.webm": "dd005805d957609176905e41e137ce3cd1c64c6064550ca29187a861f85047ec"
+    "frontend/apps/uploads/walkthrough.webm": "aa327ffc6f5b07816f6b1405994a173746c2ba742317c3bec00ec31135d279a2"
   }
 }
