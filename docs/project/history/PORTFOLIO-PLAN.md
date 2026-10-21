@@ -2,7 +2,7 @@
 
 # Portfolio evidence and demo
 
-October 13 current demo: [actual app screenshots and journey](../../../README.md#the-operator-workbench), [system map](../../assets/diagrams/relayops-architecture.svg), and [source/visual provenance guide](../../development/REPOSITORY.md). The local operator workbench and browser-evidence journey are implemented with scripted integration choices. Earlier CLI-only/no-browser-product statements below are superseded foundation history. Live AI quality, customer feedback and cloud hosting remain pending.
+October 13 current demo: [actual app screenshots and journey](../../product/PRODUCT-WORKSPACE.md), [system map](../../assets/diagrams/relayops-architecture.svg), and [source/visual provenance guide](../../development/REPOSITORY.md). The local operator workbench and browser-evidence journey are implemented with scripted integration choices. Earlier CLI-only/no-browser-product statements below are superseded foundation history. Live AI quality, customer feedback and cloud hosting remain pending.
 
 October12 current implementation: [model-directed agent and local workbench](../../architecture/AGENT-WORKBENCH.md) add persistent dynamic tool selection, real browser/document screenshots, cited public hypotheses, bounded correction, actual SDK HTTP/SSE checks and operator pages. Earlier no-browser/no-server/single-call-only statements below describe the initial foundation and are superseded for current coverage; live quality, arbitrary UI actions, scanned-document extraction and distributed/cloud release remain pending.
 

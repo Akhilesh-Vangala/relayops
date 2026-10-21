@@ -3,6 +3,7 @@ import asyncio
 import copy
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Literal
 from typing import TypedDict
@@ -116,7 +117,12 @@ def build_agent(world, client, saver, browser=None):
         async with asyncio.timeout(max(.001, 240 - state["active_seconds"])):
             payload = await client.complete(prompt, state["messages"], definitions(), round_number,
                                             min(2048, 12000 - state["output_tokens"]))
-        result = payload["result"]
+        if not isinstance(payload, dict):
+            raise Refused("Malformed provider envelope")
+        seconds = payload.get("seconds")
+        if type(seconds) not in (int, float) or not math.isfinite(seconds) or seconds < 0:
+            raise Refused("Invalid provider elapsed time")
+        result = payload.get("result")
         if not isinstance(result, dict) or not isinstance(result.get("content"), list) or any(not isinstance(b, dict) for b in result["content"]):
             raise Refused("Malformed provider message")
         calls = [block for block in result.get("content", []) if block.get("type") == "tool_use"]
@@ -130,14 +136,18 @@ def build_agent(world, client, saver, browser=None):
         control = any(c.get("name") in ("submit_plan", "record_hypotheses") for c in calls)
         if control and len(calls) != 1:
             raise Refused("Control submissions must be separate from evidence calls")
-        usage = result.get("usage", {})
-        output = usage.get("output_tokens", 0)
+        if any(not isinstance(c.get("name"), str) or not c["name"] for c in calls):
+            raise Refused("Invalid provider tool name")
+        usage = result.get("usage")
+        if not isinstance(usage, dict):
+            raise Refused("Malformed provider usage")
+        output = usage.get("output_tokens")
         if type(output) is not int or output < 0 or state["output_tokens"] + output > 12000:
             raise Refused("Invalid or exhausted provider output usage")
         return {"rounds": round_number, "calls": calls,
                 "messages": state["messages"] + [{"role": "assistant", "content": result["content"]}],
                 "output_tokens": state["output_tokens"] + output,
-                "active_seconds": state["active_seconds"] + payload["seconds"],
+                "active_seconds": state["active_seconds"] + seconds,
                 "activity": journal(state, "model", round=round_number, requested=[c.get("name") for c in calls])}
 
     async def route(state):
