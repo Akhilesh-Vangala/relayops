@@ -1,12 +1,12 @@
-<p align="center"><img src="docs/assets/branding/relayops-banner.svg" alt="RelayOps — Workflow execution" width="100%"></p>
+<p align="center"><img src="docs/assets/branding/relayops-banner.svg" alt="ActionDesk — Workflow execution" width="100%"></p>
 
-**Use your own data:** [Open RelayOps](https://relayops-two.vercel.app/) · [Start with your data file](https://relayops-two.vercel.app/uploads) · [Product walkthrough and storage](docs/product/PRODUCT-WORKSPACE.md). Guided source/rule review, observed execution stages, independently checked results, consented device projects/history and portable backups. Approve checked snapshot changes separately; no external business writes.
+**Use your own data:** [Open ActionDesk](https://relayops-two.vercel.app/) · [Start with your data file](https://relayops-two.vercel.app/uploads) · [Product walkthrough and storage](docs/product/PRODUCT-WORKSPACE.md). Guided source/rule review, observed execution stages, independently checked results, consented device projects/history and portable backups. Approve checked snapshot changes separately; no external business writes.
 
 **File imports:** CSV · TSV · Excel `.xlsx` with worksheet choice · JSON · JSONL. [Import contract and limits](docs/product/FILE-IMPORTS.md). Existing independent checks and approval rules apply to every format.
 
 <p align="center"><a href="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml"><img src="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml/badge.svg" alt="Required engineering checks"></a> &nbsp; Python · LangGraph · FastAPI · PostgreSQL</p>
 
-# RelayOps
+# ActionDesk
 
 **Evidence to verified action.** A workflow agent with independent simulation, exact-version review and uncertain-action recovery.
 
@@ -21,7 +21,7 @@ Resolve a supplier short shipment across procurement, warehouse, billing and cas
 
 ## Run the workflow
 
-![RelayOps actual own-data product result](docs/assets/demos/product-report.png)
+![ActionDesk actual own-data product result](docs/assets/demos/product-report.png)
 
 [Watch the actual upload walkthrough](https://relayops-two.vercel.app/uploads/recording.html) · [Product architecture and validation](docs/product/PRODUCT-WORKSPACE.md). The original guided synthetic agent demonstration follows; neither recording claims live inference.
 
@@ -41,7 +41,7 @@ Four original synthetic cases. Investigate, inspect evidence and simulation, app
 
 ## Architecture and authority
 
-![RelayOps architecture and verification boundaries](docs/assets/diagrams/relayops-architecture.svg)
+![ActionDesk architecture and verification boundaries](docs/assets/diagrams/relayops-architecture.svg)
 
 A bounded LangGraph investigator observes original browser/document evidence, records cited hypotheses and submits typed proposals. Separate policy, private-copy simulation and final-state verification precede exact-version review and receipted actions. PostgreSQL coordinates leased browser workers; fixture worlds and checkpoints still use same-node files.
 
