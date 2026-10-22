@@ -17,6 +17,7 @@ from relayops.domain.environment import fixture
 from relayops.persistence.run_store import RunStore
 from relayops.agents.scripted_agent import ScriptedAgent
 from relayops.agents.workflow import simulate_plan
+from relayops.product.run_contract import record
 
 SCENARIO_OPTIONS = {
     "short-shipment": {}, "unknown-delivery": {"delivery_known": False},
@@ -63,6 +64,12 @@ async def run_job(store, job):
             client = ScriptedAgent(incorrect_first=True)
         result = await investigate(world, client, browser=browser)
         result["simulation"] = await asyncio.to_thread(simulate_plan, world, Plan.from_json(result["plan"]))
+        result["run_record"] = record(run_id=job["id"], task="case_resolution", mode=spec["mode"],
+            owner_scope="operator-workspace", input_sha256=world.version(), contract={"task": "open-short-shipment", "version": "v1"},
+            result={"plan": result["plan"], "simulation": result["simulation"]},
+            verification_scope="independent-simulation", verification_passed=result["simulation"]["passed"],
+            check_count=1, evidence_count=len(result["evidence"]), billing="unknown" if spec["mode"] == "live" else "not-used",
+            producer_versions={"agent": result["agent_version"], "policy": "short-shipment-v1"})
         result["version"] = digest(result)
         destination = world.path.parent / "assessment.json"
         temporary = destination.with_suffix("." + job["owner"] + ".tmp")

@@ -11,6 +11,8 @@ from relayops.domain.models import digest
 from relayops.execution.executor import approve, execute
 from relayops.verification.evaluator import evaluate
 
+from relayops.product.run_contract import upload_record
+
 from .ingestion import UploadProblem, column, decimal_value, fingerprint, integer, parse, safe_csv
 
 
@@ -121,5 +123,6 @@ def run(upload, *, approved=False, progress=None):
             "csv": safe_csv(["order_id", "outcome", "held_cents", "claim_units", "reserved_units", "status"], updates) if approved else None,
             "scope": "Open, previously unprocessed cases only. Stock is shared only when an inventory-pool column is mapped; otherwise each order has separately allocated stock. Approval creates a checked downloadable change set against a temporary snapshot. No ERP, supplier, payment or inventory system is modified.",
             "activity": ["validate-open-case-export", "observe-upload-worlds", "langgraph-propose-policy-simulate", "review-exact-source-and-plan", "verify-exported-effects" if approved else "await-review"]}
+    result["run_record"] = upload_record(upload, result)
     progress("report", "complete")
     return result
