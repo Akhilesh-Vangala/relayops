@@ -1,30 +1,18 @@
-<p align="center"><img src="docs/assets/branding/relayops-banner.svg" alt="RelayOps — Workflow execution" width="100%"></p>
+# RelayOps
 
-**Evidence to verified action.** [Open RelayOps](https://relayops-two.vercel.app/) · [Upload your data](https://relayops-two.vercel.app/uploads) · [Docs](docs/README.md)
+A workflow agent for a short-shipment across procurement, warehouse, billing, and case systems. It observes those systems, proposes typed actions, and simulates them on a private copy. Nothing is executed until that exact version passes independent checks.
+
+[Open the app](https://relayops-two.vercel.app/) · [Upload a file](https://relayops-two.vercel.app/uploads) · [Architecture](docs/architecture/OVERVIEW.md) · [What the checks measure](docs/evaluation/README.md) · [Run locally](docs/operations/DEVELOPMENT.md)
 
 <p align="center"><a href="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml"><img src="https://github.com/Akhilesh-Vangala/relayops/actions/workflows/checks.yml/badge.svg" alt="Required engineering checks"></a> &nbsp; Python · LangGraph · FastAPI · PostgreSQL</p>
 
-# RelayOps
-
-A workflow agent with independent simulation, exact-version review, and uncertain-action recovery — so a short-shipment case across procurement, warehouse, billing, and case systems does not pay the wrong invoice or duplicate an action.
-
-[**Open the app ↗**](https://relayops-two.vercel.app/) · [Technical documentation](docs/README.md) · [Repository layout](docs/development/LAYOUT.md)
+The public app uses synthetic fixtures and does not call a model. Live model quality is not a result of this repository.
 
 ## Architecture
 
-![RelayOps architecture](docs/assets/diagrams/relayops-architecture.svg)
+The model can observe and propose. Simulation, final-state checks, and the action broker are separate. An uncertain acknowledgment is reconciled before any retry, so a lost response does not become a second payment or a second shipment.
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-  Case --> Evidence[Grounded observations]
-  Evidence --> Proposal[Typed proposal]
-  Proposal --> Simulation[Private-copy simulation]
-  Simulation --> Checks[Independent state checks]
-  Checks --> Review[Exact-version review]
-  Review --> Act[Scoped actions and receipts]
-  Act --> Recovery[Reconcile uncertain outcomes]
-```
+![System map: observation, grounded plan, private-copy simulation, exact-version review, receipted actions](docs/assets/diagrams/relayops-architecture.svg)
 
 | Component | Responsibility |
 | --- | --- |

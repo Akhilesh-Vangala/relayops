@@ -1,23 +1,16 @@
-[Product pages, storage and verification](product/PRODUCT-WORKSPACE.md) · [Own-data business contract](product/USER-DATA.md)
+# RelayOps documentation
 
-# RelayOps technical documentation
+[App](https://relayops-two.vercel.app/) · [Project overview](../README.md)
 
-[Project overview](../README.md) · [Working app](https://relayops-two.vercel.app/demo) · [Recorded demo](DEMO.md)
-
-| Review question | Current source |
+| Question | Read |
 | --- | --- |
-| Where do frontend, backend and tests live? | [Layout and commands](development/LAYOUT.md) |
-| How does the system work? | [Architecture](architecture/OVERVIEW.md) |
-| What do the checks establish? | [Evaluation](evaluation/README.md), [progress and source-linked evidence](project/PROGRESS.md) |
-| How do I run/deploy it? | [Operations](operations/DEVELOPMENT.md) |
-| What are the design tradeoffs? | [Decisions](DECISIONS.md) |
-| How was the demo captured? | [Actual continuous recording and provenance](DEMO.md) |
-| What is current versus historical? | [Handoff](project/HANDOFF.md), [plan](project/PLAN.md), [dated history](project/history/PRE-ORGANIZATION-README.md) |
+| How is the system split? | [Architecture](architecture/OVERVIEW.md) |
+| Where does the code live? | [Layout and commands](development/LAYOUT.md) |
+| What do the checks actually establish? | [Evaluation](evaluation/README.md) |
+| How do I run it? | [Development](operations/DEVELOPMENT.md) |
+| Why these boundaries? | [Decisions](DECISIONS.md) |
+| What does the recording show? | [Demo](DEMO.md) |
 
-Detailed implementation: [agent framework](architecture/AGENT-WORKBENCH.md), [public sandbox](operations/PUBLIC-SANDBOX.md), [private worker/container topology](operations/DURABLE-WORKERS.md), [engineering case study](architecture/CASE-STUDY.md).
+The workbench, the public sandbox, and the worker topology are written up separately: [agent workbench](architecture/AGENT-WORKBENCH.md), [public sandbox](operations/PUBLIC-SANDBOX.md), [durable workers](operations/DURABLE-WORKERS.md), [case study](architecture/CASE-STUDY.md).
 
-## Visitor-owned data
-
-[CSV workspace contracts, limits and verification](product/USER-DATA.md).
-
-Current scoped implementation: [project status](project/STATUS.md).
+Uploaded files and the product pages: [file contracts](product/USER-DATA.md) · [product workspace](product/PRODUCT-WORKSPACE.md).
