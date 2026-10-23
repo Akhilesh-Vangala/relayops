@@ -10,7 +10,7 @@
 | Known synthetic regression | 12 scripted assessments with original source state unchanged. |
 | Live model quality | Not measured. Scripted providers and fixed diagnostics are not model-accuracy evidence. |
 
-Local and container executions repeat the same distinct cases; do not add their counts as unique tests. Actual result/source links are in [progress](../project/PROGRESS.md) and the required CI artifacts. The repository-layout increment must pass its own exact-head checks before merge.
+Local and container executions repeat the same distinct cases; do not add their counts as unique tests. The required CI artifacts are the source for those counts.
 
 ## Independent acceptance boundary
 
@@ -20,4 +20,4 @@ The final-state evaluator compares business outcomes, source preservation, held 
 
 Frozen unseen task/data families, live model comparisons and repeats, representative real integrations, safety challenges, actual operator feedback, observed costs/latency, and monitored persistent cloud/load/restore evidence remain release work. No live quality, customer impact or causal inference result is inferred from deterministic success.
 
-[Agent and correction details](../architecture/AGENT-WORKBENCH.md) · [Prior evaluation history](../project/history/PRE-ORGANIZATION-evaluation-README.md).
+[Agent and correction details](../architecture/AGENT-WORKBENCH.md).
