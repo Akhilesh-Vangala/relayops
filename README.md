@@ -14,23 +14,20 @@ The model can observe and propose. Simulation, final-state checks, and the actio
 
 ![System map: observation, grounded plan, private-copy simulation, exact-version review, receipted actions](docs/assets/diagrams/relayops-architecture.svg)
 
-| Component | Responsibility |
-| --- | --- |
-| Frontend | Operator workbench, evidence/review views, session history, exports |
-| Backend | FastAPI, typed contracts, LangGraph orchestration, review gates |
-| Independent checking | Private-copy final-state evaluation and receipt/duplicate checks |
-| Runtime | PostgreSQL queue and leased workers; fixtures remain same-node |
+| Layer | Where | Responsibility |
+| --- | --- | --- |
+| Frontend | `frontend/` | Operator workbench, evidence, review, exports |
+| Agent | `backend/src/relayops/agents/` | Observation, typed proposal. It does not execute. |
+| Backend | `backend/src/relayops/` | API, private-copy simulation, checks, receipts, workers |
+
+The agent package stays inside the backend import root so the service can call it. It is not the API, and it is not the checker.
 
 ## Repository layout
 
 ```text
-relayops/
-├── backend/          src, tests, requirements, docker, data
-├── frontend/         demo + workbench apps
-├── infrastructure/   containers, kubernetes
-├── scripts/          checks, demos, deployment
-├── docs/
-└── .github/
+frontend/                         workbench and demo
+backend/src/relayops/agents/      model loop, browser evidence, planner
+backend/src/relayops/             API, simulation, verification, workers
 ```
 
 ## Run locally
