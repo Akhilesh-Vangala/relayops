@@ -37,7 +37,7 @@ function inspect(row) {
     el(
       "div",
       {},
-      badge(labels[row.plan.outcome]),
+      badge(labels[row.plan.outcome], "outcome-" + row.plan.outcome),
       el("p", { class: "spaced" }, reason(row)),
       el(
         "p",
@@ -154,7 +154,7 @@ export function reportView(ctx) {
               ["Case", "Outcome", "Shortage", "Pool", "Evidence / review"],
               visible.map((r) => [
                 r.order_id,
-                badge(labels[r.plan.outcome]),
+                badge(labels[r.plan.outcome], "outcome-" + r.plan.outcome),
                 r.shortage_units,
                 r.inventory_pool,
                 button("Inspect case", () => inspect(r), "quiet", {

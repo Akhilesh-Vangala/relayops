@@ -14,7 +14,7 @@ class DemoSession:
     def __init__(self, secret, cookie):
         if len(secret) < 48:
             raise ValueError(
-                "Public demo requires a private signing secret of at least48characters"
+                "Public demo requires a private signing secret of at least 48 characters"
             )
         self.key, self.cookie = secret.encode(), cookie
 

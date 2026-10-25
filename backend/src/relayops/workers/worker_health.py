@@ -1,4 +1,5 @@
 """Container liveness for the polling worker and its active lease renewal."""
+
 import os
 import time
 from pathlib import Path

@@ -9,3 +9,4 @@ __pycache__/
 artifacts/generated/
 .DS_Store
 .vercel/
+.ruff_cache/

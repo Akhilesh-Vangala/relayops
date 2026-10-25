@@ -1,4 +1,5 @@
 """Strict CSV ingestion and bounded request handling; no global dataset storage."""
+
 import asyncio
 import csv
 import hashlib
@@ -17,12 +18,25 @@ MAX_ROWS = 5000
 
 class UploadProblem(ValueError):
     """Recoverable client issue, with record/column locations and no cell values."""
-    def __init__(self, message, *, code="invalid_file", issues=None, hint="Review the file and try again."):
+
+    def __init__(
+        self,
+        message,
+        *,
+        code="invalid_file",
+        issues=None,
+        hint="Review the file and try again.",
+    ):
         super().__init__(message)
         self.code, self.issues, self.hint = code, (issues or [])[:20], hint
 
     def response(self):
-        return {"detail": str(self), "code": self.code, "issues": self.issues, "hint": self.hint}
+        return {
+            "detail": str(self),
+            "code": self.code,
+            "issues": self.issues,
+            "hint": self.hint,
+        }
 
 
 class Upload(BaseModel):
@@ -31,7 +45,6 @@ class Upload(BaseModel):
     mapping: dict[str, str] = Field(default_factory=dict, max_length=20)
     options: dict[str, str] = Field(default_factory=dict, max_length=12)
     review: str = Field(default="", max_length=4000)
-
 
     @field_validator("mapping", "options")
     @classmethod
@@ -42,7 +55,9 @@ class Upload(BaseModel):
 
 
 def fingerprint(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
 
 
 def parse(source):
@@ -51,47 +66,83 @@ def parse(source):
     if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in source):
         raise ValueError("CSV contains unsupported control characters")
     try:
-        reader = csv.reader(io.StringIO(source.lstrip("\ufeff"), newline=""), strict=True)
+        reader = csv.reader(
+            io.StringIO(source.lstrip("\ufeff"), newline=""), strict=True
+        )
         headers = next(reader)
-        if not 1 <= len(headers) <= 60 or any(not h.strip() or len(h) > 120 for h in headers):
-            raise ValueError("CSV needs 1–60 named columns, each at most 120 characters")
+        if not 1 <= len(headers) <= 60 or any(
+            not h.strip() or len(h) > 120 for h in headers
+        ):
+            raise ValueError(
+                "CSV needs 1–60 named columns, each at most 120 characters"
+            )
         if len({h.strip().casefold() for h in headers}) != len(headers):
-            raise UploadProblem("Duplicate column names are ambiguous", code="duplicate_headers",
-                                issues=[{"row": 1, "column": name, "message": "This header is repeated."}
-                                        for name in headers if sum(h.strip().casefold() == name.strip().casefold() for h in headers) > 1],
-                                hint="Give each column a unique name in the header row, then upload the corrected file.")
+            raise UploadProblem(
+                "Duplicate column names are ambiguous",
+                code="duplicate_headers",
+                issues=[
+                    {"row": 1, "column": name, "message": "This header is repeated."}
+                    for name in headers
+                    if sum(
+                        h.strip().casefold() == name.strip().casefold() for h in headers
+                    )
+                    > 1
+                ],
+                hint="Give each column a unique name in the header row, then upload the corrected file.",
+            )
         rows = []
         for number, row in enumerate(reader, 2):
             if len(rows) >= MAX_ROWS:
                 raise ValueError("CSV exceeds 5,000 records")
             if len(row) != len(headers) or any(len(cell) > 2048 for cell in row):
-                raise UploadProblem(f"CSV row {number} has an invalid column count or oversized field",
-                                    code="invalid_record", issues=[{"row": number, "column": "", "message": f"Expected {len(headers)} fields, each at most 2,048 characters."}],
-                                    hint="Check the highlighted record's comma separators, quoting and field lengths.")
+                raise UploadProblem(
+                    f"CSV row {number} has an invalid column count or oversized field",
+                    code="invalid_record",
+                    issues=[
+                        {
+                            "row": number,
+                            "column": "",
+                            "message": f"Expected {len(headers)} fields, each at most 2,048 characters.",
+                        }
+                    ],
+                    hint="Check the highlighted record's comma separators, quoting and field lengths.",
+                )
             rows.append(row)
         if not rows:
             raise ValueError("CSV has no records")
     except (csv.Error, StopIteration):
-        raise ValueError("Invalid CSV; upload a UTF-8 comma-separated file with a header") from None
+        raise ValueError(
+            "Invalid CSV; upload a UTF-8 comma-separated file with a header"
+        ) from None
     return headers, rows
 
 
 def profile(source):
     headers, rows = parse(source)
+
     def numeric(value):
         try:
             decimal_value(value)
             return True
         except ValueError:
             return False
-    return {"rows": len(rows), "sha256": hashlib.sha256(source.encode()).hexdigest(),
-            "columns": [{"id": f"c{i}", "name": name,
-                         "missing": sum(not row[i].strip() for row in rows),
-                         "distinct": len({row[i] for row in rows}),
-                         "numeric": sum(numeric(row[i]) for row in rows),
-                         "samples": [row[i][:100] for row in rows[:3]]}
-                        for i, name in enumerate(headers)],
-            "preview": [{"row": i+2, "cells": row} for i, row in enumerate(rows[:10])]}
+
+    return {
+        "rows": len(rows),
+        "sha256": hashlib.sha256(source.encode()).hexdigest(),
+        "columns": [
+            {
+                "id": f"c{i}",
+                "name": name,
+                "missing": sum(not row[i].strip() for row in rows),
+                "distinct": len({row[i] for row in rows}),
+                "numeric": sum(numeric(row[i]) for row in rows),
+                "samples": [row[i][:100] for row in rows[:3]],
+            }
+            for i, name in enumerate(headers)
+        ],
+        "preview": [{"row": i + 2, "cells": row} for i, row in enumerate(rows[:10])],
+    }
 
 
 class Preview(BaseModel):
@@ -104,12 +155,23 @@ class Preview(BaseModel):
 
 def preview(request):
     headers, rows = parse(request.csv)
-    if any(type(n) is not int or n < 1 or n > MAX_ROWS+1 for n in request.rows):
+    if any(type(n) is not int or n < 1 or n > MAX_ROWS + 1 for n in request.rows):
         raise ValueError("Invalid record selection")
-    selected = [{"row": i+2, "cells": row} for i, row in enumerate(rows)
-                if (not request.rows or i+2 in request.rows)
-                and (not request.search or any(request.search.casefold() in cell.casefold() for cell in row))]
-    return {"headers": headers, "rows": selected[request.offset:request.offset+25], "matches": len(selected), "total": len(rows)}
+    selected = [
+        {"row": i + 2, "cells": row}
+        for i, row in enumerate(rows)
+        if (not request.rows or i + 2 in request.rows)
+        and (
+            not request.search
+            or any(request.search.casefold() in cell.casefold() for cell in row)
+        )
+    ]
+    return {
+        "headers": headers,
+        "rows": selected[request.offset : request.offset + 25],
+        "matches": len(selected),
+        "total": len(rows),
+    }
 
 
 def column(mapping, name, headers, optional=False):
@@ -123,7 +185,9 @@ def column(mapping, name, headers, optional=False):
 
 def decimal_value(value, *, places=6, nonnegative=False):
     if not re.fullmatch(r"-?\d{1,12}(?:\.\d{1,6})?", value.strip()):
-        raise ValueError("Numbers must be plain decimals without currency symbols, commas or exponents")
+        raise ValueError(
+            "Numbers must be plain decimals without currency symbols, commas or exponents"
+        )
     try:
         number = Decimal(value.strip())
         if number.as_tuple().exponent < -places or (nonnegative and number < 0):
@@ -141,10 +205,12 @@ def integer(value):
 
 def safe_csv(headers, rows):
     """Quote formula-like text, preserving typed numeric values as numbers."""
+
     def safe(value):
         if isinstance(value, str) and value.lstrip().startswith(("=", "+", "-", "@")):
             return "'" + value
         return value
+
     stream = io.StringIO(newline="")
     writer = csv.writer(stream)
     writer.writerow([safe(h) for h in headers])
@@ -154,16 +220,21 @@ def safe_csv(headers, rows):
 
 class UploadBoundary:
     """Enforce actual streamed bytes before JSON parsing, including chunked bodies."""
+
     def __init__(self, app):
         self.app = app
 
     async def __call__(self, scope, receive, send):
-        if scope["type"] != "http" or not scope["path"].startswith(("/api/uploads/", "/api/account/")):
+        if scope["type"] != "http" or not scope["path"].startswith(
+            ("/api/uploads/", "/api/account/")
+        ):
             return await self.app(scope, receive, send)
         if scope["method"] == "POST":
             headers = dict(scope.get("headers", []))
             if headers.get(b"content-type", b"").split(b";")[0] != b"application/json":
-                return await JSONResponse({"detail": "JSON upload transport required"}, 415)(scope, receive, send)
+                return await JSONResponse(
+                    {"detail": "JSON upload transport required"}, 415
+                )(scope, receive, send)
             chunks, size = [], 0
             try:
                 async with asyncio.timeout(15):
@@ -174,12 +245,16 @@ class UploadBoundary:
                         chunk = message.get("body", b"")
                         size += len(chunk)
                         if size > BODY_LIMIT:
-                            return await JSONResponse({"detail": "Upload request exceeds 1 MB"}, 413)(scope, receive, send)
+                            return await JSONResponse(
+                                {"detail": "Upload request exceeds 1 MB"}, 413
+                            )(scope, receive, send)
                         chunks.append(chunk)
                         if not message.get("more_body", False):
                             break
             except TimeoutError:
-                return await JSONResponse({"detail": "Upload timed out"}, 408)(scope, receive, send)
+                return await JSONResponse({"detail": "Upload timed out"}, 408)(
+                    scope, receive, send
+                )
             body = b"".join(chunks)
             delivered = False
 

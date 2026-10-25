@@ -1,9 +1,15 @@
-# RelayOps infrastructure
+# Infrastructure
 
-[Container topology](containers/compose.yaml) is launched from the repository root:
+| Path | Contents |
+| --- | --- |
+| [containers/compose.yaml](containers/compose.yaml) | PostgreSQL 17, migration, API and worker services |
+| [kubernetes/base](kubernetes/base) | Namespace, deployments, probes, network policies, state volume |
+| [kubernetes/overlays/kind](kubernetes/overlays/kind) | Test PostgreSQL and credentials for Kind |
+| [supabase](supabase/) | Owner-isolated account migration |
 
 ```sh
-scripts/deployment/compose.sh up --build -d
+scripts/deployment/compose.sh up --build --wait
+scripts/deployment/kind_smoke.sh
 ```
 
-The wrapper explicitly retains the root build context, private configuration and intended project/volume naming. [Kubernetes](kubernetes/) separates base resources and environment overlays. Actual image/topology checks belong to required CI; these files alone are not proof of monitored cloud delivery.
+[Deployment](../docs/operations/DEPLOYMENT.md)

@@ -1,7 +1,7 @@
 """Actual public API/SSE and private worker provenance, without provider requests."""
+
 import copy
 import json
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -13,7 +13,19 @@ from relayops.product.run_contract import RunRecord
 from relayops.uploads.api import attach
 
 ROOT = Path(__file__).resolve().parents[3]
-UPLOAD = {'csv': 'id,ordered,received,invoiced,stock,price,confirmed\nA,10,7,10,5,125,true\n', 'mapping': {'order_id': 'c0', 'ordered': 'c1', 'received': 'c2', 'invoiced': 'c3', 'available': 'c4', 'unit_price': 'c5', 'confirmed': 'c6'}, 'options': {'unit': 'dollars'}}
+UPLOAD = {
+    "csv": "id,ordered,received,invoiced,stock,price,confirmed\nA,10,7,10,5,125,true\n",
+    "mapping": {
+        "order_id": "c0",
+        "ordered": "c1",
+        "received": "c2",
+        "invoiced": "c3",
+        "available": "c4",
+        "unit_price": "c5",
+        "confirmed": "c6",
+    },
+    "options": {"unit": "dollars"},
+}
 
 
 class RunContractTests(unittest.TestCase):
@@ -30,16 +42,24 @@ class RunContractTests(unittest.TestCase):
         self.assertEqual(first.headers["x-run-id"], run.run_id)
         self.assertEqual(run.owner_scope, "request-local")
         self.assertEqual(run.billing, "not-used")
-        other = self.client.post("/api/uploads/analyze", json=UPLOAD).json()["run_record"]
+        other = self.client.post("/api/uploads/analyze", json=UPLOAD).json()[
+            "run_record"
+        ]
         self.assertNotEqual(run.run_id, other["run_id"])
         self.assertEqual(run.input_sha256, other["input_sha256"])
         changed = copy.deepcopy(UPLOAD)
         changed["options"]["unit"] = "cents"
-        second = self.client.post("/api/uploads/analyze", json=changed).json()["run_record"]
+        second = self.client.post("/api/uploads/analyze", json=changed).json()[
+            "run_record"
+        ]
         self.assertNotEqual(run.input_sha256, second["input_sha256"])
         self.assertNotEqual(run.contract_sha256, second["contract_sha256"])
         report["run_record"]["verification_passed"] = False
-        self.assertFalse(self.client.post("/api/uploads/check-report", json={"report": report}).json()["verified"])
+        self.assertFalse(
+            self.client.post(
+                "/api/uploads/check-report", json={"report": report}
+            ).json()["verified"]
+        )
 
     def test_stream_stages_and_final_report_have_one_correlation_id(self):
         response = self.client.post("/api/uploads/analyze-stream", json=UPLOAD)
@@ -49,10 +69,18 @@ class RunContractTests(unittest.TestCase):
                 lines = block.splitlines()
                 events.append((lines[0][7:], json.loads(lines[1][6:])))
         run = events[-1][1]["run_record"]
-        self.assertTrue(all(e[1]["run_id"] == run["run_id"] for e in events if e[0] == "stage"))
+        self.assertTrue(
+            all(e[1]["run_id"] == run["run_id"] for e in events if e[0] == "stage")
+        )
 
     def test_public_record_cannot_claim_live_provider_verification(self):
-        value = self.client.post("/api/uploads/analyze", json=UPLOAD).json()["run_record"]
-        for changes in ({"mode": "live"}, {"billing": "provider-reported"}, {"private_source": "secret"}):
+        value = self.client.post("/api/uploads/analyze", json=UPLOAD).json()[
+            "run_record"
+        ]
+        for changes in (
+            {"mode": "live"},
+            {"billing": "provider-reported"},
+            {"private_source": "secret"},
+        ):
             with self.subTest(changes=changes), self.assertRaises(ValidationError):
                 RunRecord.model_validate({**value, **changes})

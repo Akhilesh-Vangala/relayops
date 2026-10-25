@@ -1,5 +1,5 @@
-# RelayOps evaluation
+# evaluation
 
-Known-case benchmark runners and evaluation reports; scripted results do not establish live model quality.
+- [benchmark.py](benchmark.py): 12-case scripted matrix through the full agent graph
 
-- [benchmark.py](benchmark.py)
+[Evaluation](../../../../docs/evaluation/README.md)

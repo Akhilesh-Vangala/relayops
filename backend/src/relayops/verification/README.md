@@ -1,5 +1,5 @@
-# RelayOps verification
+# verification
 
-Independent reference computations, guarded SQL execution and regression checking.
+- [evaluator.py](evaluator.py): independent final-state checks. Not imported by the agent module.
 
-- [evaluator.py](evaluator.py)
+[Execution](../../../../docs/architecture/EXECUTION.md#counterfactual-simulation)

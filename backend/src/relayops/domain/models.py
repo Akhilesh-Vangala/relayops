@@ -1,4 +1,5 @@
 """Typed public observations and proposals; no private evaluation answers."""
+
 import hashlib
 import json
 from typing import Literal
@@ -9,12 +10,16 @@ from pydantic import Field
 
 
 def digest(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
 
 
 class Action(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True, frozen=True)
-    kind: Literal["hold_invoice", "open_supplier_claim", "reserve_replacement", "resolve_case"]
+    kind: Literal[
+        "hold_invoice", "open_supplier_claim", "reserve_replacement", "resolve_case"
+    ]
     amount: int = Field(ge=0, le=10_000_000)
 
 

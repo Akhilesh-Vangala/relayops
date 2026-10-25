@@ -379,7 +379,7 @@ export function settings(ctx) {
           el(
             "p",
             {},
-            "Known-contract LangGraph assessment, independent simulation and stock checks, explicit snapshot approval and receipted exports. Live inference and external business writes are unavailable.",
+            "LangGraph assessment against the declared contract, independent simulation and stock checks, explicit snapshot approval and receipted exports. No external business system is written.",
           ),
         ),
         link("Read the guide", "/workspace/guide", "secondary"),

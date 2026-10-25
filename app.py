@@ -1,4 +1,5 @@
 """Vercel entrypoint for RelayOps samples and reviewed visitor CSV exports."""
+
 import os
 import sys
 from pathlib import Path

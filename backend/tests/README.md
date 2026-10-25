@@ -1,5 +1,9 @@
-# RelayOps tests
+# Tests
 
-Tests are grouped by the responsibility they exercise. API, agent, analytics/verification, persistence and workflow directories may contain both isolated and integration checks; their names do not claim external dependencies are mocked. e2e contains actual browser journeys. fixtures owns reusable scripted provider responses; production code does not import test fixtures. Live model quality remains a separate evaluation gate.
+Grouped by the capability under test: `agents/`, `api/`, `persistence/`, `verification/` and `workflows/`. `e2e/browser_workbench.py` is the operator workbench browser journey. PostgreSQL queue tests run when `RELAY_TEST_DATABASE_URL` is set.
 
-Run `PYTHONPATH=backend/src python -m unittest discover -s backend/tests -v`.
+```sh
+PYTHONPATH=backend/src RELAY_ALLOW_LIVE=0 python -m unittest discover -s backend/tests -v
+```
+
+[Evaluation](../../docs/evaluation/README.md)

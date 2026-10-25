@@ -228,6 +228,7 @@ def attach(app, scenarios):
             )
 
     @app.get("/demo/recording")
+    @app.get("/demo/architecture")
     @app.get("/demo")
     @app.get("/demo/runs/{identity}")
     def index(identity: str = ""):
@@ -235,7 +236,15 @@ def attach(app, scenarios):
 
     @app.get("/demo-assets/{name}")
     def assets(name: Literal["app.js", "style.css", "walkthrough.webm", "poster.png"]):
-        return FileResponse(ASSETS / {"app.js": "assets/scripts/app.js", "style.css": "assets/styles/style.css", "walkthrough.webm": "assets/media/walkthrough.webm", "poster.png": "assets/media/poster.png"}[name])
+        return FileResponse(
+            ASSETS
+            / {
+                "app.js": "assets/scripts/app.js",
+                "style.css": "assets/styles/style.css",
+                "walkthrough.webm": "assets/media/walkthrough.webm",
+                "poster.png": "assets/media/poster.png",
+            }[name]
+        )
 
     @app.get("/api/demo/runs")
     def history():

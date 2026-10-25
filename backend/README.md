@@ -1,12 +1,13 @@
-# RelayOps backend
+# Backend
 
-Application code is grouped by responsibility in [src/relayops](src/relayops). Each capability has a local guide.
+Python 3.12 package `relayops` under [src/relayops](src/relayops). Each capability package has its own README.
 
-- [Tests](tests/): capability-grouped regression/integration cases and browser journeys where applicable.
-- [Dependency locks](requirements/): runtime and development requirements.
-- [Docker image](docker/Dockerfile): runtime and test build stages.
-- [Fixtures and pricing](data/): original versioned synthetic material.
+| Path | Contents |
+| --- | --- |
+| [src/relayops](src/relayops) | Application code |
+| [tests](tests/) | Unit, integration and browser end-to-end tests |
+| [requirements](requirements/) | Hash-locked runtime dependencies |
+| [docker](docker/Dockerfile) | Runtime and test image targets |
+| [data](data/) | Model pricing profile |
 
-[Full layout](../docs/development/LAYOUT.md) · [Run locally](../README.md#run-locally).
-
-- [Visitor-owned CSV processing](src/relayops/uploads/): bounded ingestion, source-derived workflows and independent checks.
+[Layout](../docs/development/LAYOUT.md) · [Development](../docs/development/DEVELOPMENT.md)

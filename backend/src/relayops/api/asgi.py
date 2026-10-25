@@ -1,4 +1,5 @@
 """Persistent container entrypoint; the public Vercel entrypoint stays separate."""
+
 import os
 from relayops.api.web import create_app
 

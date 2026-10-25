@@ -1,4 +1,5 @@
 """Authenticate a saved computed report; do not equate source rules with real-world truth."""
+
 from datetime import datetime, timezone
 import hashlib
 import hmac
@@ -22,25 +23,44 @@ def digest(report):
     # Approval has its own visitor/source/plan-bound expiring signature. Never
     # require its transient envelope in a durable/downloaded report receipt.
     payload = {k: v for k, v in report.items() if k not in ("attestation", "review")}
-    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(
+            payload, sort_keys=True, separators=(",", ":"), allow_nan=False
+        ).encode()
+    ).hexdigest()
 
 
 def attest(report):
-    if not report.get("checks") or not all(v is True for v in report["checks"].values()):
+    if not report.get("checks") or not all(
+        v is True for v in report["checks"].values()
+    ):
         raise ValueError("A failed report cannot receive a verification attestation")
     result = {**report, "verified_at": datetime.now(timezone.utc).isoformat()}
-    signature = hmac.new(key(), ("relayops-upload-report-v1:"+digest(result)).encode(), hashlib.sha256).hexdigest()
-    result["attestation"] = {"version": "v1", "signature": signature,
-                             "scope": "Unmodified report produced by this deployment; correctness remains conditional on the declared source contract."}
+    signature = hmac.new(
+        key(), ("relayops-upload-report-v1:" + digest(result)).encode(), hashlib.sha256
+    ).hexdigest()
+    result["attestation"] = {
+        "version": "v1",
+        "signature": signature,
+        "scope": "Unmodified report produced by this deployment; correctness remains conditional on the declared source contract.",
+    }
     return result
 
 
 def verify_report(report):
     receipt = report.get("attestation", {})
-    if not isinstance(receipt, dict) or receipt.get("version") != "v1" or not isinstance(receipt.get("signature"), str):
+    if (
+        not isinstance(receipt, dict)
+        or receipt.get("version") != "v1"
+        or not isinstance(receipt.get("signature"), str)
+    ):
         return False
     try:
-        expected = hmac.new(key(), ("relayops-upload-report-v1:"+digest(report)).encode(), hashlib.sha256).hexdigest()
+        expected = hmac.new(
+            key(),
+            ("relayops-upload-report-v1:" + digest(report)).encode(),
+            hashlib.sha256,
+        ).hexdigest()
         return hmac.compare_digest(receipt["signature"], expected)
     except (TypeError, ValueError, OverflowError):
         return False

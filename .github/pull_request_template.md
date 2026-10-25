@@ -12,4 +12,4 @@ Explain relevant effects on model authority, source provenance, verification, re
 
 ## Repository workflow
 
-Target `main` from a short-lived work branch. Use a conventional PR title, keep the scope focused, and wait for the required CI checks before squash merging. See [BRANCHING.md](https://github.com/Akhilesh-Vangala/relayops/blob/main/BRANCHING.md).
+Target `main` from a short-lived work branch. Use a conventional PR title, keep the scope focused, and wait for the required CI checks before squash merging. See [BRANCHING.md](https://github.com/Akhilesh-Vangala/relayops/blob/main/docs/development/BRANCHING.md).

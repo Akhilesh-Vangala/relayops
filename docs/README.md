@@ -1,16 +1,16 @@
 # RelayOps documentation
 
-[App](https://relayops-two.vercel.app/) · [Project overview](../README.md)
-
-| Question | Read |
+| Topic | Document |
 | --- | --- |
-| How is the system split? | [Architecture](architecture/OVERVIEW.md) |
-| Where does the code live? | [Layout and commands](development/LAYOUT.md) |
-| What do the checks actually establish? | [Evaluation](evaluation/README.md) |
-| How do I run it? | [Development](operations/DEVELOPMENT.md) |
-| Why these boundaries? | [Decisions](DECISIONS.md) |
-| What does the recording show? | [Demo](DEMO.md) |
-
-The workbench, the public sandbox, and the worker topology are written up separately: [agent workbench](architecture/AGENT-WORKBENCH.md), [public sandbox](operations/PUBLIC-SANDBOX.md), [durable workers](operations/DURABLE-WORKERS.md), [case study](architecture/CASE-STUDY.md).
-
-Uploaded files and the product pages: [file contracts](product/USER-DATA.md) · [product workspace](product/PRODUCT-WORKSPACE.md).
+| System components and authority boundaries | [Architecture overview](architecture/OVERVIEW.md) |
+| Agent loop, tools, budgets, model receipts and recovery | [Agent](architecture/AGENT.md) |
+| Policy, simulation, approval, receipts and reconciliation | [Execution](architecture/EXECUTION.md) |
+| Design choices and their tradeoffs | [Decisions](architecture/DECISIONS.md) |
+| Product workspace, storage, accounts and signed reports | [Product workspace](product/WORKSPACE.md) |
+| File formats, business contract and limits | [Data imports](product/DATA-IMPORTS.md) |
+| Public sandbox, workers, Compose, Kubernetes and monitoring | [Deployment](operations/DEPLOYMENT.md) |
+| Test suites and what each one establishes | [Evaluation](evaluation/README.md) |
+| Setup, configuration and live mode | [Development](development/DEVELOPMENT.md) |
+| Directory ownership | [Layout](development/LAYOUT.md) |
+| Branch protection and pull requests | [Branching](development/BRANCHING.md) |
+| Recorded browser journeys and provenance | [Demos](demos/README.md) |

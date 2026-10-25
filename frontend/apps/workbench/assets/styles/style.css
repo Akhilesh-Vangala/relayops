@@ -3,8 +3,8 @@
 }
 body {
   margin: 0;
-  background: #080808;
-  color: #eee;
+  background: #06141b;
+  color: #e4eef2;
   font:
     14px/1.6 Inter,
     Arial,
@@ -25,9 +25,9 @@ aside {
   left: 0;
   width: 224px;
   height: 100vh;
-  border-right: 1px solid #282828;
+  border-right: 1px solid #1d2c33;
   padding: 32px 20px;
-  background: #0c0c0c;
+  background: #08171f;
 }
 aside strong {
   font-size: 21px;
@@ -40,12 +40,22 @@ nav {
 }
 nav a {
   padding: 12px 14px;
-  color: #aaa;
+  color: #9daeb7;
   border-radius: 6px;
 }
 nav a:hover {
-  color: #fff;
-  background: #1d1d1d;
+  color: #ffffff;
+  background: #0f2631;
+}
+.button:hover,
+button:hover:enabled {
+  background: #5eead4;
+}
+a.card {
+  display: block;
+}
+a.card:hover {
+  border-color: #2dd4bf;
 }
 main {
   margin-left: 224px;
@@ -55,16 +65,16 @@ main {
 .top {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #282828;
+  border-bottom: 1px solid #1d2c33;
   padding-bottom: 20px;
-  color: #999;
+  color: #8a9ea8;
   font-size: 12px;
 }
 .pill {
-  border: 1px solid #444;
+  border: 1px solid #314a57;
   border-radius: 5px;
   padding: 3px 9px;
-  color: #ddd;
+  color: #d4e0e6;
 }
 .hero {
   padding: 40px 0 24px;
@@ -73,7 +83,7 @@ main {
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #999;
+  color: #2dd4bf;
 }
 h1 {
   font-size: 40px;
@@ -90,7 +100,7 @@ h3 {
   margin: 0 0 12px;
 }
 .muted {
-  color: #aaa;
+  color: #9daeb7;
 }
 .grid {
   display: grid;
@@ -99,8 +109,8 @@ h3 {
 }
 .card {
   min-width: 0;
-  background: #111;
-  border: 1px solid #303030;
+  background: #0b1e27;
+  border: 1px solid #1c3440;
   padding: 24px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -121,7 +131,7 @@ h3 {
   align-items: center;
   gap: 16px;
   padding: 13px 0;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid #1e2d34;
 }
 .row:last-child {
   border: 0;
@@ -129,8 +139,8 @@ h3 {
 .button,
 button {
   display: inline-block;
-  background: #f0f0f0;
-  color: #101010;
+  background: #2dd4bf;
+  color: #042f2e;
   border: 0;
   border-radius: 5px;
   padding: 10px 16px;
@@ -138,9 +148,9 @@ button {
   font-weight: 600;
 }
 .secondary {
-  background: #232323;
-  color: #eee;
-  border: 1px solid #555;
+  background: #142832;
+  color: #eaeff2;
+  border: 1px solid #3d5d6d;
 }
 button:disabled {
   opacity: 0.4;
@@ -148,9 +158,9 @@ button:disabled {
 }
 select,
 input {
-  background: #151515;
-  color: #ddd;
-  border: 1px solid #444;
+  background: #0c181e;
+  color: #d4e0e6;
+  border: 1px solid #314a57;
   border-radius: 5px;
   padding: 10px;
   width: 100%;
@@ -158,13 +168,13 @@ input {
 }
 label {
   display: block;
-  color: #bbb;
+  color: #b1bec5;
 }
 pre {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  background: #0b0b0b;
-  border: 1px solid #333;
+  background: #060d10;
+  border: 1px solid #253841;
   padding: 18px;
   border-radius: 5px;
   font: 12px/1.7 monospace;
@@ -180,43 +190,43 @@ td,
 th {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #253841;
   overflow-wrap: anywhere;
 }
 th {
-  color: #aaa;
+  color: #9daeb7;
   font-size: 12px;
 }
 .timeline {
-  border-left: 1px solid #555;
+  border-left: 1px solid #3d5d6d;
   padding-left: 20px;
 }
 .step {
   margin: 0 0 20px;
 }
 .step small {
-  color: #aaa;
+  color: #9daeb7;
 }
 .screen {
   width: 100%;
-  border: 1px solid #333;
+  border: 1px solid #253841;
   border-radius: 5px;
 }
 .callout {
   padding: 14px;
-  border-left: 2px solid #777;
-  color: #bbb;
-  background: #181818;
+  border-left: 2px solid #657d89;
+  color: #b1bec5;
+  background: #0e1b22;
 }
 .error {
-  color: #eee;
+  color: #eaeff2;
   white-space: pre-wrap;
 }
 .footer {
-  color: #888;
+  color: #768e9a;
   font-size: 12px;
   margin-top: 32px;
-  border-top: 1px solid #292929;
+  border-top: 1px solid #1e2d34;
   padding-top: 18px;
 }
 .toolbar {
@@ -230,7 +240,7 @@ th {
     width: auto;
     height: auto;
     padding: 16px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #253841;
   }
   nav {
     display: flex;

@@ -47,6 +47,10 @@ jobs:
         run: python -m playwright install --with-deps chromium
       - name: Verify installed dependency compatibility
         run: python -m pip check
+      - name: Lint and format check
+        run: |
+          pipx run ruff==0.14.0 check .
+          pipx run ruff==0.14.0 format --check .
       - name: Check repository layout and documentation
         run: python scripts/checks/check_repository.py
       - name: Run unit and integration tests

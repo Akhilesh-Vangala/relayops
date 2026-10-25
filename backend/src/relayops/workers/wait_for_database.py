@@ -1,4 +1,5 @@
 """Wait for the separately migrated queue before API/worker startup."""
+
 import os
 import time
 import psycopg
@@ -13,7 +14,9 @@ def main():
     while time.monotonic() < deadline:
         try:
             with psycopg.connect(database_url, connect_timeout=3) as connection:
-                row = connection.execute("SELECT MAX(version) FROM relay_schema_migrations").fetchone()
+                row = connection.execute(
+                    "SELECT MAX(version) FROM relay_schema_migrations"
+                ).fetchone()
                 if row[0] == SCHEMA_VERSION:
                     return
         except psycopg.Error:

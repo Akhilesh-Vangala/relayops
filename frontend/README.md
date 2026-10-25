@@ -1,8 +1,12 @@
-# RelayOps frontend
+# Frontend
 
-- [Guided application](apps/demo/): index.html and nested assets/scripts, assets/styles and assets/media.
-- [Private workbench](apps/workbench/): operator assets; server-owned HTML remains in the backend where appropriate.
+Native browser applications served by FastAPI. There is no build step and no Node service.
 
-These are native browser applications served by Python. Folder separation does not introduce an extra Node service or change backend authority. [Full layout](../docs/development/LAYOUT.md).
+| App | Path | Served at |
+| --- | --- | --- |
+| [Product workspace](apps/product/) | ES modules, IndexedDB storage, SSE | `/`, `/workspace/*`, `/uploads` |
+| [Interactive sandbox](apps/demo/) | Single-page app over `/api/demo/*` | `/demo/*` |
+| [Operator workbench](apps/workbench/) | Assets for server-rendered pages | Local and durable runtime |
+| [Upload walkthrough](apps/uploads/) | Recording page and media | `/uploads/recording.html` |
 
-- [Own-data workspace](apps/uploads/): file selection, explicit contracts, checked results, approval and downloads.
+[Layout](../docs/development/LAYOUT.md)

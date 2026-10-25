@@ -11,14 +11,12 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from relayops.domain.models import Action
-from relayops.domain.models import Plan
 from relayops.domain.models import Refused
 from relayops.domain.environment import World
 from relayops.domain.environment import fixture
 from relayops.verification.evaluator import evaluate
 from relayops.execution.executor import approve
 from relayops.execution.executor import execute
-from relayops.execution.executor import reconcile
 from relayops.agents.planner import DiagnosticPlanner
 from relayops.domain.policy import validate
 from relayops.agents.workflow import build_workflow
@@ -31,10 +29,14 @@ class ExecutionTests(unittest.TestCase):
         self.original = fixture()
         self.world = World(Path(self.tmp.name) / "world.sqlite")
         self.world.initialize(self.original)
-        self.plan = asyncio.run(DiagnosticPlanner().propose(self.world.public_observations()))
+        self.plan = asyncio.run(
+            DiagnosticPlanner().propose(self.world.public_observations())
+        )
 
     def test_graph_simulation_preserves_original(self):
-        result = asyncio.run(build_workflow(self.world, DiagnosticPlanner()).ainvoke({}))
+        result = asyncio.run(
+            build_workflow(self.world, DiagnosticPlanner()).ainvoke({})
+        )
         self.assertTrue(result["simulation"]["passed"])
         self.assertEqual(self.world.state(), self.original)
         self.assertEqual(self.world.events(), [])
@@ -42,7 +44,9 @@ class ExecutionTests(unittest.TestCase):
     def test_actual_business_effects_and_independent_verification(self):
         token = approve(self.world, self.plan, operator="test-operator")
         execute(self.world, self.plan, token)
-        report = evaluate(self.original, self.world.state(), self.world.events(), self.plan.outcome)
+        report = evaluate(
+            self.original, self.world.state(), self.world.events(), self.plan.outcome
+        )
         self.assertTrue(report["passed"])
         self.assertEqual(self.world.state()["billing"]["held_cents"], 50000)
 
@@ -53,28 +57,43 @@ class ExecutionTests(unittest.TestCase):
 
     def test_exact_approved_proposal_required(self):
         token = approve(self.world, self.plan, operator="test-operator")
-        edited = self.plan.model_copy(update={"explanation": "different reviewed proposal"})
+        edited = self.plan.model_copy(
+            update={"explanation": "different reviewed proposal"}
+        )
         with self.assertRaises(Refused):
             execute(self.world, edited, token)
         self.assertEqual(self.world.state(), self.original)
 
     def test_wrong_amount_rejected(self):
-        wrong = self.plan.model_copy(update={"actions": (Action(kind="hold_invoice", amount=49999), *self.plan.actions[1:])})
+        wrong = self.plan.model_copy(
+            update={
+                "actions": (
+                    Action(kind="hold_invoice", amount=49999),
+                    *self.plan.actions[1:],
+                )
+            }
+        )
         with self.assertRaises(Refused):
             approve(self.world, wrong, operator="test-operator")
 
     def test_early_close_rejected(self):
-        wrong = self.plan.model_copy(update={"actions": tuple(reversed(self.plan.actions))})
+        wrong = self.plan.model_copy(
+            update={"actions": tuple(reversed(self.plan.actions))}
+        )
         with self.assertRaises(Refused):
             approve(self.world, wrong, operator="test-operator")
 
     def test_forged_evidence_rejected(self):
-        wrong = self.plan.model_copy(update={"evidence_ids": ("fake", *self.plan.evidence_ids[1:])})
+        wrong = self.plan.model_copy(
+            update={"evidence_ids": ("fake", *self.plan.evidence_ids[1:])}
+        )
         with self.assertRaises(Refused):
             validate(self.world, wrong)
 
     def test_duplicate_evidence_rejected(self):
-        wrong = self.plan.model_copy(update={"evidence_ids": (self.plan.evidence_ids[0],) * 4})
+        wrong = self.plan.model_copy(
+            update={"evidence_ids": (self.plan.evidence_ids[0],) * 4}
+        )
         with self.assertRaises(Refused):
             validate(self.world, wrong)
 
@@ -82,7 +101,11 @@ class ExecutionTests(unittest.TestCase):
         with self.assertRaises(Refused):
             self.world.observe("other-tenant", "billing")
         with self.assertRaises(Refused):
-            approve(self.world, self.plan.model_copy(update={"tenant": "other-tenant"}), operator="test-operator")
+            approve(
+                self.world,
+                self.plan.model_copy(update={"tenant": "other-tenant"}),
+                operator="test-operator",
+            )
 
     def test_stale_approval_blocked(self):
         token = approve(self.world, self.plan, operator="test-operator")
@@ -114,8 +137,23 @@ plan=Plan.from_json(value['plan'])
 assert reconcile(world,plan,value['approval'])==1
 execute(world,plan,value['approval'])
 """
-        subprocess.run([sys.executable, '-c', code], input=json.dumps({'path':str(self.world.path), 'plan':self.plan.model_dump(mode='json'), 'approval':token}), text=True, check=True)
-        self.assertTrue(evaluate(self.original, self.world.state(), self.world.events(), "resolve")["passed"])
+        subprocess.run(
+            [sys.executable, "-c", code],
+            input=json.dumps(
+                {
+                    "path": str(self.world.path),
+                    "plan": self.plan.model_dump(mode="json"),
+                    "approval": token,
+                }
+            ),
+            text=True,
+            check=True,
+        )
+        self.assertTrue(
+            evaluate(self.original, self.world.state(), self.world.events(), "resolve")[
+                "passed"
+            ]
+        )
 
     def test_crash_between_actions_retains_partial_state(self):
         token = approve(self.world, self.plan, operator="test-operator")
@@ -123,20 +161,35 @@ execute(world,plan,value['approval'])
             execute(self.world, self.plan, token, crash_before=2)
         self.assertEqual(self.world.state()["case_management"]["reserved_units"], 0)
         execute(World(self.world.path), self.plan, token)
-        self.assertTrue(evaluate(self.original, self.world.state(), self.world.events(), "resolve")["passed"])
+        self.assertTrue(
+            evaluate(self.original, self.world.state(), self.world.events(), "resolve")[
+                "passed"
+            ]
+        )
 
     def test_repeated_execution_idempotent(self):
         token = approve(self.world, self.plan, operator="test-operator")
         execute(self.world, self.plan, token)
         execute(self.world, self.plan, token)
-        self.assertEqual(len([e for e in self.world.events() if e["kind"] == "action_applied"]), 4)
+        self.assertEqual(
+            len([e for e in self.world.events() if e["kind"] == "action_applied"]), 4
+        )
 
     def test_concurrent_same_plan_does_not_duplicate_effects(self):
         token = approve(self.world, self.plan, operator="test-operator")
         with ThreadPoolExecutor(max_workers=2) as pool:
-            results = list(pool.map(lambda _: execute(World(self.world.path), self.plan, token), range(2)))
+            results = list(
+                pool.map(
+                    lambda _: execute(World(self.world.path), self.plan, token),
+                    range(2),
+                )
+            )
         self.assertEqual(len(results), 2)
-        self.assertTrue(evaluate(self.original, self.world.state(), self.world.events(), "resolve")["passed"])
+        self.assertTrue(
+            evaluate(self.original, self.world.state(), self.world.events(), "resolve")[
+                "passed"
+            ]
+        )
 
     def test_independent_evaluator_rejects_false_success(self):
         final = copy.deepcopy(self.original)
@@ -144,18 +197,26 @@ execute(world,plan,value['approval'])
         self.assertFalse(evaluate(self.original, final, [], "resolve")["passed"])
 
     def test_strict_action_schema_rejects_coercion_and_unknown_tools(self):
-        for value in ({"kind": "hold_invoice", "amount": "500"}, {"kind": "send_email", "amount": 0},
-                      {"kind": "hold_invoice", "amount": True}, {"kind": "hold_invoice", "amount": 10, "extra": 1}):
+        for value in (
+            {"kind": "hold_invoice", "amount": "500"},
+            {"kind": "send_email", "amount": 0},
+            {"kind": "hold_invoice", "amount": True},
+            {"kind": "hold_invoice", "amount": 10, "extra": 1},
+        ):
             with self.subTest(value=value), self.assertRaises(ValidationError):
                 Action.model_validate(value)
 
     def test_unknown_delivery_and_insufficient_stock_abstain(self):
-        for index, overrides in enumerate(({'delivery_known': False}, {'stock': 3}, {'billed': 90})):
+        for index, overrides in enumerate(
+            ({"delivery_known": False}, {"stock": 3}, {"billed": 90})
+        ):
             with self.subTest(overrides=overrides):
                 source = fixture(**overrides)
                 world = World(Path(self.tmp.name) / f"uncertain-{index}.sqlite")
                 world.initialize(source)
-                result = asyncio.run(build_workflow(world, DiagnosticPlanner()).ainvoke({}))
+                result = asyncio.run(
+                    build_workflow(world, DiagnosticPlanner()).ainvoke({})
+                )
                 self.assertEqual(result["plan"].outcome, "needs_information")
                 self.assertTrue(result["simulation"]["passed"])
                 self.assertEqual(world.state(), source)
@@ -170,11 +231,15 @@ execute(world,plan,value['approval'])
         self.assertTrue(result["simulation"]["passed"])
 
     def test_varied_quantities_and_integer_currency(self):
-        for index, (ordered, received, unit) in enumerate(((19, 7, 301), (1, 0, 1), (10000, 9990, 99999))):
+        for index, (ordered, received, unit) in enumerate(
+            ((19, 7, 301), (1, 0, 1), (10000, 9990, 99999))
+        ):
             source = fixture(ordered=ordered, received=received, unit_cents=unit)
             world = World(Path(self.tmp.name) / f"variant-{index}.sqlite")
             world.initialize(source)
             plan = asyncio.run(DiagnosticPlanner().propose(world.public_observations()))
             token = approve(world, plan, operator="test-operator")
             execute(world, plan, token)
-            self.assertTrue(evaluate(source, world.state(), world.events(), "resolve")["passed"])
+            self.assertTrue(
+                evaluate(source, world.state(), world.events(), "resolve")["passed"]
+            )

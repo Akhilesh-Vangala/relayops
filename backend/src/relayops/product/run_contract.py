@@ -3,6 +3,7 @@
 An execution ID is a correlation identifier, never an authorization credential.
 The attestation authenticates a report; these hashes do not authenticate a source.
 """
+
 from contextlib import contextmanager
 from contextvars import ContextVar
 import hashlib
@@ -25,8 +26,11 @@ def identifier(value):
 
 
 def fingerprint(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
-                                     allow_nan=False).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(
+            value, sort_keys=True, separators=(",", ":"), allow_nan=False
+        ).encode()
+    ).hexdigest()
 
 
 @contextmanager
@@ -67,29 +71,76 @@ class RunRecord(BaseModel):
         if live == (self.billing == "not-used"):
             raise ValueError("Execution mode and billing provenance disagree")
         if self.owner_scope == "request-local" and self.mode != "guided-workflow":
-            raise ValueError("Public upload scope cannot claim private live investigation")
+            raise ValueError(
+                "Public upload scope cannot claim private live investigation"
+            )
         return self
 
 
-def record(*, task, mode, owner_scope, input_sha256, contract, result,
-           verification_scope, verification_passed, check_count, evidence_count,
-           producer_versions, billing="not-used", run_id=None, budget_run_id=None,
-           parent_run_id=None):
+def record(
+    *,
+    task,
+    mode,
+    owner_scope,
+    input_sha256,
+    contract,
+    result,
+    verification_scope,
+    verification_passed,
+    check_count,
+    evidence_count,
+    producer_versions,
+    billing="not-used",
+    run_id=None,
+    budget_run_id=None,
+    parent_run_id=None,
+):
     identity = identifier(run_id or current_run_id())
-    return RunRecord(run_id=identity, budget_run_id=identifier(budget_run_id or identity),
-                     parent_run_id=parent_run_id, task=task, mode=mode, owner_scope=owner_scope,
-                     input_sha256=input_sha256, contract_sha256=fingerprint(contract),
-                     result_sha256=fingerprint(result), producer_versions=producer_versions,
-                     verification_scope=verification_scope, verification_passed=verification_passed,
-                     check_count=check_count, evidence_count=evidence_count, billing=billing).model_dump()
+    return RunRecord(
+        run_id=identity,
+        budget_run_id=identifier(budget_run_id or identity),
+        parent_run_id=parent_run_id,
+        task=task,
+        mode=mode,
+        owner_scope=owner_scope,
+        input_sha256=input_sha256,
+        contract_sha256=fingerprint(contract),
+        result_sha256=fingerprint(result),
+        producer_versions=producer_versions,
+        verification_scope=verification_scope,
+        verification_passed=verification_passed,
+        check_count=check_count,
+        evidence_count=evidence_count,
+        billing=billing,
+    ).model_dump()
 
 
 def upload_record(upload, report):
-    return record(task="case_resolution", mode="guided-workflow", owner_scope="request-local",
-                  input_sha256=fingerprint({"csv": upload.csv, "mapping": upload.mapping, "options": upload.options}),
-                  contract=report["contract"], result={k: report[k] for k in ("results", "sql", "checks") if k in report},
-                  verification_scope="declared-contract", verification_passed=all(report["checks"].values()),
-                  check_count=len(report["checks"]), evidence_count=report["summary"]["cases"],
-                  producer_versions={"contract": "relayops-upload-v1", "producer": fingerprint({
-                      "service": hashlib.sha256(Path(__file__).parents[1].joinpath("uploads/service.py").read_bytes()).hexdigest(),
-                      "record": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})})
+    return record(
+        task="case_resolution",
+        mode="guided-workflow",
+        owner_scope="request-local",
+        input_sha256=fingerprint(
+            {"csv": upload.csv, "mapping": upload.mapping, "options": upload.options}
+        ),
+        contract=report["contract"],
+        result={k: report[k] for k in ("results", "sql", "checks") if k in report},
+        verification_scope="declared-contract",
+        verification_passed=all(report["checks"].values()),
+        check_count=len(report["checks"]),
+        evidence_count=report["summary"]["cases"],
+        producer_versions={
+            "contract": "relayops-upload-v1",
+            "producer": fingerprint(
+                {
+                    "service": hashlib.sha256(
+                        Path(__file__)
+                        .parents[1]
+                        .joinpath("uploads/service.py")
+                        .read_bytes()
+                    ).hexdigest(),
+                    "record": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                }
+            ),
+        },
+    )

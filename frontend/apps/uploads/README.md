@@ -1,3 +1,5 @@
-# Own-data workspace
+# Upload walkthrough
 
-Accessible monochrome upload, column mapping, explicit contract review, checked results and CSV/JSON exports. Files and results are held in browser memory, never local/session storage. Served at `/uploads` by the backend; [contracts and limits](../../../docs/product/USER-DATA.md).
+`recording.html`, `style.css`, `walkthrough.webm` and `poster.png` are served under `/uploads/` and present the recorded product journey. The interactive upload flow itself lives in the [product workspace](../product/).
+
+[Data imports](../../../docs/product/DATA-IMPORTS.md)

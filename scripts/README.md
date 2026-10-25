@@ -1,7 +1,9 @@
-# RelayOps tooling
+# Scripts
 
-Run these from the repository root.
+Run from the repository root.
 
-- [checks](checks/): repository invariants and container test entrypoints.
-- [demos](demos/): actual browser journeys and reproducible recordings.
-- [deployment](deployment/): Compose launcher and actual topology/recovery smoke checks.
+| Folder | Contents |
+| --- | --- |
+| [checks](checks/) | Repository invariants, row-level security, public health probe, container test entrypoint |
+| [demos](demos/) | Browser journeys for the sandbox, product and imports. These also record the demos. |
+| [deployment](deployment/) | Compose launcher and the Compose and Kind smoke tests |

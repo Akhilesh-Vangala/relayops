@@ -1,4 +1,5 @@
 """Bounded observed SSE progress; terminal results cannot be lost to backpressure."""
+
 import asyncio
 from collections import deque
 import json
@@ -16,6 +17,7 @@ STREAM_DEADLINE_SECONDS = 25.0
 
 class _Mailbox:
     """Keep recent progress and a separate terminal slot; coalesce loop wakeups."""
+
     def __init__(self, loop):
         self.loop = loop
         self.wake = asyncio.Event()
@@ -70,34 +72,60 @@ def stream(upload, finish=None):
         def execute():
             def progress(stage, state):
                 if not stopped.is_set():
-                    mailbox.publish("stage", {"stage": stage, "state": state, "run_id": run_id,
-                        "elapsed_ms": round((time.monotonic()-started)*1000)})
+                    mailbox.publish(
+                        "stage",
+                        {
+                            "stage": stage,
+                            "state": state,
+                            "run_id": run_id,
+                            "elapsed_ms": round((time.monotonic() - started) * 1000),
+                        },
+                    )
+
             try:
                 with run_scope(run_id):
                     result = run(upload, progress=progress)
                 if stopped.is_set():
                     return
-                result["elapsed_ms"] = round((time.monotonic()-started)*1000)
+                result["elapsed_ms"] = round((time.monotonic() - started) * 1000)
                 mailbox.publish("result", (finish or attest)(result))
             except UploadProblem as error:
                 mailbox.publish("problem", error.response())
             except ValueError as error:
-                mailbox.publish("problem", {"detail": str(error), "issues": [],
-                    "hint": "Review the selected rules and try again."})
+                mailbox.publish(
+                    "problem",
+                    {
+                        "detail": str(error),
+                        "issues": [],
+                        "hint": "Review the selected rules and try again.",
+                    },
+                )
             except Exception:
-                mailbox.publish("problem", {"detail": "Verification could not complete. No result was published.",
-                    "issues": [], "hint": "Try again, or export your draft and return later."})
+                mailbox.publish(
+                    "problem",
+                    {
+                        "detail": "Verification could not complete. No result was published.",
+                        "issues": [],
+                        "hint": "Try again, or export your draft and return later.",
+                    },
+                )
 
         future = loop.run_in_executor(None, execute)
         try:
             while True:
-                remaining = STREAM_DEADLINE_SECONDS - (time.monotonic()-started)
+                remaining = STREAM_DEADLINE_SECONDS - (time.monotonic() - started)
                 if remaining <= 0:
                     # Close before yielding: a slow consumer may suspend here.
                     stopped.set()
                     mailbox.close()
-                    kind, value = "problem", {"detail": "Verification exceeded the request time limit. No result was published.",
-                        "issues": [], "hint": "Use a smaller export or retry. Your source and rules remain available."}
+                    kind, value = (
+                        "problem",
+                        {
+                            "detail": "Verification exceeded the request time limit. No result was published.",
+                            "issues": [],
+                            "hint": "Use a smaller export or retry. Your source and rules remain available.",
+                        },
+                    )
                 else:
                     # Clear before inspecting shared state so a producer notification
                     # between take() and wait() cannot be lost.
@@ -105,13 +133,21 @@ def stream(upload, finish=None):
                     item = mailbox.take()
                     if item is None:
                         try:
-                            await asyncio.wait_for(mailbox.wake.wait(), timeout=min(5, remaining))
+                            await asyncio.wait_for(
+                                mailbox.wake.wait(), timeout=min(5, remaining)
+                            )
                         except TimeoutError:
-                            if time.monotonic()-started < STREAM_DEADLINE_SECONDS:
+                            if time.monotonic() - started < STREAM_DEADLINE_SECONDS:
                                 yield ": still connected\n\n"
                         continue
                     kind, value = item
-                yield "event: " + kind + "\ndata: " + json.dumps(value, separators=(",", ":")) + "\n\n"
+                yield (
+                    "event: "
+                    + kind
+                    + "\ndata: "
+                    + json.dumps(value, separators=(",", ":"))
+                    + "\n\n"
+                )
                 if kind in ("result", "problem"):
                     break
         finally:
@@ -121,5 +157,8 @@ def stream(upload, finish=None):
             # finish. Cancellation/deadline does not claim to kill that thread.
             future.cancel()
 
-    return StreamingResponse(events(), media_type="text/event-stream", headers={
-        "Cache-Control": "no-store", "X-Accel-Buffering": "no"})
+    return StreamingResponse(
+        events(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"},
+    )

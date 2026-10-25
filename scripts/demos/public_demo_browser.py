@@ -28,9 +28,6 @@ def main():
     if args.publish_assets and not args.record:
         parser.error("Publishing demo media requires --record")
     root = Path(__file__).resolve().parents[2]
-    relay = (root / "backend/src/relayops").is_dir()
-    package = "relayops" if relay else "vdir"
-    name = "RelayOps" if relay else "VerifyOps"
     output = root / args.output
     output.mkdir(parents=True, exist_ok=True)
     assets = root / "frontend/apps/demo"
@@ -42,10 +39,10 @@ def main():
             port = sock.getsockname()[1]
         url = "http://127.0.0.1:" + str(port)
         environment = dict(
-            os.environ, VDIR_LOAD_DOTENV="0", RELAY_ALLOW_LIVE="0", ANTHROPIC_API_KEY=""
-        )
-        environment["RELAY_DEMO_SECRET" if relay else "VDIR_DEMO_SECRET"] = (
-            secrets.token_urlsafe(48)
+            os.environ,
+            RELAY_ALLOW_LIVE="0",
+            ANTHROPIC_API_KEY="",
+            RELAY_DEMO_SECRET=secrets.token_urlsafe(48),
         )
         log = (output / "server.log").open("w")
         server = subprocess.Popen(
@@ -117,9 +114,7 @@ def main():
 
             page.goto(url + "/demo")
             page.get_by_role("heading", name="Start a working investigation").wait_for()
-            page.get_by_label("Choose a synthetic case").select_option(
-                "short-shipment" if relay else "case-002"
-            )
+            page.get_by_label("Choose a synthetic case").select_option("short-shipment")
             capture("choose-case")
             with page.expect_response(
                 lambda r: (
@@ -132,97 +127,49 @@ def main():
             initial = response.value.json()
             assert response.value.status == 200, initial
             page.get_by_role("button", name="Download report").wait_for()
-            assert (
-                initial["simulation"]["passed"]
-                if relay
-                else initial["grading"]["passed"]
-            )
+            assert initial["simulation"]["passed"]
             capture("checked-proposal")
             page.get_by_role("button", name="Source evidence", exact=True).click()
-            expect(page.locator(".result-card details")).to_have_count(
-                4 if relay else len([e for e in initial["evidence"] if e["ok"]])
-            )
+            expect(page.locator(".result-card details")).to_have_count(4)
             capture("executed-evidence", ".result-card")
-            if relay:
-                page.get_by_role("button", name="Proposal + action", exact=True).click()
-                page.get_by_role("button", name="Approve sandbox proposal").click()
-                page.get_by_role("button", name="Test lost acknowledgment").wait_for()
-                with page.expect_response(
-                    lambda r: (
-                        r.url.endswith("/api/demo/execute")
-                        and r.request.method == "POST"
-                    )
-                ) as response:
-                    page.get_by_role("button", name="Test lost acknowledgment").click()
-                uncertain = response.value.json()
-                assert (
-                    uncertain["stage"] == "uncertain"
-                    and uncertain["receipts"][0]["status"] == "unknown"
+            page.get_by_role("button", name="Proposal + action", exact=True).click()
+            page.get_by_role("button", name="Approve sandbox proposal").click()
+            page.get_by_role("button", name="Test lost acknowledgment").wait_for()
+            with page.expect_response(
+                lambda r: (
+                    r.url.endswith("/api/demo/execute") and r.request.method == "POST"
                 )
-                page.get_by_role("button", name="Reconcile and complete").wait_for()
-                capture("uncertain-action", ".result-card")
-                with page.expect_response(
-                    lambda r: (
-                        r.url.endswith("/api/demo/reconcile")
-                        and r.request.method == "POST"
-                    )
-                ) as response:
-                    page.get_by_role("button", name="Reconcile and complete").click()
-                final = response.value.json()
-                assert (
-                    final["stage"] == "executed"
-                    and final["execution"]["passed"]
-                    and final["execution"]["reconciled_receipts"] == 1
+            ) as response:
+                page.get_by_role("button", name="Test lost acknowledgment").click()
+            uncertain = response.value.json()
+            assert (
+                uncertain["stage"] == "uncertain"
+                and uncertain["receipts"][0]["status"] == "unknown"
+            )
+            page.get_by_role("button", name="Reconcile and complete").wait_for()
+            capture("uncertain-action", ".result-card")
+            with page.expect_response(
+                lambda r: (
+                    r.url.endswith("/api/demo/reconcile") and r.request.method == "POST"
                 )
-                assert len(final["receipts"]) == 4 and all(
-                    r["status"] == "confirmed" for r in final["receipts"]
-                )
-                page.get_by_role("button", name="Verification", exact=True).click()
-                expect(page.locator(".result-card .check-row")).to_have_count(24)
-                capture("verified-effects", ".result-card")
-                page.get_by_role("button", name="Proposal + action", exact=True).click()
-            else:
-                page.get_by_role("button", name="SQL + revision", exact=True).click()
-                page.get_by_label("Candidate SQL", exact=True).fill(
-                    "SELECT substr(occurred_at,1,10) AS business_date, SUM(DISTINCT amount_cents) AS revenue_cents FROM event_deliveries GROUP BY business_date"
-                )
-                with page.expect_response(
-                    lambda r: (
-                        r.url.endswith("/api/demo/verify")
-                        and r.request.method == "POST"
-                    ),
-                    timeout=60000,
-                ) as response:
-                    page.get_by_role("button", name="Verify edited SQL").click()
-                failed = response.value.json()
-                assert (
-                    not failed["grading"]["passed"]
-                    and failed["parent_id"] == initial["id"]
-                )
-                expect(
-                    page.get_by_role("button", name="Accept verified finding")
-                ).to_be_disabled()
-                capture("false-repair-blocked", ".result-card")
-                page.goto(url + "/demo/runs/" + initial["id"])
-                page.get_by_role("button", name="Verification", exact=True).click()
-                expect(page.locator(".result-card .check-row")).to_have_count(
-                    len(initial["grading"]["checks"])
-                )
-                capture("independent-regressions", ".result-card")
-                page.get_by_role("button", name="Finding", exact=True).click()
-                with page.expect_response(
-                    lambda r: (
-                        r.url.endswith("/api/demo/review")
-                        and r.request.method == "POST"
-                    ),
-                    timeout=60000,
-                ) as response:
-                    page.get_by_role("button", name="Accept verified finding").click()
-                final = response.value.json()
-                assert (
-                    final["stage"] == "approved"
-                    and final["version"] == initial["version"]
-                )
+            ) as response:
+                page.get_by_role("button", name="Reconcile and complete").click()
+            final = response.value.json()
+            assert (
+                final["stage"] == "executed"
+                and final["execution"]["passed"]
+                and final["execution"]["reconciled_receipts"] == 1
+            )
+            assert len(final["receipts"]) == 4 and all(
+                r["status"] == "confirmed" for r in final["receipts"]
+            )
+            page.get_by_role("button", name="Verification", exact=True).click()
+            expect(page.locator(".result-card .check-chip.pass")).to_have_count(24)
+            page.get_by_role("button", name="Effects", exact=True).click()
+            expect(page.locator(".result-card .delta")).to_have_count(4)
+            expect(page.locator(".result-card .status-reconciled")).to_have_count(1)
+            capture("verified-effects", ".result-card")
+            page.get_by_role("button", name="Proposal + action", exact=True).click()
             page.locator(".review-summary").wait_for()
             capture("reviewed-result", ".result-card")
             with page.expect_download() as download:
@@ -235,9 +182,7 @@ def main():
             )
             page.reload()
             page.get_by_role("button", name="Download report").wait_for()
-            expect(page.locator(".review-summary")).to_contain_text(
-                "verified" if relay else "approved"
-            )
+            expect(page.locator(".review-summary")).to_contain_text("verified")
             other = browser.new_context(viewport={"width": 1180, "height": 844})
             other_page = other.new_page()
             other_page.goto(url + "/demo/runs/" + final["id"])
@@ -259,7 +204,7 @@ def main():
             page.get_by_role(
                 "heading", name="Investigation history", exact=True
             ).wait_for()
-            assert page.locator(".history-row").count() >= (1 if relay else 2)
+            assert page.locator(".history-row").count() >= 1
             assert not errors, errors
             video = page.video
             context.close()
@@ -271,15 +216,19 @@ def main():
             decoder.close()
             if args.publish_assets:
                 shutil.copyfile(
-                    output / "continuous-walkthrough.webm", assets / "assets/media/walkthrough.webm"
+                    output / "continuous-walkthrough.webm",
+                    assets / "assets/media/walkthrough.webm",
                 )
-                shutil.copyfile(output / frames[1]["path"], assets / "assets/media/poster.png")
+                shutil.copyfile(
+                    output / frames[1]["path"], assets / "assets/media/poster.png"
+                )
             if (assets / "assets/media/walkthrough.webm").exists() or args.url:
                 player = browser.new_page()
                 player.goto(url + "/demo/recording")
-                player.get_by_role("heading", name=name + " in action.").wait_for()
+                player.get_by_role("heading", name="RelayOps in action.").wait_for()
                 player.wait_for_function(
-                    "() => document.querySelector('video')?.readyState >= 1", timeout=30000
+                    "() => document.querySelector('video')?.readyState >= 1",
+                    timeout=30000,
                 )
                 assert player.locator("video").evaluate("video=>video.duration > 0")
                 player_verified = True
@@ -296,7 +245,7 @@ def main():
         if log:
             log.close()
     report = {
-        "project": name,
+        "project": "RelayOps",
         "url": url,
         "interactive_journey": True,
         "guided": True,
@@ -308,27 +257,17 @@ def main():
         "recording_player": player_verified,
         "page_errors": errors,
         "frames": frames,
-        "proof": (
-            {
-                "uncertain_receipt": True,
-                "reconciliation": True,
-                "verified_effects": True,
-                "confirmed_receipts": 4,
-            }
-            if relay
-            else {
-                "independent_verification": True,
-                "false_repair_rejected": True,
-                "failed_acceptance_disabled": True,
-                "exact_version_review": True,
-            }
-        ),
+        "proof": {
+            "uncertain_receipt": True,
+            "reconciliation": True,
+            "verified_effects": True,
+            "confirmed_receipts": 4,
+        },
         "source_sha256": {
             str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in [
                 root / "app.py",
-                *sorted((root / "backend/src" / package).rglob("*.py")),
-                *sorted((root / "backend/agents/investigator").glob("*.py")),
+                *sorted((root / "backend/src/relayops").rglob("*.py")),
                 assets / "assets/scripts/app.js",
                 assets / "assets/styles/style.css",
             ]

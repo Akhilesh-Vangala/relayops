@@ -1,4 +1,5 @@
 """Actual LangGraph assessment workflow; approval and execution stay outside it."""
+
 import tempfile
 from pathlib import Path
 from typing import TypedDict
@@ -30,7 +31,9 @@ def simulate_plan(world, plan):
         shadow.initialize(original)
         with world.connect() as source, shadow.connect() as destination:
             for row in source.execute("SELECT * FROM evidence"):
-                destination.execute("INSERT INTO evidence VALUES (?,?,?,?,?)", tuple(row))
+                destination.execute(
+                    "INSERT INTO evidence VALUES (?,?,?,?,?)", tuple(row)
+                )
         if plan.actions:
             token = approve(shadow, plan, operator="counterfactual-simulator")
             execute(shadow, plan, token)
@@ -42,7 +45,10 @@ def simulate_plan(world, plan):
 
 def build_workflow(world, planner):
     def observe(state):
-        return {"observations": world.public_observations(), "activity": ["observed-four-systems"]}
+        return {
+            "observations": world.public_observations(),
+            "activity": ["observed-four-systems"],
+        }
 
     async def propose(state):
         plan = await planner.propose(state["observations"])
@@ -50,14 +56,26 @@ def build_workflow(world, planner):
 
     def policy(state):
         validate(world, state["plan"])
-        return {"policy": "passed", "activity": state["activity"] + ["policy-validated"]}
+        return {
+            "policy": "passed",
+            "activity": state["activity"] + ["policy-validated"],
+        }
 
     def simulate(state):
         report = simulate_plan(world, state["plan"])
-        return {"simulation": report, "activity": state["activity"] + ["simulated-on-private-copy", "awaiting-operator-if-actions"]}
+        return {
+            "simulation": report,
+            "activity": state["activity"]
+            + ["simulated-on-private-copy", "awaiting-operator-if-actions"],
+        }
 
     builder = StateGraph(State)
-    for name, node in (("observe", observe), ("propose", propose), ("policy", policy), ("simulate", simulate)):
+    for name, node in (
+        ("observe", observe),
+        ("propose", propose),
+        ("policy", policy),
+        ("simulate", simulate),
+    ):
         builder.add_node(name, node)
     builder.add_edge(START, "observe")
     builder.add_edge("observe", "propose")

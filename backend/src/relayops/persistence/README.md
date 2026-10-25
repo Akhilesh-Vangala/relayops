@@ -1,6 +1,6 @@
-# RelayOps persistence
+# persistence
 
-Durable run state, queue claims, leases, migrations and publication fencing.
+- [run_store.py](run_store.py): PostgreSQL or SQLite run store with idempotent admission, `SKIP LOCKED` claims, leases and owner-fenced publication
+- [migrations.py](migrations.py): schema version 1
 
-- [migrations.py](migrations.py)
-- [run_store.py](run_store.py)
+[Deployment](../../../../docs/operations/DEPLOYMENT.md#durable-runtime)

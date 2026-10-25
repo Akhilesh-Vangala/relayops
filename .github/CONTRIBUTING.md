@@ -2,7 +2,7 @@
 
 Use the [branch and release workflow](../docs/development/BRANCHING.md): short-lived work branch → pull request → required CI → squash merge into protected `main`.
 
-Use the [README quick start](../README.md#run-locally) to create a Python 3.11 environment from the hashed dependency lock. Development checks require Chromium. Use original synthetic fixtures and fresh generated output directories.
+Use the [README quick start](../README.md#run-locally) to create a Python 3.12 environment from the hashed dependency lock. Development checks require Chromium. Use original synthetic fixtures and fresh generated output directories.
 
 ## Verify a change
 
@@ -21,6 +21,6 @@ The [CI workflow](workflows/checks.yml) installs the pinned hash-verified depend
 - Keep model tools read-only; preserve exact-version review, unknown receipts and explicit reconciliation.
 - Add focused failure tests when changing execution, recovery, evidence or budget behavior.
 - Use focused conventional commits, such as `feat(agent): ...`, `fix(execution): ...` or `docs(readme): ...`.
-- Keep credentials, generated stores, private data and local environments out of Git. Preserve dated design history and update the current implementation docs.
+- Keep credentials, generated stores, private data and local environments out of Git. Update the architecture docs when behavior changes.
 
-The supported workflow and infrastructure limits are in the [repository guide](../docs/development/REPOSITORY.md). The app is a local research workbench; public multitenant hosting requires the identity and isolation release gates in [PLAN.md](../docs/project/PLAN.md).
+Architecture, deployment and evaluation details are in the [documentation](../docs/README.md).

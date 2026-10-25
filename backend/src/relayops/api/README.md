@@ -1,8 +1,10 @@
-# RelayOps api
+# api
 
-HTTP routing, request/response contracts, public demo scope and transport authority.
+FastAPI application, security middleware and the public sandbox.
 
-- [asgi.py](asgi.py)
-- [demo_security.py](demo_security.py)
-- [public_demo.py](public_demo.py)
-- [web.py](web.py)
+- [web.py](web.py): app factory, operator workbench routes, origin and body checks, security headers
+- [public_demo.py](public_demo.py): request-scoped `/api/demo/*` investigate, review, execute and reconcile
+- [demo_security.py](demo_security.py): HMAC envelopes bound to an HttpOnly visitor cookie
+- [asgi.py](asgi.py): ASGI entrypoint for containers
+
+[Deployment](../../../../docs/operations/DEPLOYMENT.md)

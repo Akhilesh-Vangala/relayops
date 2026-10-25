@@ -1,4 +1,5 @@
 """Initialize the durable investigation queue; deployment runs this separately."""
+
 import os
 from relayops.persistence.run_store import migrate_postgres
 

@@ -1,5 +1,4 @@
 import asyncio
-import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -35,17 +34,40 @@ class Stream:
 
 
 class SDK:
-    def __init__(self, plan, *, tokens=200, error=None, stop="tool_use", model="claude-sonnet-5-5"):
+    def __init__(
+        self,
+        plan,
+        *,
+        tokens=200,
+        error=None,
+        stop="tool_use",
+        model="claude-sonnet-5-5",
+    ):
         self.generation_calls = 0
+
         async def retrieve(name):
             return SimpleNamespace(id=name, lifecycle="active")
+
         async def count_tokens(**kwargs):
             return SimpleNamespace(input_tokens=tokens)
+
         def stream(**kwargs):
             self.generation_calls += 1
-            value = SimpleNamespace(model=model, stop_reason=stop, content=[SimpleNamespace(type="tool_use", name="submit_plan", input=plan)],
-                                    usage=SimpleNamespace(model_dump=lambda **kwargs: {"input_tokens": 200, "output_tokens": 100}))
+            value = SimpleNamespace(
+                model=model,
+                stop_reason=stop,
+                content=[
+                    SimpleNamespace(type="tool_use", name="submit_plan", input=plan)
+                ],
+                usage=SimpleNamespace(
+                    model_dump=lambda **kwargs: {
+                        "input_tokens": 200,
+                        "output_tokens": 100,
+                    }
+                ),
+            )
             return Stream(value, error)
+
         self.models = SimpleNamespace(retrieve=retrieve)
         self.messages = SimpleNamespace(count_tokens=count_tokens, stream=stream)
 
@@ -57,8 +79,14 @@ class PlannerTests(unittest.TestCase):
         self.world = World(Path(self.tmp.name) / "world.sqlite")
         self.world.initialize(fixture())
         self.observations = self.world.public_observations()
-        self.plan = asyncio.run(DiagnosticPlanner().propose(self.observations)).model_dump(mode="json")
-        self.pricing = {"model": "claude-sonnet-5-5", "input_per_million": 2, "output_per_million": 10}
+        self.plan = asyncio.run(
+            DiagnosticPlanner().propose(self.observations)
+        ).model_dump(mode="json")
+        self.pricing = {
+            "model": "claude-sonnet-5-5",
+            "input_per_million": 2,
+            "output_per_million": 10,
+        }
 
     def test_typed_model_submission_and_no_second_paid_attempt(self):
         sdk = SDK(self.plan)
@@ -82,19 +110,25 @@ class PlannerTests(unittest.TestCase):
         with self.assertRaises(TimeoutError):
             asyncio.run(planner.propose(self.observations))
         with self.world.connect() as db:
-            self.assertEqual(db.execute("SELECT status FROM model_calls").fetchone()[0], "unknown")
+            self.assertEqual(
+                db.execute("SELECT status FROM model_calls").fetchone()[0], "unknown"
+            )
         with self.assertRaises(Refused):
             asyncio.run(planner.propose(self.observations))
         self.assertEqual(sdk.generation_calls, 1)
 
     def test_incomplete_submission_cannot_be_a_plan(self):
-        planner = AnthropicPlanner(self.world, self.pricing, sdk=SDK(self.plan, stop="max_tokens"))
+        planner = AnthropicPlanner(
+            self.world, self.pricing, sdk=SDK(self.plan, stop="max_tokens")
+        )
         with self.assertRaises(Refused):
             asyncio.run(planner.propose(self.observations))
 
     def test_pricing_admission_rejects_before_generation(self):
         sdk = SDK(self.plan)
-        planner = AnthropicPlanner(self.world, {**self.pricing, "output_per_million": 1000}, sdk=sdk)
+        planner = AnthropicPlanner(
+            self.world, {**self.pricing, "output_per_million": 1000}, sdk=sdk
+        )
         with self.assertRaises(Refused):
             asyncio.run(planner.propose(self.observations))
         self.assertEqual(sdk.generation_calls, 0)

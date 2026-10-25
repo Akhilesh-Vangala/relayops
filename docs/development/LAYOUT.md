@@ -1,120 +1,58 @@
-# RelayOps component layout
+# Repository layout
 
-Run commands from the repository root unless a command states otherwise. The file tree is organized by ownership at the root and responsibility inside each component.
+Root folders are organized by deployable component, and folders inside a component by responsibility. The only top-level files are the Python, Vercel and Git configuration files, `app.py`, `.env.example` and the README. `scripts/checks/check_repository.py` enforces the root-folder allowlist and requires every backend capability package to have its own README.
 
 ```text
 relayops/
+├── .github/                 CI, public health monitor, issue and PR templates, CONTRIBUTING
+├── app.py                   Vercel entrypoint (public build)
 ├── backend/
+│   ├── data/                pricing profile for live mode
+│   ├── docker/              runtime and test image
+│   ├── requirements/        hash-locked dependencies
 │   ├── src/relayops/
-│   ├── tests/
-│   ├── requirements/
-│   ├── docker/
-│   └── data/
-├── frontend/
-│   └── apps/
-│       ├── demo/
-│       │   └── assets/
-│       │       ├── scripts/
-│       │       ├── styles/
-│       │       └── media/
-│       └── workbench/
-│           └── assets/
-│               ├── scripts/
-│               └── styles/
-├── infrastructure/
-│   ├── containers/
-│   └── kubernetes/
-├── scripts/
-│   ├── checks/
-│   ├── demos/
-│   └── deployment/
-├── docs/
-│   ├── architecture/
-│   ├── operations/
-│   ├── evaluation/
-│   ├── project/history/
-│   └── assets/
-│       ├── branding/
-│       ├── diagrams/
-│       ├── screenshots/
-│       └── demos/
-└── .github/
-```
-
-## Ownership and runtime boundaries
-
-Backend APIs own request validation, identity and action authority. Agents propose bounded decisions; verification and execution code own whether a proposal passes and which effects may occur. Persistence and workers own recovery and claims. Frontend code owns presentation and browser interactions. Tests are grouped by capability, with shared fixtures and cross-component browser journeys identified separately.
-
-Only GitHub/Python/Vercel discovery files, private-configuration examples and the primary README remain at the root. Compose is under infrastructure/containers; `scripts/deployment/compose.sh` supplies the repository project directory so build contexts, private root .env and existing volume naming retain their intended meaning. No live-model call or cloud apply is part of this reorganization.
-
-Source-path changes intentionally change runtime and review fingerprints. Preserve old results; start a fresh investigation when stale checkpoints or checked proposals are rejected. The exportable VerifyOps investigator deliberately keeps a small flat runtime when copied into an isolated workspace; evaluator references remain outside that runtime.
-
-[Branch policy](BRANCHING.md) · [Backend](../../backend/README.md) · [Frontend](../../frontend/README.md) · [Infrastructure](../../infrastructure/README.md) · [Scripts](../../scripts/README.md)
-
-## Full directory navigation
-
-```text
-relayops/
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   └── workflows/
-├── backend/
-│   ├── data/
-│   ├── docker/
-│   ├── requirements/
-│   ├── src/
-│   │   └── relayops/
-│   │       ├── agents/
-│   │       ├── api/
-│   │       ├── cli/
-│   │       ├── domain/
-│   │       ├── evaluation/
-│   │       ├── execution/
-│   │       ├── persistence/
-│   │       ├── verification/
-│   │       └── workers/
+│   │   ├── agents/          LangGraph agent, transport, browser evidence, planners, workflow
+│   │   ├── api/             FastAPI app, public sandbox, envelope signing
+│   │   ├── cli/             command-line launch and continuation
+│   │   ├── domain/          fixture world, typed models, policy
+│   │   ├── evaluation/      scripted case matrix
+│   │   ├── execution/       approval, executor, reconciliation
+│   │   ├── persistence/     run store and migrations
+│   │   ├── product/         product routes, accounts, run contract
+│   │   ├── uploads/         imports, analysis, SSE, report signing
+│   │   ├── verification/    independent evaluator
+│   │   └── workers/         leased worker, health, database wait
 │   └── tests/
-│       ├── agents/
-│       ├── api/
-│       ├── e2e/
-│       ├── persistence/
-│       ├── verification/
-│       └── workflows/
-├── docs/
-│   ├── architecture/
-│   ├── assets/
-│   │   ├── branding/
-│   │   ├── demos/
-│   │   ├── diagrams/
-│   │   └── screenshots/
-│   ├── demos/
-│   │   └── history/
-│   ├── development/
-│   ├── evaluation/
-│   ├── evidence/
-│   ├── operations/
-│   ├── product/
-│   └── project/
-│       └── history/
-├── frontend/
-│   └── apps/
-│       ├── demo/
-│       │   └── assets/
-│       │       ├── media/
-│       │       ├── scripts/
-│       │       └── styles/
-│       └── workbench/
-│           └── assets/
-│               ├── scripts/
-│               └── styles/
+│       ├── agents/  api/  persistence/  verification/  workflows/
+│       └── e2e/             operator workbench browser journey
+├── frontend/apps/
+│   ├── product/             product workspace (ES modules)
+│   ├── demo/                interactive sandbox SPA and recorded walkthrough
+│   ├── workbench/           operator workbench assets
+│   └── uploads/             upload walkthrough recording page and media
 ├── infrastructure/
-│   ├── containers/
-│   └── kubernetes/
-│       ├── base/
-│       └── overlays/
-│           └── kind/
-└── scripts/
-    ├── checks/
-    ├── demos/
-    └── deployment/
+│   ├── containers/          Compose topology
+│   ├── kubernetes/          base resources and Kind overlay
+│   └── supabase/            owner-isolated account migration
+├── scripts/
+│   ├── checks/              repository, RLS, public health, container entrypoint
+│   ├── demos/               browser journeys and recorders
+│   └── deployment/          Compose launcher, Compose and Kind smoke tests
+└── docs/
+    ├── architecture/  product/  operations/  evaluation/  development/
+    ├── demos/               recording manifests
+    └── assets/demos/        recording preview and product screenshot
 ```
+
+## Ownership
+
+- **Backend API.** Owns request validation, origin checks, identity and the public write allowlist.
+- **Agent.** Owns observation and proposal only.
+- **Policy, simulation and evaluation.** Decide whether a proposal is admissible.
+- **Execution.** Owns which effects occur and how their receipts are recorded.
+- **Persistence and workers.** Own claiming, leases and recovery.
+- **Frontend apps.** Own presentation and browser storage, with no build step and no Node service.
+
+Source paths feed the agent's recovery fingerprint, so moving files intentionally invalidates old checkpoints and checked proposals.
+
+[Development](DEVELOPMENT.md) · [Branching](BRANCHING.md)

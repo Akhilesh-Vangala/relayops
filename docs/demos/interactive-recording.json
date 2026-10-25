@@ -1,6 +1,6 @@
 {
   "project": "RelayOps",
-  "url": "http://127.0.0.1:51695",
+  "url": "http://127.0.0.1:61388",
   "interactive_journey": true,
   "guided": true,
   "paid_model_calls": 0,
@@ -14,32 +14,32 @@
     {
       "stage": "choose-case",
       "path": "00-choose-case.png",
-      "sha256": "c084b70b1e57de56dd3bc9fb02b45ebd41026dbeb60b3c1e00a6e5fe4d0e4202"
+      "sha256": "5aa7b9bf7e03a39e4ea3d1dfdc6a62f592f76c2072047697ad957dc5345da56d"
     },
     {
       "stage": "checked-proposal",
       "path": "01-checked-proposal.png",
-      "sha256": "3a50a0709acc65d36d5c818c660beeafc5b9c613fe1a31f725c07f077843de10"
+      "sha256": "4d60d5d852415204986279c111af35af9c11878e031b4bfe74c44aa0c8d35844"
     },
     {
       "stage": "executed-evidence",
       "path": "02-executed-evidence.png",
-      "sha256": "675825f7c2d9e7e746cee44513767925ed32601258356e9d0665084e0e1726ff"
+      "sha256": "98b8ab833bc87d91e0668ed97dcbfbc6085f09b14735a904ec8fdc76f00583cc"
     },
     {
       "stage": "uncertain-action",
       "path": "03-uncertain-action.png",
-      "sha256": "5e691ed6a724ffa35898af001a2ef0be26c7b4561ca9daab068e39155e91af0b"
+      "sha256": "5a3b4c055a6565bc61d8452ce8f141d73a4757dad7cddad26986183f8d92d3c4"
     },
     {
       "stage": "verified-effects",
       "path": "04-verified-effects.png",
-      "sha256": "80e916828708aaf1f1c7cf8f646a432ad4021163d5032a04813b85b74ab8c708"
+      "sha256": "0679e2ac118f9d0cbfc2286a9c68a36540f31b61a8744551f867817bb6a144f9"
     },
     {
       "stage": "reviewed-result",
       "path": "05-reviewed-result.png",
-      "sha256": "b5844be67e6bee96fc107bbed3e86df12bc4e52e7471120809257cb3e36c35d3"
+      "sha256": "188c2cd0e6e91aed46c7309bc251e111f97e8d92221b8e7d3f7f5ae6c3397feb"
     }
   ],
   "proof": {
@@ -49,55 +49,55 @@
     "confirmed_receipts": 4
   },
   "source_sha256": {
-    "app.py": "47482be8696c2b9a83f30b19fa687a2a02f10c266dc3ffceb10e3143e8779a35",
+    "app.py": "78ab021d01eb3e4a57236d54d02b46b488cfe081f68183f1dc802877ee6edb44",
     "backend/src/relayops/__init__.py": "41b6fd3a5368295549b563c2a4529dae72879e7394d8f05435b48b4e4259e975",
-    "backend/src/relayops/__main__.py": "0533b27001db07b156350acf3cee1651e937ec6c1424a47781f06fedc84efe1b",
+    "backend/src/relayops/__main__.py": "2113a2ee540b1277fbff53566f6e254a5f80abb422fb3e65ea8e920fb6304f15",
     "backend/src/relayops/agents/__init__.py": "54814d9ac22b591eae9d54e8cdb027bcab5ce5cc56b82b3e6b7af1fb038a02dc",
-    "backend/src/relayops/agents/agent.py": "3ed2e80a41b3a98b8d21e95d831fa7347a219c6addb3d1253b14cbca0513e0a3",
-    "backend/src/relayops/agents/agent_transport.py": "1feb348112d22644c22ee47f669f536d70baff503d8388d0dee37a71f206e347",
-    "backend/src/relayops/agents/browser.py": "0898056fc5f6d261ef5d257a2fe8981f589b7a0ce441bd277ab4cb84450eee61",
-    "backend/src/relayops/agents/planner.py": "6bdd0e69bf53bc5067f95bbe9046f66e19d57c2391d4798171972dda4eb4ca81",
-    "backend/src/relayops/agents/scripted_agent.py": "5a745c70efbdb1c1d6da15ddfc997e1e2ddf281208b86d81af27925b89f11313",
-    "backend/src/relayops/agents/workflow.py": "fc97d0486c1c3613776f265fcf313bff3265e6d36799f7f210830571c4c9a12b",
+    "backend/src/relayops/agents/agent.py": "c0f8412ebaff8fd27fc6c6c2110f16f767524b3228228399df35766105c41058",
+    "backend/src/relayops/agents/agent_transport.py": "49da26186872967096b46a1cd51d4cd519c8dbc9826efd0d8ae6554d789592f3",
+    "backend/src/relayops/agents/browser.py": "789b52b24a37f432fa9bf38d2fd064039512711db4ca969cabd7dd55c4b276f0",
+    "backend/src/relayops/agents/planner.py": "8c95ae7e1c14ed0359b52dba3c09f4e50feb84568c99c2bb7608629538bb0e68",
+    "backend/src/relayops/agents/scripted_agent.py": "0033182dae5789234cc3f35c9f25f4ae91f8fe44ab363cc5651a79d7643c5721",
+    "backend/src/relayops/agents/workflow.py": "dc736f6afa4cb9533b93bc02e12399d47d0591e4f5e188653c8821c14f807555",
     "backend/src/relayops/api/__init__.py": "6be09e7ee0ba3dc50a55d09f411319e52392ee5b1675f64aa43608f7619370ae",
-    "backend/src/relayops/api/asgi.py": "96d15091bbd7f94b7713aa72ea3d2a0e5cf23e70b61329bfeb49f63ccf72e0d2",
-    "backend/src/relayops/api/demo_security.py": "6f2f5ff7c134ab053f2798c9998d7b25214f87f695792353e0d26e816c5432ab",
-    "backend/src/relayops/api/public_demo.py": "90442be3c65617182ebe1a25daf1d090c79973f971ada2c33b8f4343c5102f9f",
-    "backend/src/relayops/api/web.py": "b93ba7fd7b04cad1a43297c6c5f65e685e3c2f45b2f757a36d80f3db7832007f",
+    "backend/src/relayops/api/asgi.py": "da682e3bf948d52be5eeadba8f527c0fad3409a8220eada22444ef1c86d6fbed",
+    "backend/src/relayops/api/demo_security.py": "333644cef968b905db1e15a15f5e25c87854d4c76f81d91b27a6f4307ec14d1c",
+    "backend/src/relayops/api/public_demo.py": "c23a2e60ced2524e7ce56a5277c7a7fdb7ef8a0a31f95ea07648d75b6ad4228b",
+    "backend/src/relayops/api/web.py": "e2cfc15ff47e6490f35b3af395f2b881b3788f8afdbf6cb3d941339eb42b1ae8",
     "backend/src/relayops/cli/__init__.py": "cf91b41403b576dbbee2c6c0e13f26d839c6137450507a748aa00e113d98bce7",
-    "backend/src/relayops/cli/agent_cli.py": "5d279d6779827289ee41c06c5b84b0133751a097fc636c55ceaa7a9044c7e0b0",
+    "backend/src/relayops/cli/agent_cli.py": "d7ccb4698e2b80ca8f78261311d034fb6d155e80dd1b0e217c3d9434ec22fc15",
     "backend/src/relayops/domain/__init__.py": "a7bd69c4d644f64be19d0a0fad2bb630e3b75fdeca97fa723f9edf76f6e0bce2",
-    "backend/src/relayops/domain/environment.py": "77647ad062756c590f346da175d553783ec33b1fc27c6c8802c6165a12557472",
-    "backend/src/relayops/domain/models.py": "ae2065dd210551b60270ed03c1ed1452fc7ce4b6a8c720ad2b0564f271cf407a",
-    "backend/src/relayops/domain/policy.py": "c827876f2dc8de93b71c9ab91ca5aab7cd8c6b390c0b483d3f2e1c98ffb05d8d",
+    "backend/src/relayops/domain/environment.py": "a3bcff79a24c5333ea4e1d5a4fb52f1b5db587a4dbc74fcc43fdf1f02cd93473",
+    "backend/src/relayops/domain/models.py": "074b710e8ecabf9b3ffe3090d4590fc02b40ecfae58b925c85b44a7bef67c7d6",
+    "backend/src/relayops/domain/policy.py": "11bca57ad14388391a19edd3ad2bf5f45962a92647c7bf38ed5bbed15ee2466c",
     "backend/src/relayops/evaluation/__init__.py": "1d5ac446fe1d2f650963eeebf0e1fd297e6a9c34d415159e2d338321ebee8e70",
-    "backend/src/relayops/evaluation/benchmark.py": "588e1617ae00461e161ee6558c514b9d0404ff486c01dca10ada95329260aa53",
+    "backend/src/relayops/evaluation/benchmark.py": "a12ed369a9793cd91a8e2560a0c3aa5b36523acead8bfae1d43a58f88d384f52",
     "backend/src/relayops/execution/__init__.py": "1987fd3273a250b1b803f18b83e081db0219c00fd7353dcfb062c099fc5d20c4",
-    "backend/src/relayops/execution/executor.py": "c697958062ff4abef20a36c3183980170ac0340c1990ccc7eec69633128f206d",
+    "backend/src/relayops/execution/executor.py": "2ebaba04da1d7bb55aa16836a8b57e4151c5c4134804727316fdbba571437bb5",
     "backend/src/relayops/persistence/__init__.py": "3ca206777c38f388d48cec021a2b4eeb2f3797fec72adecf62eecc12c52e3c82",
-    "backend/src/relayops/persistence/migrations.py": "4202f511e57b8b0bc0c54395c6d878fed085bc8e1d0f7a71d0465df6d0c2a7fd",
-    "backend/src/relayops/persistence/run_store.py": "1f5f01cf1329ca617a0dec61d914a57837ff9dd58baf4554a019748f341f5026",
+    "backend/src/relayops/persistence/migrations.py": "b687d19bc930e1e51719ed6bc06c8bc3c94608bb62ee8dbb46fa791c9d11f98e",
+    "backend/src/relayops/persistence/run_store.py": "80270162e9aafd3f6db8d4b9e5156ed796260d0dfb8f561cc3736f27d1087db1",
     "backend/src/relayops/product/__init__.py": "806adf8275ff3895ae1c03b315777a53a234b7611339e3988f4f9a2533b80873",
-    "backend/src/relayops/product/accounts.py": "9833edcdde51fc1b7b5770de3e97e1ba2306d898c771a6168661194dd408bcc5",
-    "backend/src/relayops/product/api.py": "64dca786b60c6216c452fdc72ba8e248090dda25ef34f7a249673e99ac2c2e75",
-    "backend/src/relayops/product/run_contract.py": "4c8090b72f0c321970332f97caad3a9ccaf6205a3acf5f8abf657771b59f5232",
+    "backend/src/relayops/product/accounts.py": "67296ee26df2f26f2fd6ba53364138788847cee2851415a87c553f314ab4caed",
+    "backend/src/relayops/product/api.py": "7dcbe1388dca74a367657b5abcbd3aa6f546d896337a59fa79473814a54fa3de",
+    "backend/src/relayops/product/run_contract.py": "0dabe51c8878d885328913a4eab55a48359c5c3eff9b01132185d4d0af589b8e",
     "backend/src/relayops/uploads/__init__.py": "6cf9cc3f23b8eb7fecf7b1f708e9627b7d6c5aacbe313fc0034cc082b4496ee4",
-    "backend/src/relayops/uploads/api.py": "b416f0179121b7a225fffe4bf3e9cd6e3f3030165379d501ede8928b6d55b486",
-    "backend/src/relayops/uploads/imports.py": "d025a3e701bca899913b580737065f1cb2f87084babc8699d582c03cb5ed778f",
-    "backend/src/relayops/uploads/ingestion.py": "5d8bc63659a13b09d848639d1ce1870583f70a46c9c29f9465b521d25f9883a5",
-    "backend/src/relayops/uploads/service.py": "069670c93ab0219ab9ad04086e819b0876bc6846157165228d60fb6e2b9c136f",
-    "backend/src/relayops/uploads/signing.py": "d5cd0b21e05e94526e998a8a57a617884779dd6b3f492dc50f055725d9692864",
-    "backend/src/relayops/uploads/stream.py": "69898a94b641afb17d4d9af88da641742b588590e4b21bd7a62847db376d8c55",
+    "backend/src/relayops/uploads/api.py": "c42b870213c9ad651e414044e6007e826b58c7741c5e0f4905ba2f08d49ba56e",
+    "backend/src/relayops/uploads/imports.py": "68b2bf802051a25c3900e65569a623a5ede94f607da564211cfdf1ce63efb633",
+    "backend/src/relayops/uploads/ingestion.py": "ee953c9e28564991b64de03df19fd08fddeb99875a26393bc14d1779d5ef40bb",
+    "backend/src/relayops/uploads/service.py": "bdc20fc723941958f38fec551355199391acc3dd1066c855c9aed6a88ca5f737",
+    "backend/src/relayops/uploads/signing.py": "c1b3dc48d9b1c35a120ac6ab557ad9941360d6be951a68a3985f2a4155447643",
+    "backend/src/relayops/uploads/stream.py": "179056ae636462ab3aee477d29c5a203e7be03bd452a34e53973ac47d6007e28",
     "backend/src/relayops/verification/__init__.py": "e79f47856ac72444982146da26520dc49d6f883f8ae0cbc713e717151d52cd0c",
-    "backend/src/relayops/verification/evaluator.py": "f59e6f843d64d09fa7fe5d2c6c92ea25a6610175b564c6367abba8f0024f4bd6",
+    "backend/src/relayops/verification/evaluator.py": "da65e88cfebee412215f15f1a784a0978610544bb9812c47bc16d1ae9c6521e2",
     "backend/src/relayops/workers/__init__.py": "8bf0670a840fdf42a71b598ea2086b7cae8c2dde307f3c7eb4118e968761e911",
-    "backend/src/relayops/workers/wait_for_database.py": "a770ed913384248d68e6e29ca4afea456e67d4bcec6b402b21ebe34aaced43dc",
-    "backend/src/relayops/workers/worker.py": "308bf97e07501c655fa21ba1003e1d2bd27d7499e5f8b057436a2a33e0de18fe",
-    "backend/src/relayops/workers/worker_health.py": "d7164c14cadcabf47e3b71b0f94a52253d483a1c6bb6bb7e66a9e9e0aef3e236",
-    "frontend/apps/demo/assets/scripts/app.js": "b71d4ef78d51b48c714f3a4dbbaff29ef2d4afb0ae2a4e9c6ade9dc51b5d5193",
-    "frontend/apps/demo/assets/styles/style.css": "5e4e30e952040b4cdac45b655c775226cc16a7805ac74690535999c46a771bbe"
+    "backend/src/relayops/workers/wait_for_database.py": "87b973844ef9376993a50a668de8ba2b1244f5beaab944ae576d63acac2ca3d6",
+    "backend/src/relayops/workers/worker.py": "a34770c4419317ae700fc16b1e4839cfd30ee42512e2265a0a39a22a16bb3ff0",
+    "backend/src/relayops/workers/worker_health.py": "718adc46b2d2a9af3f0a93b32a3af93ff54b2356a6abc43684684bff37a86672",
+    "frontend/apps/demo/assets/scripts/app.js": "ca68851642a93de7ae8c6017395f82908df49e3b088424dd888fcfc06a5176c3",
+    "frontend/apps/demo/assets/styles/style.css": "34ae0afef501ad063fbc75a23f0f9019364317a0bd2e9989b2aa393401f2abab"
   },
-  "video_sha256": "afc3eabccd36678e6f517c3314e848c1fde92cafbf445557d42ef371bf9e252f",
+  "video_sha256": "0beb89dfbf3cbc483c4cd3855fa3170a4c2b294dfb5ecf3c1cef710951e97f51",
   "recording": "Continuous actual browser capture; automated synthetic interactions, not customer feedback or live model inference",
   "video_path": "frontend/apps/demo/assets/media/walkthrough.webm",
   "preview_path": "docs/assets/demos/relayops-interactive-demo.gif"

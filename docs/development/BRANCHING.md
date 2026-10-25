@@ -2,7 +2,7 @@
 
 ## Branch model
 
-`main` is the default, stable integration branch. Stable means its required engineering checks pass; this project remains a development release with the limitations documented in the README. All changes reach `main` through a pull request.
+`main` is the default, stable integration branch. Stable means its required engineering checks pass. All changes reach `main` through a pull request.
 
 | Branch | Purpose | Lifetime |
 | --- | --- | --- |
@@ -13,7 +13,7 @@
 | `chore/<short-description>` | Dependencies, CI, tooling or repository maintenance | Delete after the PR merges |
 | `hotfix/<short-description>` | Urgent correction from current `main` | Same CI and PR gates; delete after merge |
 
-The workflow uses short-lived branches directly from `main`. Create a release branch only when an actual supported release needs independent maintenance; no permanent staging branch or placeholder release is needed for the current solo-maintainer project.
+Work branches are short-lived and cut directly from `main`. A release branch is created only when a supported release needs independent maintenance.
 
 ```mermaid
 %%{init: {"theme": "neutral"}}%%
@@ -24,7 +24,7 @@ flowchart LR
     Checks --> Merge["Squash merge with conventional title"]
     Merge --> Main
     Merge --> Cleanup["Delete merged work branch"]
-    Main --> Release["Tag a verified commit when release gates are met"]
+    Main --> Release["Tag a verified commit"]
 ```
 
 ## Protected main
@@ -34,9 +34,8 @@ The GitHub policy for this repository is:
 - Pull request required for every change, including repository administrators.
 - All named CI checks below required from GitHub Actions; the branch must be up to date with `main` before merge.
 - Unresolved review conversations block merging; stale approvals are dismissed after new changes.
-- Required approving reviewer count **0** while the owner is the only maintainer. A PR and passing checks are still required. Increase to at least 1 when a second reviewer can actually approve changes.
 - Linear history, squash-only PR merges, and automatic deletion of merged remote branches.
-- Force pushes and deletion of `main` blocked; no administrator bypass is configured.
+- Force pushes and deletion of `main` blocked; administrators are included.
 
 Required check names (preserve these names when editing CI):
 
@@ -70,12 +69,12 @@ After merging, switch back to `main`, pull with `--ff-only`, and prune obsolete 
 
 ## Commit and pull-request titles
 
-Use `feat(scope): ...`, `fix(scope): ...`, `docs(scope): ...`, `refactor(scope): ...`, `test(scope): ...` or `chore(scope): ...`. Keep each PR focused on one reviewable outcome. Older published commits remain preserved as history; this convention applies to new work.
+Use `feat(scope): ...`, `fix(scope): ...`, `docs(scope): ...`, `refactor(scope): ...`, `test(scope): ...` or `chore(scope): ...`. Keep each PR focused on one reviewable outcome.
 
 ## CI and releases
 
 [checks.yml](../../.github/workflows/checks.yml) runs on pull requests targeting `main` and pushes to `main`. Required jobs always run; path filters do not silently skip a gate. New commits cancel superseded runs for the same PR, while `main` verification is allowed to finish.
 
-Release tags use `vMAJOR.MINOR.PATCH`. Tag the exact verified `main` commit only when the stated release scope is complete; identify development releases or prereleases accurately. Release notes should link the commit, CI evidence, reproducible setup, migration/recovery changes and known limitations. A tag is not evidence of cloud operation or live AI quality. No release tag is created by this branch-structure change.
+Release tags use `vMAJOR.MINOR.PATCH`. Tag the exact verified `main` commit. Release notes link the commit, CI evidence, setup, and migration or recovery changes.
 
 GitHub references: [protected-branch API](https://docs.github.com/en/rest/branches/branch-protection), [squash merge configuration](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/configuring-commit-squashing-for-pull-requests).

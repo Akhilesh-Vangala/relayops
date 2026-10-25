@@ -1,7 +1,7 @@
-# RelayOps workers
+# workers
 
-Separate background worker process and its readiness/lifecycle support.
+- [worker.py](worker.py): claims queued runs, drives the investigator, simulates and publishes reports
+- [worker_health.py](worker_health.py): heartbeat-based liveness probe
+- [wait_for_database.py](wait_for_database.py): blocks startup until the migrated schema exists
 
-- [wait_for_database.py](wait_for_database.py)
-- [worker.py](worker.py)
-- [worker_health.py](worker_health.py)
+[Deployment](../../../../docs/operations/DEPLOYMENT.md#durable-runtime)
